@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Text } from "react-native";
+import { Text, Platform, TouchableOpacity } from "react-native";
 
 // Onboarding
 import OnboardingScreen from "./src/screens/Onboarding/OnboardingScreen";
@@ -37,26 +37,76 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainTabs() {
+  const tabBarBottomPad = Platform.OS === "ios" ? 22 : 16;
+  const tabBarHeight = Platform.OS === "ios" ? 96 : 88;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: "#3D5CFF",
-        tabBarInactiveTintColor: "#999",
-        tabBarStyle: { paddingBottom: 8, height: 60 },
-        tabBarLabel: ({ color }) => {
+        tabBarActiveTintColor: "#0961F5",
+        tabBarInactiveTintColor: "#A0A4AB",
+        tabBarStyle: {
+          paddingTop: 12,
+          paddingBottom: tabBarBottomPad,
+          height: tabBarHeight,
+          backgroundColor: "#FFFFFF",
+          borderTopWidth: 0,
+          elevation: 10,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -3 },
+          shadowOpacity: 0.08,
+          shadowRadius: 10,
+        },
+        tabBarItemStyle: {
+          paddingTop: 4,
+          paddingBottom: 2,
+          minHeight: 56,
+        },
+        tabBarIconStyle: {
+          marginBottom: 4,
+        },
+        tabBarButton: (props) => (
+          <TouchableOpacity
+            {...props}
+            activeOpacity={0.65}
+            hitSlop={{ top: 12, bottom: 10, left: 8, right: 8 }}
+            style={props.style}
+          />
+        ),
+        tabBarLabel: ({ color, focused }) => {
           const labels = {
             Home: "Trang chủ",
             Vocabulary: "Học từ vựng",
             Profile: "Thông tin",
           };
           return (
-            <Text style={{ color, fontSize: 11 }}>{labels[route.name]}</Text>
+            <Text
+              allowFontScaling
+              maxFontSizeMultiplier={1.35}
+              style={{
+                color,
+                fontSize: 16,
+                fontWeight: focused ? "800" : "600",
+                letterSpacing: 0.2,
+                marginTop: 2,
+              }}
+            >
+              {labels[route.name]}
+            </Text>
           );
         },
-        tabBarIcon: ({ color }) => {
+        tabBarIcon: ({ focused }) => {
           const icons = { Home: "🏠", Vocabulary: "📖", Profile: "👤" };
-          return <Text style={{ fontSize: 22 }}>{icons[route.name]}</Text>;
+          return (
+            <Text
+              allowFontScaling
+              maxFontSizeMultiplier={1.2}
+              style={{ fontSize: focused ? 34 : 32, lineHeight: 40 }}
+            >
+              {icons[route.name]}
+            </Text>
+          );
         },
       })}
     >

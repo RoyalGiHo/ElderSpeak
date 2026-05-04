@@ -1,13 +1,62 @@
-export const MOCK_USERS = [{ phone: "0901234567", password: "1234" }];
+export const MOCK_USERS = [{ phone: "0123456789", password: "1234" }];
 
 export const USER = {
   name: "Bác A",
-  phone: "0901234567",
+  phone: "0123456789",
   memberSince: "tháng 1 / 2025",
   streak: 7,
   totalWords: 42,
   medals: 3,
 };
+
+/** Tiến độ bài học hiển thị trên trang chủ (theo bản thiết kế). */
+export const HOME_CURRENT_LESSON = {
+  title: "Trò chuyện thường ngày",
+  subtitle: "Bài 3/8 · Chào hỏi cơ bản",
+  current: 3,
+  total: 8,
+};
+
+/**
+ * Thẻ chủ đề trên trang chủ (cuộn ngang). Màu theo Homepage_svg / mockup.
+ */
+export const HOME_TOPIC_CARDS = [
+  {
+    id: "home-family",
+    label: "GIA ĐÌNH",
+    footer: "8 bài · Hoàn thành ✓",
+    badge: "Đã xong",
+    theme: "purple",
+  },
+  {
+    id: "home-medical",
+    label: "KHÁM BỆNH",
+    footer: "6 bài · Chưa bắt đầu",
+    badge: null,
+    theme: "blue",
+  },
+  {
+    id: "home-entry",
+    label: "NHẬP CẢNH",
+    footer: "5 bài · Chưa bắt đầu",
+    badge: "Mới",
+    theme: "green",
+  },
+  {
+    id: "home-shopping",
+    label: "MUA SẮM",
+    footer: "4 bài · Đang học",
+    badge: null,
+    theme: "amber",
+  },
+  {
+    id: "home-greeting",
+    label: "CHÀO HỎI",
+    footer: "3 bài · Chưa bắt đầu",
+    badge: "Phổ biến",
+    theme: "rose",
+  },
+];
 
 export const TOPICS = [
   { id: "1", name: "Khám bệnh", icon: "🏥", totalWords: 32, done: true },
