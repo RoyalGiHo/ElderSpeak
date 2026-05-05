@@ -8,12 +8,17 @@ import {
   SafeAreaView,
 } from "react-native";
 import PrimaryButton from "../../components/PrimaryButton";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 export default function FillProfileScreen({ navigation, route }) {
   const { phone } = route.params || {};
   const [name, setName] = useState("");
   const [birthday, setBirthday] = useState("");
   const [email, setEmail] = useState("");
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
 
   const handleConfirm = () => {
     if (!name) return;
@@ -22,12 +27,12 @@ export default function FillProfileScreen({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
-        <Text style={styles.backText}>← Cập nhật thông tin</Text>
+        <Text style={[styles.backText, { color: palette.text }]}>← Cập nhật thông tin</Text>
       </TouchableOpacity>
 
       <View style={styles.content}>
@@ -42,10 +47,10 @@ export default function FillProfileScreen({ navigation, route }) {
         </View>
 
         {/* Họ và tên */}
-        <View style={styles.inputRow}>
+        <View style={[styles.inputRow, { backgroundColor: isDark ? palette.card : "#F5F5F5" }]}>
           <Text style={styles.inputIcon}>👤</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: palette.text }]}
             placeholder="Họ và tên"
             value={name}
             onChangeText={setName}
@@ -53,10 +58,10 @@ export default function FillProfileScreen({ navigation, route }) {
         </View>
 
         {/* Sinh nhật */}
-        <View style={styles.inputRow}>
+        <View style={[styles.inputRow, { backgroundColor: isDark ? palette.card : "#F5F5F5" }]}>
           <Text style={styles.inputIcon}>📅</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: palette.text }]}
             placeholder="Sinh nhật của bạn"
             value={birthday}
             onChangeText={setBirthday}
@@ -64,10 +69,10 @@ export default function FillProfileScreen({ navigation, route }) {
         </View>
 
         {/* Email */}
-        <View style={styles.inputRow}>
+        <View style={[styles.inputRow, { backgroundColor: isDark ? palette.card : "#F5F5F5" }]}>
           <Text style={styles.inputIcon}>✉️</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: palette.text }]}
             placeholder="Email (Tùy chọn)"
             keyboardType="email-address"
             value={email}

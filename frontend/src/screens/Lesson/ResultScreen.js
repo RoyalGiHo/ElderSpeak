@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,11 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { USER } from "../../data/mockData";
+import {
+  useTopicProgress,
+  TOPIC_KIND,
+} from "../../store/TopicProgressContext";
+import { useAppSettings } from "../../store/AppSettingsContext";
 
 /** Palette aligned with frontend/Design/ResultPage.png */
 const C = {
@@ -59,6 +64,10 @@ export default function ResultScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const insets = useSafeAreaInsets();
+  const { markTopicCompleted } = useTopicProgress();
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const savedRef = useRef(false);
 
   const p = route.params ?? {};
   const mode = typeof p.mode === "string" ? p.mode : "lesson";
@@ -109,6 +118,37 @@ export default function ResultScreen() {
   const progressRatio =
     lessonTotal > 0 ? Math.min(lessonCurrent / lessonTotal, 1) : 0.5;
 
+  const allDone = lessonTotal > 0 && lessonCurrent >= lessonTotal;
+
+  // Khi người học đến màn Result và đã hoàn tất toàn bộ bài của chủ đề,
+  // ghi tiến độ vào "DB" FE để màn LessonTopics phản ánh đã học xong.
+  useEffect(() => {
+    if (!allDone || savedRef.current) return;
+    savedRef.current = true;
+    markTopicCompleted(
+      lessonTopicId,
+      {
+        mode,
+        scorePercent,
+        correctCount,
+        questionTotal,
+        durationSec,
+        lessonTotal,
+      },
+      TOPIC_KIND.LESSON
+    );
+  }, [
+    allDone,
+    lessonTopicId,
+    mode,
+    scorePercent,
+    correctCount,
+    questionTotal,
+    durationSec,
+    lessonTotal,
+    markTopicCompleted,
+  ]);
+
   const onBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
@@ -121,9 +161,14 @@ export default function ResultScreen() {
         lessonMeta,
         lessonTopicId,
         lessonIndex: 0,
+        sentenceIndex: 0,
       });
     } else {
-      navigation.navigate("ChooseMode", { topicTitle, lessonMeta });
+      navigation.navigate("ChooseMode", {
+        topicTitle,
+        lessonMeta,
+        lessonTopicId,
+      });
     }
   }, [navigation, mode, topicTitle, lessonMeta, lessonTopicId]);
 
@@ -139,6 +184,7 @@ export default function ResultScreen() {
         styles.root,
         { paddingTop: insets.top },
         Platform.OS === "web" && styles.rootWeb,
+        isDark && { backgroundColor: "#0B1220" },
       ]}
     >
       <View style={styles.decorTopLeft} pointerEvents="none" />
@@ -153,10 +199,10 @@ export default function ResultScreen() {
           accessibilityLabel="Quay lại"
           activeOpacity={0.75}
         >
-          <Ionicons name="chevron-back" size={22} color={C.primary} />
+          <Ionicons name="chevron-back" size={22} color={isDark ? "#93C5FD" : C.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerCenter} numberOfLines={1}>
-          {topicTitle} · Bài {lessonCurrent} / {lessonTotal}
+        <Text style={[styles.headerCenter, isDark && { color: "#93C5FD" }]} numberOfLines={1}>
+          {topicTitle} · Hoàn thành {lessonTotal} câu
         </Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -230,7 +276,7 @@ export default function ResultScreen() {
             <View style={styles.progressHeader}>
               <Text style={styles.progressTitle}>Tiến độ chủ đề</Text>
               <Text style={styles.progressMeta}>
-                {lessonCurrent} / {lessonTotal} bài
+                {lessonCurrent} / {lessonTotal} câu
               </Text>
             </View>
             <View style={styles.progressTrack}>

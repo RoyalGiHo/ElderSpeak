@@ -9,11 +9,16 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 const IS_LOGGED_IN_KEY = "is_logged_in";
 const LAST_TAB_KEY = "last_main_tab";
 
 export default function ProfileScreen({ navigation }) {
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
   const achievementRows = [
     { label: "Thành tích", icon: "award", screen: "Medals" },
     { label: "Tiến độ", icon: "bar-chart-2", screen: "History" },
@@ -35,48 +40,57 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       <View style={styles.contentContainer}>
         <View style={styles.header}>
-          <Ionicons name="person-circle" size={84} color="#0A1A47" />
-          <Text style={styles.userName}>Bác A</Text>
-          <Text style={styles.memberText}>Thành viên từ tháng 1 / 2025</Text>
-          <TouchableOpacity style={styles.editButton} activeOpacity={0.8}>
-            <Text style={styles.editButtonText}>Chỉnh sửa</Text>
+          <Ionicons name="person-circle" size={84} color={isDark ? "#93C5FD" : "#0A1A47"} />
+          <Text style={[styles.userName, { color: isDark ? palette.text : "#1F2D64" }]}>Bác A</Text>
+          <Text style={[styles.memberText, { color: isDark ? palette.textMuted : "#6E7284" }]}>
+            Thành viên từ tháng 1 / 2025
+          </Text>
+          <TouchableOpacity
+            style={[styles.editButton, isDark && { borderColor: palette.accentText }]}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.editButtonText, isDark && { color: palette.accentText }]}>Chỉnh sửa</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>THÀNH TÍCH</Text>
-        <View style={styles.sectionList}>
+        <Text style={[styles.sectionTitle, isDark && { color: palette.textMuted }]}>THÀNH TÍCH</Text>
+        <View style={[styles.sectionList, isDark && { borderColor: "#1E293B" }]}>
           {achievementRows.map((row) => (
             <TouchableOpacity
               key={row.label}
-              style={styles.row}
+              style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
               onPress={() => navigation.navigate(row.screen)}
               activeOpacity={0.78}
             >
-              <Feather name={row.icon} size={28} color="#17192B" />
-              <Text style={styles.rowLabel}>{row.label}</Text>
+              <Feather name={row.icon} size={28} color={isDark ? "#CBD5E1" : "#17192B"} />
+              <Text style={[styles.rowLabel, isDark && { color: "#E2E8F0" }]}>{row.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        <Text style={styles.sectionTitle}>TÀI KHOẢN</Text>
-        <View style={styles.sectionList}>
+        <Text style={[styles.sectionTitle, isDark && { color: palette.textMuted }]}>TÀI KHOẢN</Text>
+        <View style={[styles.sectionList, isDark && { borderColor: "#1E293B" }]}>
           {accountRows.map((row) => (
             <TouchableOpacity
               key={row.label}
-              style={styles.row}
+              style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
               onPress={() => navigation.navigate(row.screen)}
               activeOpacity={0.78}
             >
-              <Feather name={row.icon} size={28} color="#17192B" />
-              <Text style={styles.rowLabel}>{row.label}</Text>
+              <Feather name={row.icon} size={28} color={isDark ? "#CBD5E1" : "#17192B"} />
+              <Text style={[styles.rowLabel, isDark && { color: "#E2E8F0" }]}>{row.label}</Text>
             </TouchableOpacity>
           ))}
-          <TouchableOpacity style={styles.row} onPress={handleLogout} activeOpacity={0.78}>
-            <Feather name="log-out" size={28} color="#17192B" />
-            <Text style={styles.rowLabel}>Đăng xuất</Text>
+          <TouchableOpacity
+            style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
+            onPress={handleLogout}
+            activeOpacity={0.78}
+          >
+            <Feather name="log-out" size={28} color={isDark ? "#FCA5A5" : "#17192B"} />
+            <Text style={[styles.rowLabel, isDark && { color: "#FCA5A5" }]}>Đăng xuất</Text>
           </TouchableOpacity>
         </View>
       </View>

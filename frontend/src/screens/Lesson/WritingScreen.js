@@ -10,7 +10,15 @@ import {
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { LESSONS } from "../../data/mockData";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import {
+  getSentenceExercise,
+  advanceLessonPosition,
+  countTotalSentencesInTopic,
+  countLessonUnits,
+  countSentencesInUnit,
+  getGlobalSentenceStep,
+} from "../../data/mockData";
 
 const C = {
   bg: "#FFFFFF",
@@ -41,15 +49,6 @@ const C = {
   divider: "#E5E7EB",
 };
 
-function parseLessonMeta(meta) {
-  if (typeof meta !== "string") return { current: 3, total: 6 };
-  const m = meta.match(/(\d+)\s*\/\s*(\d+)/);
-  if (m) return { current: Number(m[1]), total: Number(m[2]) };
-  const bai = meta.match(/(\d+)\s*bài/);
-  if (bai) return { current: 1, total: Number(bai[1]) || 6 };
-  return { current: 3, total: 6 };
-}
-
 function answersMatch(a, b) {
   if (!a || !b || a.length !== b.length) return false;
   for (let i = 0; i < a.length; i++) {
@@ -74,15 +73,15 @@ export default function WritingScreen() {
   const topicId = params.lessonTopicId != null ? String(params.lessonTopicId) : "1";
   const lessonIndex =
     typeof params.lessonIndex === "number" ? params.lessonIndex : 0;
+  const sentenceIndex =
+    typeof params.sentenceIndex === "number" ? params.sentenceIndex : 0;
 
-  const lessonsList = LESSONS[topicId] ?? LESSONS["1"] ?? [];
-  const lesson = lessonsList[lessonIndex] ?? lessonsList[0];
-
-  const { current, total } = useMemo(
-    () => parseLessonMeta(lessonMeta),
-    [lessonMeta]
-  );
-  const progressRatio = total > 0 ? Math.min(current / total, 1) : 0;
+  const lesson = getSentenceExercise(topicId, lessonIndex, sentenceIndex);
+  const unitsCount = countLessonUnits(topicId);
+  const inUnitCount = countSentencesInUnit(topicId, lessonIndex);
+  const totalSteps = countTotalSentencesInTopic(topicId);
+  const globalStep = getGlobalSentenceStep(topicId, lessonIndex, sentenceIndex);
+  const progressRatio = totalSteps > 0 ? Math.min(globalStep / totalSteps, 1) : 0;
 
   const writeWords = lesson?.writeWords ?? [];
   const writeAnswer = lesson?.writeAnswer ?? [];
@@ -90,6 +89,10 @@ export default function WritingScreen() {
   const [pickedIndices, setPickedIndices] = useState([]);
   /** null | 'correct' | 'incorrect' */
   const [submitResult, setSubmitResult] = useState(null);
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const textScale =
+    settings.fontSize === "A+" ? 1.08 : settings.fontSize === "A-" ? 0.92 : 1;
 
   useEffect(() => {
     setSubmitResult(null);
@@ -120,23 +123,26 @@ export default function WritingScreen() {
 
   const onNext = useCallback(() => {
     if (submitResult === "correct") {
-      if (lessonIndex + 1 < lessonsList.length) {
-        navigation.replace("Writing", {
-          ...params,
-          lessonTopicId: topicId,
-          lessonIndex: lessonIndex + 1,
-        });
-        setPickedIndices([]);
-        setSubmitResult(null);
-      } else {
+      const next = advanceLessonPosition(topicId, lessonIndex, sentenceIndex);
+      if (next.topicComplete) {
+        const total = countTotalSentencesInTopic(topicId);
         navigation.navigate("Result", {
           mode: "writing",
           topicTitle,
           lessonTopicId: topicId,
           lessonMeta,
-          lessonCurrent: lessonIndex + 1,
-          lessonTotal: lessonsList.length,
+          lessonCurrent: total,
+          lessonTotal: total,
         });
+      } else {
+        navigation.replace("Writing", {
+          ...params,
+          lessonTopicId: topicId,
+          lessonIndex: next.lessonIndex,
+          sentenceIndex: next.sentenceIndex,
+        });
+        setPickedIndices([]);
+        setSubmitResult(null);
       }
       return;
     }
@@ -148,7 +154,7 @@ export default function WritingScreen() {
     userWords,
     writeAnswer,
     lessonIndex,
-    lessonsList.length,
+    sentenceIndex,
     navigation,
     params,
     topicId,
@@ -168,7 +174,12 @@ export default function WritingScreen() {
   }
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top, backgroundColor: C.bg }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top, backgroundColor: isDark ? "#0F172A" : C.bg },
+      ]}
+    >
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
@@ -177,42 +188,49 @@ export default function WritingScreen() {
       >
         <View style={styles.headerRow}>
           <TouchableOpacity
-            style={styles.backBtn}
+            style={[styles.backBtn, isDark && { backgroundColor: "#1F2937" }]}
             onPress={() => navigation.goBack()}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
           >
-            <Ionicons name="chevron-back" size={26} color={C.primary} />
+            <Ionicons name="chevron-back" size={26} color={isDark ? "#FDBA74" : C.primary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle} numberOfLines={1}>
+          <Text style={[styles.headerTitle, isDark && { color: "#FDBA74" }]} numberOfLines={1}>
             {topicTitle} · Luyện viết
           </Text>
-          <Text style={styles.progressText}>
-            {current}/{total}
+          <Text style={[styles.progressText, isDark && { color: "#FDBA74" }]}>
+            {globalStep}/{totalSteps}
           </Text>
         </View>
 
-        <View style={styles.progressBarTrack}>
+        <Text style={[styles.lessonPartMeta, isDark && { color: "#CBD5E1" }]} numberOfLines={1}>
+          Phần {lessonIndex + 1}/{Math.max(unitsCount, 1)} · Câu {sentenceIndex + 1}/
+          {Math.max(inUnitCount, 1)}
+        </Text>
+
+        <View style={[styles.progressBarTrack, isDark && { backgroundColor: "#1E293B" }]}>
           <View
             style={[styles.progressBarFill, { width: `${progressRatio * 100}%` }]}
           />
         </View>
 
-        <View style={styles.instructionBanner}>
+        <View style={[styles.instructionBanner, isDark && { backgroundColor: "#1F2937" }]}>
           <View style={styles.instructionIconCircle}>
             <Ionicons name="pencil" size={20} color="#FFFFFF" />
           </View>
-          <Text style={styles.instructionText}>
+          <Text style={[styles.instructionText, isDark && { color: "#FED7AA" }]}>
             Nhìn nghĩa tiếng Việt rồi gõ tiếng Anh
           </Text>
         </View>
 
-        <View style={styles.questionCard}>
-          <Text style={styles.questionLabel}>Dịch câu này sang tiếng Anh:</Text>
-          <Text style={styles.questionVi}>{lesson.sentenceVi}</Text>
+        <View style={[styles.questionCard, isDark && { backgroundColor: "#111827", borderColor: "#334155" }]}>
+          <Text style={[styles.questionLabel, isDark && { color: "#94A3B8" }]}>Dịch câu này sang tiếng Anh:</Text>
+          <Text style={[styles.questionVi, { fontSize: 22 * textScale }, isDark && { color: "#F8FAFC" }]}>
+            {lesson.sentenceVi}
+          </Text>
         </View>
 
-        <Text style={styles.hintLabel}>Gợi ý – chạm để thêm từ:</Text>
+        <Text style={[styles.hintLabel, isDark && { color: "#94A3B8" }]}>Gợi ý – chạm để thêm từ:</Text>
         <View style={styles.wordBank}>
           {writeWords.map((word, i) => {
             const used = pickedIndices.includes(i);
@@ -236,37 +254,39 @@ export default function WritingScreen() {
           })}
         </View>
 
-        <View style={styles.inputBox}>
-          <Text style={styles.inputText}>
+        <View style={[styles.inputBox, isDark && { backgroundColor: "#0B1220", borderColor: "#FB923C" }]}>
+          <Text style={[styles.inputText, { fontSize: 20 * textScale }, isDark && { color: "#FED7AA" }]}>
             {composed}
             <Text style={styles.inputCursor}>|</Text>
           </Text>
         </View>
 
         {submitResult === "correct" && (
-          <View style={styles.feedbackOk}>
+          <View style={[styles.feedbackOk, isDark && { backgroundColor: "#14532D" }]}>
             <View style={styles.feedbackOkHeader}>
               <View style={styles.feedbackOkIcon}>
                 <Ionicons name="checkmark" size={18} color="#FFFFFF" />
               </View>
-              <Text style={styles.feedbackOkTitle}>Đúng rồi!</Text>
+              <Text style={[styles.feedbackOkTitle, isDark && { color: "#DCFCE7" }]}>Đúng rồi!</Text>
             </View>
-            <Text style={styles.feedbackDetail}>
+            <Text style={[styles.feedbackDetail, isDark && { color: "#DCFCE7" }]}>
               Đáp án: {lesson.sentence}
             </Text>
-            <Text style={styles.feedbackDetail}>Bạn gõ: {composed}.</Text>
+            <Text style={[styles.feedbackDetail, isDark && { color: "#DCFCE7" }]}>
+              Bạn gõ: {composed}.
+            </Text>
           </View>
         )}
 
         {submitResult === "incorrect" && (
-          <View style={styles.feedbackBad}>
+          <View style={[styles.feedbackBad, isDark && { backgroundColor: "#3F1D1D" }]}>
             <View style={styles.feedbackBadHeader}>
               <View style={styles.feedbackBadIcon}>
                 <Ionicons name="close" size={18} color="#FFFFFF" />
               </View>
-              <Text style={styles.feedbackBadTitle}>Chưa đúng</Text>
+              <Text style={[styles.feedbackBadTitle, isDark && { color: "#FECACA" }]}>Chưa đúng</Text>
             </View>
-            <Text style={styles.feedbackBadDetail}>
+            <Text style={[styles.feedbackBadDetail, isDark && { color: "#FECACA" }]}>
               Hãy dùng gợi ý, sắp xếp lại câu rồi thử lại.
             </Text>
           </View>
@@ -278,12 +298,16 @@ export default function WritingScreen() {
           styles.footer,
           {
             paddingBottom: Math.max(insets.bottom, 14),
-            borderTopColor: C.divider,
+              borderTopColor: isDark ? "#1E293B" : C.divider,
           },
         ]}
       >
-        <TouchableOpacity style={styles.btnClear} onPress={onClear} activeOpacity={0.85}>
-          <Text style={styles.btnClearText}>Xoá</Text>
+        <TouchableOpacity
+          style={[styles.btnClear, isDark && { borderColor: "#FB923C" }]}
+          onPress={onClear}
+          activeOpacity={0.85}
+        >
+          <Text style={[styles.btnClearText, isDark && { color: "#FDBA74" }]}>Xoá</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnNext} onPress={onNext} activeOpacity={0.85}>
           <Text style={styles.btnNextText}>Tiếp theo</Text>
@@ -325,8 +349,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     color: C.primaryDark,
-    minWidth: 40,
+    minWidth: 52,
     textAlign: "right",
+  },
+  lessonPartMeta: {
+    marginTop: 6,
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.primaryDark,
+    paddingHorizontal: 2,
   },
   progressBarTrack: {
     height: 6,

@@ -9,7 +9,18 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { USER, HOME_CURRENT_LESSON, HOME_TOPIC_CARDS } from "../../data/mockData";
+import {
+  USER,
+  HOME_CURRENT_LESSON,
+  HOME_TOPIC_CARDS,
+  lessonTopicSummaryLine,
+} from "../../data/mockData";
+import {
+  useTopicProgress,
+  TOPIC_KIND,
+} from "../../store/TopicProgressContext";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 const C = {
   bg: "#F5F9FF",
@@ -266,13 +277,18 @@ function homeCardTopicTitle(item) {
   return lower.charAt(0).toUpperCase() + lower.slice(1);
 }
 
-function TopicCard({ item, onPress }) {
+function TopicCard({ item, onPress, isDark }) {
   const th = TOPIC_THEMES[item.theme];
   return (
     <Pressable
       style={({ pressed }) => [
         styles.topicCardOuter,
-        { backgroundColor: th.card, opacity: pressed ? 0.92 : 1 },
+        {
+          backgroundColor: isDark ? "#111827" : th.card,
+          opacity: pressed ? 0.92 : 1,
+          borderWidth: isDark ? 1 : 0,
+          borderColor: isDark ? "#334155" : "transparent",
+        },
       ]}
       onPress={onPress}
     >
@@ -283,7 +299,7 @@ function TopicCard({ item, onPress }) {
             { backgroundColor: th.badgeBg },
           ]}
         >
-          <Text style={[styles.topicBadgeText, { color: th.badgeText }]}>
+          <Text style={[styles.topicBadgeText, { color: isDark ? "#E2E8F0" : th.badgeText }]}>
             {item.badge}
           </Text>
         </View>
@@ -291,36 +307,54 @@ function TopicCard({ item, onPress }) {
         <View style={styles.topicBadgePlaceholder} />
       )}
       <TopicIcon theme={item.theme} />
-      <Text style={[styles.topicTitle, { color: th.title }]}>{item.label}</Text>
-      <View style={[styles.topicLine, { backgroundColor: th.line }]} />
-      <Text style={[styles.topicFooter, { color: th.footer }]}>{item.footer}</Text>
+      <Text style={[styles.topicTitle, { color: isDark ? "#E2E8F0" : th.title }]}>
+        {item.label}
+      </Text>
+      <View style={[styles.topicLine, { backgroundColor: isDark ? "#334155" : th.line }]} />
+      <Text style={[styles.topicFooter, { color: isDark ? "#94A3B8" : th.footer }]}>
+        {item.footer}
+      </Text>
     </Pressable>
   );
 }
 
+function buildHomeFooter(item, done) {
+  if (!item.lessonTopicId) return item.footer;
+  const line = lessonTopicSummaryLine(item.lessonTopicId);
+  if (line === "Sắp có dữ liệu") return item.footer;
+  if (done) return `${line} · Hoàn thành ✓`;
+  return `${line} · Chưa bắt đầu`;
+}
+
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { isCompleted } = useTopicProgress();
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
   const progress = useMemo(() => {
     const { current, total } = HOME_CURRENT_LESSON;
     return Math.min(1, current / total);
   }, []);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: palette.page }]}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.headerBlock}>
+        <View style={[styles.headerBlock, { backgroundColor: isDark ? palette.card : C.white }]}>
           <View style={styles.headerRow}>
-            <Text style={styles.greeting}>
+            <Text style={[styles.greeting, { color: isDark ? palette.text : C.navy }]}>
               {greetingLine()}
               {", "}
-              <Text style={styles.greetingName}>{USER.name}</Text>
+              <Text style={[styles.greetingName, { color: isDark ? palette.text : C.navy }]}>
+                {USER.name}
+              </Text>
             </Text>
             <TouchableOpacity
-              style={styles.avatar}
+              style={[styles.avatar, isDark && { backgroundColor: palette.soft }]}
               onPress={() => navigation.navigate("Profile")}
               accessibilityRole="button"
               accessibilityLabel="Hồ sơ"
@@ -333,22 +367,33 @@ export default function HomeScreen() {
         </View>
 
         <TouchableOpacity
-          style={styles.lessonCard}
+          style={[styles.lessonCard, isDark && { backgroundColor: palette.soft }]}
           activeOpacity={0.9}
-          onPress={() =>
+          onPress={() => {
+            const { lessonTopicId, title, current, total, subtitle } =
+              HOME_CURRENT_LESSON;
+            const line = lessonTopicSummaryLine(lessonTopicId);
             navigation.navigate("ChooseMode", {
-              topicTitle: HOME_CURRENT_LESSON.title,
-              lessonMeta: HOME_CURRENT_LESSON.subtitle,
-            })
-          }
+              topicTitle: title,
+              lessonMeta:
+                line === "Sắp có dữ liệu"
+                  ? subtitle
+                  : `${line} · Câu ${current}/${total}`,
+              lessonTopicId,
+            });
+          }}
         >
           <View style={styles.lessonIconBox}>
             <LessonChatIcon />
           </View>
           <View style={styles.lessonTextCol}>
-            <Text style={styles.lessonTitle}>{HOME_CURRENT_LESSON.title}</Text>
-            <Text style={styles.lessonSubtitle}>{HOME_CURRENT_LESSON.subtitle}</Text>
-            <View style={styles.progressTrack}>
+            <Text style={[styles.lessonTitle, { color: isDark ? palette.text : "rgba(0,0,0,0.85)" }]}>
+              {HOME_CURRENT_LESSON.title}
+            </Text>
+            <Text style={[styles.lessonSubtitle, { color: isDark ? palette.accentText : C.subtitleBlue }]}>
+              {HOME_CURRENT_LESSON.subtitle}
+            </Text>
+            <View style={[styles.progressTrack, isDark && { backgroundColor: palette.border }]}>
               <View
                 style={[styles.progressFill, { width: `${progress * 100}%` }]}
               />
@@ -357,24 +402,28 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <View style={styles.statsRow}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNum}>{USER.streak}</Text>
-            <Text style={styles.statLabel}>Ngày liên tiếp</Text>
+          <View style={[styles.statCard, isDark && { backgroundColor: "#1E293B" }]}>
+            <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.streak}</Text>
+            <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Ngày liên tiếp</Text>
           </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNum}>{USER.totalWords}</Text>
-            <Text style={styles.statLabel}>Từ đã học</Text>
+          <View style={[styles.statCard, isDark && { backgroundColor: "#1E293B" }]}>
+            <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.totalWords}</Text>
+            <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Từ đã học</Text>
           </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNum}>{USER.medals}</Text>
-            <Text style={styles.statLabel}>Huy chương</Text>
+          <View style={[styles.statCard, isDark && { backgroundColor: "#1E293B" }]}>
+            <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.medals}</Text>
+            <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Huy chương</Text>
           </View>
         </View>
 
         <View style={styles.sectionHead}>
-          <Text style={styles.sectionTitle}>Chọn chủ đề</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Vocabulary")}>
-            <Text style={styles.seeAll}>XEM TẤT CẢ</Text>
+          <Text style={[styles.sectionTitle, { color: isDark ? palette.text : C.navy }]}>Chọn chủ đề bài học</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("LessonTopics")}
+            accessibilityRole="button"
+            accessibilityLabel="Xem tất cả chủ đề bài học"
+          >
+            <Text style={[styles.seeAll, { color: isDark ? palette.accentText : C.primary }]}>XEM TẤT CẢ</Text>
           </TouchableOpacity>
         </View>
 
@@ -384,18 +433,32 @@ export default function HomeScreen() {
           nestedScrollEnabled
           contentContainerStyle={styles.topicStrip}
         >
-          {HOME_TOPIC_CARDS.map((item) => (
-            <TopicCard
-              key={item.id}
-              item={item}
-              onPress={() =>
-                navigation.navigate("ChooseMode", {
-                  topicTitle: homeCardTopicTitle(item),
-                  lessonMeta: item.footer,
-                })
-              }
-            />
-          ))}
+          {HOME_TOPIC_CARDS.map((item) => {
+            const done = item.lessonTopicId
+              ? isCompleted(item.lessonTopicId, TOPIC_KIND.LESSON)
+              : false;
+            const liveItem = {
+              ...item,
+              footer: buildHomeFooter(item, done),
+              badge: done ? "Đã xong" : item.badge,
+            };
+            return (
+              <TopicCard
+                key={item.id}
+                item={liveItem}
+                isDark={isDark}
+                onPress={() =>
+                  navigation.navigate("ChooseMode", {
+                    topicTitle: homeCardTopicTitle(item),
+                    lessonMeta: liveItem.footer,
+                    ...(item.lessonTopicId
+                      ? { lessonTopicId: item.lessonTopicId }
+                      : {}),
+                  })
+                }
+              />
+            );
+          })}
         </ScrollView>
       </ScrollView>
     </SafeAreaView>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -6,10 +6,13 @@ import {
   TouchableOpacity,
   Pressable,
   ScrollView,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TOPICS } from "../../data/mockData";
+import { useTopicProgress } from "../../store/TopicProgressContext";
+import { useAppSettings } from "../../store/AppSettingsContext";
 
 const C = {
   pageBg: "#EEF1F7",
@@ -21,6 +24,11 @@ const C = {
   itemBg: "#F8FAFC",
   selectedBg: "#F1F7FF",
   selectedBorder: "#1E6BDE",
+  doneBg: "#ECFDF3",
+  doneBorder: "#16A34A",
+  doneBadgeBg: "#16A34A",
+  doneBadgeText: "#FFFFFF",
+  doneText: "#15803D",
   hintBg: "#EAF3FD",
   hintBorder: "#C7DCF7",
   inactive: "#D1D5DB",
@@ -28,17 +36,51 @@ const C = {
 
 export default function FlashCardTopicsScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const initiallySelected = useMemo(
-    () => TOPICS.filter((topic) => topic.done).map((topic) => topic.id),
-    []
+  const { progress, hydrated, isCompleted, resetTopic } = useTopicProgress();
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  // Khi store đã đọc xong từ AsyncStorage, tự động gợi ý chọn các chủ đề
+  // CHƯA hoàn thành để người dùng học tiếp.
+  useEffect(() => {
+    if (!hydrated) return;
+    setSelectedIds((prev) => {
+      if (prev.length > 0) return prev;
+      const suggested = TOPICS.filter(
+        (t) => !isCompleted(t.id)
+      ).map((t) => t.id);
+      return suggested.length > 0 ? [suggested[0]] : [];
+    });
+  }, [hydrated, isCompleted]);
+
+  const completedCount = useMemo(
+    () => TOPICS.filter((t) => isCompleted(t.id)).length,
+    [progress, isCompleted]
   );
-  const [selectedIds, setSelectedIds] = useState(initiallySelected);
 
   const toggleTopic = (topicId) => {
     setSelectedIds((prev) =>
       prev.includes(topicId)
         ? prev.filter((id) => id !== topicId)
         : [...prev, topicId]
+    );
+  };
+
+  const onLongPressTopic = (topic) => {
+    if (!isCompleted(topic.id)) return;
+    Alert.alert(
+      "Học lại chủ đề?",
+      `Đặt lại tiến độ "${topic.name}" về chưa hoàn thành.`,
+      [
+        { text: "Huỷ", style: "cancel" },
+        {
+          text: "Đặt lại",
+          style: "destructive",
+          onPress: () => resetTopic(topic.id),
+        },
+      ]
     );
   };
 
@@ -58,7 +100,12 @@ export default function FlashCardTopicsScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top + 6 }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top + 6, backgroundColor: isDark ? "#0B1220" : C.pageBg },
+      ]}
+    >
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backBtn}
@@ -67,12 +114,16 @@ export default function FlashCardTopicsScreen({ navigation }) {
           accessibilityLabel="Quay lại"
           activeOpacity={0.75}
         >
-          <Ionicons name="chevron-back" size={22} color="#3B82F6" />
+          <Ionicons name="chevron-back" size={22} color={isDark ? "#93C5FD" : "#3B82F6"} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Từ vựng</Text>
+        <Text style={[styles.headerTitle, isDark && { color: "#93C5FD" }]}>Từ vựng</Text>
       </View>
 
-      <Text style={styles.mainTitle}>Chọn chủ đề bạn muốn</Text>
+      <Text style={[styles.mainTitle, isDark && { color: "#E2E8F0" }]}>Chọn chủ đề bạn muốn</Text>
+      <Text style={[styles.subTitle, isDark && { color: "#94A3B8" }]}>
+        Đã hoàn thành {completedCount}/{TOPICS.length} chủ đề
+        {completedCount > 0 ? "  ·  Nhấn giữ để học lại" : ""}
+      </Text>
 
       <ScrollView
         contentContainerStyle={styles.listContent}
@@ -81,15 +132,19 @@ export default function FlashCardTopicsScreen({ navigation }) {
       >
         {TOPICS.map((topic) => {
           const selected = selectedIds.includes(topic.id);
+          const done = isCompleted(topic.id);
           return (
             <Pressable
               key={topic.id}
               style={({ pressed }) => [
                 styles.topicRow,
+                done && !selected && styles.topicRowDone,
                 selected && styles.topicRowSelected,
                 pressed && styles.topicRowPressed,
               ]}
               onPress={() => toggleTopic(topic.id)}
+              onLongPress={() => onLongPressTopic(topic)}
+              delayLongPress={400}
             >
               <View style={styles.topicLeft}>
                 <Text style={styles.topicIcon}>{topic.icon}</Text>
@@ -97,19 +152,42 @@ export default function FlashCardTopicsScreen({ navigation }) {
                   <Text style={styles.topicName} numberOfLines={1}>
                     {topic.name}
                   </Text>
-                  <Text style={styles.topicMeta}>{topic.totalWords} từ vựng</Text>
+                  <View style={styles.topicMetaRow}>
+                    <Text style={styles.topicMeta}>
+                      {topic.totalWords} từ vựng
+                    </Text>
+                    {done ? (
+                      <View style={styles.doneBadge}>
+                        <Ionicons name="checkmark" size={13} color="#FFFFFF" />
+                        <Text style={styles.doneBadgeLabel}>Đã học xong</Text>
+                      </View>
+                    ) : null}
+                  </View>
                 </View>
               </View>
 
-              <View style={[styles.checkCircle, selected && styles.checkCircleSelected]}>
-                {selected ? <Ionicons name="checkmark" size={18} color="#FFFFFF" /> : null}
+              <View
+                style={[
+                  styles.checkCircle,
+                  selected && styles.checkCircleSelected,
+                  !selected && done && styles.checkCircleDone,
+                ]}
+              >
+                {selected || (done && !selected) ? (
+                  <Ionicons name="checkmark" size={18} color="#FFFFFF" />
+                ) : null}
               </View>
             </Pressable>
           );
         })}
       </ScrollView>
 
-      <View style={[styles.confirmWrap, { paddingBottom: Math.max(insets.bottom, 12) + 12 }]}>
+      <View
+        style={[
+          styles.confirmWrap,
+          { paddingBottom: Math.max(insets.bottom, 12) + 12 },
+        ]}
+      >
         <TouchableOpacity
           style={[styles.confirmBtn, !canConfirm && styles.confirmBtnDisabled]}
           onPress={handleConfirm}
@@ -153,8 +231,15 @@ const styles = StyleSheet.create({
     fontSize: 31,
     color: C.title,
     fontWeight: "800",
-    lineHeight: 56,
+    lineHeight: 44,
     letterSpacing: -0.5,
+  },
+  subTitle: {
+    marginTop: 4,
+    marginBottom: 4,
+    fontSize: 15,
+    color: C.muted,
+    fontWeight: "500",
   },
   hintBox: {
     marginTop: 16,
@@ -172,7 +257,7 @@ const styles = StyleSheet.create({
     lineHeight: 30,
   },
   list: {
-    marginTop: 18,
+    marginTop: 14,
     flex: 1,
   },
   listContent: {
@@ -193,6 +278,10 @@ const styles = StyleSheet.create({
   topicRowSelected: {
     borderColor: C.selectedBorder,
     backgroundColor: C.selectedBg,
+  },
+  topicRowDone: {
+    borderColor: C.doneBorder,
+    backgroundColor: C.doneBg,
   },
   topicRowPressed: {
     opacity: 0.95,
@@ -218,12 +307,33 @@ const styles = StyleSheet.create({
     color: "#1F2937",
     lineHeight: 30,
   },
+  topicMetaRow: {
+    marginTop: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 8,
+  },
   topicMeta: {
     fontSize: 16,
     color: C.muted,
     fontWeight: "500",
-    marginTop: 2,
     lineHeight: 22,
+  },
+  doneBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: C.doneBadgeBg,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 999,
+  },
+  doneBadgeLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: C.doneBadgeText,
+    letterSpacing: 0.2,
   },
   checkCircle: {
     width: 34,
@@ -238,6 +348,10 @@ const styles = StyleSheet.create({
   checkCircleSelected: {
     borderColor: C.primary,
     backgroundColor: C.primary,
+  },
+  checkCircleDone: {
+    borderColor: C.doneBorder,
+    backgroundColor: C.doneBorder,
   },
   confirmWrap: {
     paddingTop: 10,

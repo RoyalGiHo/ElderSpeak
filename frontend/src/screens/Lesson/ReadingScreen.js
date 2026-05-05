@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,15 @@ import {
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { LESSONS } from "../../data/mockData";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import {
+  getSentenceExercise,
+  advanceLessonPosition,
+  countTotalSentencesInTopic,
+  countLessonUnits,
+  countSentencesInUnit,
+  getGlobalSentenceStep,
+} from "../../data/mockData";
 
 const C = {
   bg: "#FFFFFF",
@@ -47,15 +55,6 @@ const MOCK_FEEDBACK = {
   hint: "Từ 'stomachache' cần phát âm lại",
 };
 
-function parseLessonMeta(meta) {
-  if (typeof meta !== "string") return { current: 3, total: 6 };
-  const m = meta.match(/(\d+)\s*\/\s*(\d+)/);
-  if (m) return { current: Number(m[1]), total: Number(m[2]) };
-  const bai = meta.match(/(\d+)\s*bài/);
-  if (bai) return { current: 1, total: Number(bai[1]) || 6 };
-  return { current: 3, total: 6 };
-}
-
 export default function ReadingScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -72,18 +71,22 @@ export default function ReadingScreen() {
   const topicId = params.lessonTopicId != null ? String(params.lessonTopicId) : "1";
   const lessonIndex =
     typeof params.lessonIndex === "number" ? params.lessonIndex : 0;
+  const sentenceIndex =
+    typeof params.sentenceIndex === "number" ? params.sentenceIndex : 0;
 
-  const lessonsList = LESSONS[topicId] ?? LESSONS["1"] ?? [];
-  const lesson = lessonsList[lessonIndex] ?? lessonsList[0];
-
-  const { current, total } = useMemo(
-    () => parseLessonMeta(lessonMeta),
-    [lessonMeta]
-  );
-  const progressRatio = total > 0 ? Math.min(current / total, 1) : 0;
+  const lesson = getSentenceExercise(topicId, lessonIndex, sentenceIndex);
+  const unitsCount = countLessonUnits(topicId);
+  const inUnitCount = countSentencesInUnit(topicId, lessonIndex);
+  const totalSteps = countTotalSentencesInTopic(topicId);
+  const globalStep = getGlobalSentenceStep(topicId, lessonIndex, sentenceIndex);
+  const progressRatio = totalSteps > 0 ? Math.min(globalStep / totalSteps, 1) : 0;
 
   const [isHoldingMic, setIsHoldingMic] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const textScale =
+    settings.fontSize === "A+" ? 1.08 : settings.fontSize === "A-" ? 0.92 : 1;
 
   const phonetic =
     lesson?.phonetic ??
@@ -110,28 +113,31 @@ export default function ReadingScreen() {
   }, []);
 
   const onNext = useCallback(() => {
-    if (lessonIndex + 1 < lessonsList.length) {
-      navigation.replace("Reading", {
-        ...params,
-        lessonTopicId: topicId,
-        lessonIndex: lessonIndex + 1,
-      });
-      setShowFeedback(false);
-    } else {
+    const next = advanceLessonPosition(topicId, lessonIndex, sentenceIndex);
+    if (next.topicComplete) {
+      const total = countTotalSentencesInTopic(topicId);
       navigation.navigate("Result", {
         mode: "reading",
         topicTitle,
         lessonTopicId: topicId,
         lessonMeta,
-        lessonCurrent: lessonIndex + 1,
-        lessonTotal: lessonsList.length,
+        lessonCurrent: total,
+        lessonTotal: total,
       });
+    } else {
+      navigation.replace("Reading", {
+        ...params,
+        lessonTopicId: topicId,
+        lessonIndex: next.lessonIndex,
+        sentenceIndex: next.sentenceIndex,
+      });
+      setShowFeedback(false);
     }
   }, [
     navigation,
     params,
     lessonIndex,
-    lessonsList.length,
+    sentenceIndex,
     topicId,
     topicTitle,
     lessonMeta,
@@ -149,7 +155,12 @@ export default function ReadingScreen() {
   }
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top, backgroundColor: C.pageBg }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top, backgroundColor: isDark ? "#0F172A" : C.pageBg },
+      ]}
+    >
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
@@ -158,44 +169,53 @@ export default function ReadingScreen() {
       >
         <View style={styles.headerRow}>
           <TouchableOpacity
-            style={styles.backBtn}
+            style={[styles.backBtn, isDark && { backgroundColor: "#1E293B" }]}
             onPress={() => navigation.goBack()}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
           >
-            <Ionicons name="chevron-back" size={22} color={C.primary} />
+            <Ionicons name="chevron-back" size={22} color={isDark ? "#93C5FD" : C.primary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle} numberOfLines={1}>
+          <Text style={[styles.headerTitle, isDark && { color: "#93C5FD" }]} numberOfLines={1}>
             {topicTitle} · Luyện đọc
           </Text>
-          <Text style={styles.progressText}>
-            {current}/{total}
+          <Text style={[styles.progressText, isDark && { color: "#93C5FD" }]}>
+            {globalStep}/{totalSteps}
           </Text>
         </View>
 
-        <View style={styles.progressBarTrack}>
+        <Text style={[styles.lessonPartMeta, isDark && { color: "#CBD5E1" }]} numberOfLines={1}>
+          Phần {lessonIndex + 1}/{Math.max(unitsCount, 1)} · Câu {sentenceIndex + 1}/
+          {Math.max(inUnitCount, 1)}
+        </Text>
+
+        <View style={[styles.progressBarTrack, isDark && { backgroundColor: "#1E293B" }]}>
           <View
             style={[styles.progressBarFill, { width: `${progressRatio * 100}%` }]}
           />
         </View>
 
-        <View style={styles.instructionBanner}>
+        <View style={[styles.instructionBanner, isDark && { backgroundColor: "#1F2937" }]}>
           <View style={styles.instructionIconCircle}>
             <Ionicons name="mic" size={18} color="#FFFFFF" />
           </View>
-          <Text style={styles.instructionText}>
+          <Text style={[styles.instructionText, isDark && { color: "#D1FAE5" }]}>
             Đọc to câu bên dưới rồi bấm nút mic
           </Text>
         </View>
 
-        <View style={styles.sentenceCard}>
-          <Text style={styles.sentenceEn}>{lesson.sentence}</Text>
-          <Text style={styles.sentenceVi}>{lesson.sentenceVi}</Text>
+        <View style={[styles.sentenceCard, isDark && { backgroundColor: "#111827" }]}>
+          <Text style={[styles.sentenceEn, { fontSize: 22 * textScale }, isDark && { color: "#F3F4F6" }]}>
+            {lesson.sentence}
+          </Text>
+          <Text style={[styles.sentenceVi, { fontSize: 17 * textScale }, isDark && { color: "#CBD5E1" }]}>
+            {lesson.sentenceVi}
+          </Text>
         </View>
         {!!phonetic && (
           <View style={styles.ipaRow}>
-            <View style={styles.ipaPill}>
-              <Text style={styles.ipaText}>{phonetic}</Text>
+            <View style={[styles.ipaPill, isDark && { backgroundColor: "#1E3A8A" }]}>
+              <Text style={[styles.ipaText, isDark && { color: "#DBEAFE" }]}>{phonetic}</Text>
             </View>
           </View>
         )}
@@ -213,20 +233,20 @@ export default function ReadingScreen() {
               <Ionicons name="mic" size={40} color="#FFFFFF" />
             </View>
           </Pressable>
-          <Text style={styles.micHint}>Giữ để nói</Text>
+          <Text style={[styles.micHint, isDark && { color: "#94A3B8" }]}>Giữ để nói</Text>
         </View>
 
         {showFeedback && (
-          <View style={styles.feedbackCard}>
+          <View style={[styles.feedbackCard, isDark && { backgroundColor: "#14532D" }]}>
             <View style={styles.feedbackHeader}>
               <View style={styles.feedbackCheckCircle}>
                 <Ionicons name="checkmark" size={18} color="#FFFFFF" />
               </View>
-              <Text style={styles.feedbackScore}>
+              <Text style={[styles.feedbackScore, isDark && { color: "#DCFCE7" }]}>
                 {MOCK_FEEDBACK.label} {MOCK_FEEDBACK.score} / 100
               </Text>
             </View>
-            <Text style={styles.feedbackLabel}>Bạn đã nói:</Text>
+            <Text style={[styles.feedbackLabel, isDark && { color: "#DCFCE7" }]}>Bạn đã nói:</Text>
             <View style={styles.feedbackWords}>
               {MOCK_FEEDBACK.segments.map((seg, i) => {
                 if (seg.text === " ") {
@@ -247,7 +267,7 @@ export default function ReadingScreen() {
                   );
                 }
                 return (
-                  <Text key={i} style={styles.wordPlain}>
+                  <Text key={i} style={[styles.wordPlain, isDark && { color: "#E5E7EB" }]}>
                     {seg.text}
                   </Text>
                 );
@@ -255,7 +275,7 @@ export default function ReadingScreen() {
             </View>
             <View style={styles.hintRow}>
               <Ionicons name="arrow-back" size={14} color={C.successGreen} />
-              <Text style={styles.hintText}>{MOCK_FEEDBACK.hint}</Text>
+              <Text style={[styles.hintText, isDark && { color: "#DCFCE7" }]}>{MOCK_FEEDBACK.hint}</Text>
             </View>
           </View>
         )}
@@ -267,14 +287,18 @@ export default function ReadingScreen() {
             styles.footer,
             {
               paddingBottom: Math.max(insets.bottom, 14),
-              borderTopColor: C.divider,
+              borderTopColor: isDark ? "#1E293B" : C.divider,
             },
           ]}
         >
           <TouchableOpacity style={styles.btnRetry} onPress={onRetry} activeOpacity={0.85}>
             <Text style={styles.btnRetryText}>Thử lại</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnNext} onPress={onNext} activeOpacity={0.85}>
+          <TouchableOpacity
+            style={[styles.btnNext, isDark && { backgroundColor: "#2563EB" }]}
+            onPress={onNext}
+            activeOpacity={0.85}
+          >
             <Text style={styles.btnNextText}>Tiếp theo</Text>
             <Ionicons name="arrow-forward" size={18} color="#FFFFFF" style={{ marginLeft: 6 }} />
           </TouchableOpacity>
@@ -313,8 +337,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     color: C.primary,
-    minWidth: 40,
+    minWidth: 52,
     textAlign: "right",
+  },
+  lessonPartMeta: {
+    marginTop: 6,
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.navy,
+    paddingHorizontal: 2,
+    opacity: 0.92,
   },
   progressBarTrack: {
     height: 6,

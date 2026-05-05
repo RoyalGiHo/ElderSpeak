@@ -9,8 +9,13 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import PrimaryButton from "../../components/PrimaryButton";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 export default function RegisterScreen({ navigation }) {
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -24,21 +29,21 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       {/* Logo */}
       <View style={styles.logoArea}>
         <Text style={styles.logoText}>ElderSpeak</Text>
-        <Text style={styles.tagline}>EASY TO BETTER EVERYDAY</Text>
+        <Text style={[styles.tagline, { color: palette.textMuted }]}>EASY TO BETTER EVERYDAY</Text>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.title}>Bắt đầu với chúng tôi</Text>
+        <Text style={[styles.title, { color: palette.text }]}>Bắt đầu với chúng tôi</Text>
 
         {/* Số điện thoại */}
-        <View style={styles.inputRow}>
+        <View style={[styles.inputRow, { backgroundColor: isDark ? palette.card : "#F5F5F5" }]}>
           <Text style={styles.inputIcon}>📞</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: palette.text }]}
             placeholder="Số điện thoại"
             keyboardType="phone-pad"
             value={phone}
@@ -47,10 +52,10 @@ export default function RegisterScreen({ navigation }) {
         </View>
 
         {/* Mật khẩu */}
-        <View style={styles.inputRow}>
+        <View style={[styles.inputRow, { backgroundColor: isDark ? palette.card : "#F5F5F5" }]}>
           <Text style={styles.inputIcon}>🔒</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: palette.text }]}
             placeholder="Mật khẩu"
             secureTextEntry={!showPassword}
             value={password}

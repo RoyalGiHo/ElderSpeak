@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useAppSettings } from "../../store/AppSettingsContext";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
 
@@ -80,6 +81,8 @@ function TopicChip({ label, selected, onPress }) {
 
 export default function FeedbackScreen({ navigation }) {
   const insets = useSafeAreaInsets();
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
   const [rating, setRating] = useState(4);
   const [selectedTopics, setSelectedTopics] = useState(["ui"]);
   const [comment, setComment] = useState("");
@@ -122,7 +125,12 @@ export default function FeedbackScreen({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
     >
-      <View style={[styles.root, { paddingTop: insets.top + 6 }]}>
+      <View
+        style={[
+          styles.root,
+          { paddingTop: insets.top + 6, backgroundColor: isDark ? "#0F172A" : "#FFFFFF" },
+        ]}
+      >
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.backButton}
@@ -133,7 +141,7 @@ export default function FeedbackScreen({ navigation }) {
           >
             <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Gửi phản hồi</Text>
+          <Text style={[styles.headerTitle, isDark && { color: "#E2E8F0" }]}>Gửi phản hồi</Text>
         </View>
 
         <ScrollView
@@ -144,10 +152,10 @@ export default function FeedbackScreen({ navigation }) {
         >
           <View style={styles.ratingBlock}>
             <StarRating value={rating} onChange={setRating} />
-            <Text style={styles.ratingLabel}>{ratingLabel}</Text>
+            <Text style={[styles.ratingLabel, isDark && { color: "#94A3B8" }]}>{ratingLabel}</Text>
           </View>
 
-          <Text style={styles.sectionTitle}>Bạn muốn góp ý về điều gì?</Text>
+          <Text style={[styles.sectionTitle, isDark && { color: "#E2E8F0" }]}>Bạn muốn góp ý về điều gì?</Text>
           <View style={styles.chipsWrap}>
             {TOPICS.map((topic) => (
               <TopicChip
@@ -159,24 +167,24 @@ export default function FeedbackScreen({ navigation }) {
             ))}
           </View>
 
-          <Text style={[styles.sectionTitle, styles.sectionTitleSpaced]}>
+          <Text style={[styles.sectionTitle, styles.sectionTitleSpaced, isDark && { color: "#E2E8F0" }]}>
             Cảm nhận của bạn
           </Text>
-          <View style={styles.textAreaWrap}>
+          <View style={[styles.textAreaWrap, isDark && { backgroundColor: "#111827", borderColor: "#334155" }]}>
             <TextInput
               value={comment}
               onChangeText={(text) =>
                 setComment(text.length > MAX_LENGTH ? text.slice(0, MAX_LENGTH) : text)
               }
               placeholder="Ví dụ: Chữ hơi nhỏ, khó đọc ở ngoài trời..."
-              placeholderTextColor="#A8AEC2"
-              style={styles.textArea}
+              placeholderTextColor={isDark ? "#64748B" : "#A8AEC2"}
+              style={[styles.textArea, isDark && { color: "#E2E8F0" }]}
               multiline
               maxLength={MAX_LENGTH}
               textAlignVertical="top"
               accessibilityLabel="Nội dung phản hồi"
             />
-            <Text style={styles.counter}>
+            <Text style={[styles.counter, isDark && { color: "#64748B" }]}>
               {charCount} / {MAX_LENGTH}
             </Text>
           </View>
@@ -192,7 +200,11 @@ export default function FeedbackScreen({ navigation }) {
             activeOpacity={0.9}
             onPress={handleSubmit}
             disabled={!canSubmit}
-            style={[styles.submitButton, !canSubmit && styles.submitButtonDisabled]}
+            style={[
+              styles.submitButton,
+              isDark && { backgroundColor: "#2563EB" },
+              !canSubmit && styles.submitButtonDisabled,
+            ]}
             accessibilityRole="button"
             accessibilityLabel="Gửi phản hồi"
           >

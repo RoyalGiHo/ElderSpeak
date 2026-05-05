@@ -8,33 +8,38 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import PrimaryButton from "../../components/PrimaryButton";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 export default function LetLogInScreen({ navigation }) {
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       {/* Logo */}
       <View style={styles.logoArea}>
         <Text style={styles.logoText}>ElderSpeak</Text>
-        <Text style={styles.tagline}>EASY TO BETTER EVERYDAY</Text>
+        <Text style={[styles.tagline, { color: palette.textMuted }]}>EASY TO BETTER EVERYDAY</Text>
       </View>
 
       {/* Nội dung */}
       <View style={styles.content}>
-        <Text style={styles.title}>Bắt đầu nào</Text>
+        <Text style={[styles.title, { color: palette.text }]}>Bắt đầu nào</Text>
 
         {/* Google */}
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity style={[styles.socialButton, isDark && { borderColor: "#334155", backgroundColor: "#111827" }]}>
           <FontAwesome name="google" size={22} color="#EA4335" />
-          <Text style={styles.socialText}> Đăng nhập với Google</Text>
+          <Text style={[styles.socialText, isDark && { color: "#E2E8F0" }]}> Đăng nhập với Google</Text>
         </TouchableOpacity>
 
         {/* Apple */}
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity style={[styles.socialButton, isDark && { borderColor: "#334155", backgroundColor: "#111827" }]}>
           <FontAwesome name="apple" size={22} color="#000" />
-          <Text style={styles.socialText}> Đăng nhập với Apple</Text>
+          <Text style={[styles.socialText, isDark && { color: "#E2E8F0" }]}> Đăng nhập với Apple</Text>
         </TouchableOpacity>
 
-        <Text style={styles.orText}>(hoặc)</Text>
+        <Text style={[styles.orText, isDark && { color: "#94A3B8" }]}>(hoặc)</Text>
 
         {/* Đăng nhập với tài khoản */}
         <PrimaryButton

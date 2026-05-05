@@ -1,4 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -22,6 +22,7 @@ import FlashCardTopicsScreen from "./src/screens/Flashcard/FlashCardTopicsScreen
 import ProfileScreen from "./src/screens/Main/ProfileScreen";
 
 // Lesson
+import LessonTopicsScreen from "./src/screens/Lesson/LessonTopicsScreen";
 import ChooseModeScreen from "./src/screens/Lesson/ChooseModeScreen";
 import ReadingScreen from "./src/screens/Lesson/ReadingScreen";
 import ListeningScreen from "./src/screens/Lesson/ListeningScreen";
@@ -41,6 +42,9 @@ import { useFonts, Audiowide_400Regular } from "@expo-google-fonts/audiowide";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 
+import { TopicProgressProvider } from "./src/store/TopicProgressContext";
+import { AppSettingsProvider, useAppSettings } from "./src/store/AppSettingsContext";
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const ONBOARDING_DONE_KEY = "onboarding_done";
@@ -48,10 +52,13 @@ const IS_LOGGED_IN_KEY = "is_logged_in";
 const LAST_TAB_KEY = "last_main_tab";
 
 function MainTabs() {
+  const { settings } = useAppSettings();
   const tabBarBottomPad = Platform.OS === "ios" ? 22 : 16;
   const tabBarHeight = Platform.OS === "ios" ? 96 : 88;
   const [tabReady, setTabReady] = useState(false);
   const [initialTab, setInitialTab] = useState("Home");
+  const tabLabelSize =
+    settings.fontSize === "A+" ? 17 : settings.fontSize === "A-" ? 15 : 16;
 
   useEffect(() => {
     const loadLastTab = async () => {
@@ -83,13 +90,13 @@ function MainTabs() {
       screenOptions={({ route }) => ({
         headerShown: false,
         unmountOnBlur: false,
-        tabBarActiveTintColor: "#0961F5",
-        tabBarInactiveTintColor: "#A0A4AB",
+        tabBarActiveTintColor: settings.darkMode ? "#7FB0FF" : "#0961F5",
+        tabBarInactiveTintColor: settings.darkMode ? "#8D94A4" : "#A0A4AB",
         tabBarStyle: {
           paddingTop: 12,
           paddingBottom: tabBarBottomPad,
           height: tabBarHeight,
-          backgroundColor: "#FFFFFF",
+          backgroundColor: settings.darkMode ? "#141622" : "#FFFFFF",
           borderTopWidth: 0,
           elevation: 10,
           shadowColor: "#000",
@@ -125,7 +132,7 @@ function MainTabs() {
               maxFontSizeMultiplier={1.35}
               style={{
                 color,
-                fontSize: 16,
+                fontSize: tabLabelSize,
                 fontWeight: focused ? "800" : "600",
                 letterSpacing: 0.2,
                 marginTop: 2,
@@ -156,7 +163,8 @@ function MainTabs() {
   );
 }
 
-export default function App() {
+function AppNavigator() {
+  const { isReady, settings } = useAppSettings();
   const [fontsLoaded] = useFonts({
     Audiowide_400Regular,
     ...Ionicons.font,
@@ -186,47 +194,82 @@ export default function App() {
     loadInitialRoute();
   }, []);
 
-  if (!fontsLoaded || isBootstrapping) {
+  if (!fontsLoaded || isBootstrapping || !isReady) {
     return null;
   }
 
+  const navTheme = settings.darkMode
+    ? {
+        ...DarkTheme,
+        colors: {
+          ...DarkTheme.colors,
+          background: "#10131D",
+          card: "#141622",
+          text: "#F5F7FF",
+          border: "#1E2231",
+          primary: "#7FB0FF",
+        },
+      }
+    : {
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          background: "#ECEEF4",
+          card: "#FFFFFF",
+          text: "#16172A",
+          border: "#E2E8F0",
+          primary: "#0961F5",
+        },
+      };
+
+  return (
+    <NavigationContainer theme={navTheme}>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName={initialRouteName}
+      >
+        {/* Onboarding */}
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+
+        {/* Auth */}
+        <Stack.Screen name="LetLogIn" component={LetLogInScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="FillProfile" component={FillProfileScreen} />
+        <Stack.Screen name="OTP" component={OTPScreen} />
+
+        {/* Main */}
+        <Stack.Screen name="MainTabs" component={MainTabs} />
+
+        {/* Lesson */}
+        <Stack.Screen name="LessonTopics" component={LessonTopicsScreen} />
+        <Stack.Screen name="ChooseMode" component={ChooseModeScreen} />
+        <Stack.Screen name="Reading" component={ReadingScreen} />
+        <Stack.Screen name="Listening" component={ListeningScreen} />
+        <Stack.Screen name="Writing" component={WritingScreen} />
+        <Stack.Screen name="Result" component={ResultScreen} />
+
+        {/* Flashcard */}
+        <Stack.Screen name="FlashCard" component={FlashCardScreen} />
+
+        {/* Profile sub */}
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen name="Feedback" component={FeedbackScreen} />
+        <Stack.Screen name="Medals" component={MedalsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{ headerShown: false }}
-          initialRouteName={initialRouteName}
-        >
-          {/* Onboarding */}
-          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-
-          {/* Auth */}
-          <Stack.Screen name="LetLogIn" component={LetLogInScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="FillProfile" component={FillProfileScreen} />
-          <Stack.Screen name="OTP" component={OTPScreen} />
-
-          {/* Main */}
-          <Stack.Screen name="MainTabs" component={MainTabs} />
-
-          {/* Lesson */}
-          <Stack.Screen name="ChooseMode" component={ChooseModeScreen} />
-          <Stack.Screen name="Reading" component={ReadingScreen} />
-          <Stack.Screen name="Listening" component={ListeningScreen} />
-          <Stack.Screen name="Writing" component={WritingScreen} />
-          <Stack.Screen name="Result" component={ResultScreen} />
-
-          {/* Flashcard */}
-          <Stack.Screen name="FlashCard" component={FlashCardScreen} />
-
-          {/* Profile sub */}
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen name="History" component={HistoryScreen} />
-          <Stack.Screen name="Feedback" component={FeedbackScreen} />
-          <Stack.Screen name="Medals" component={MedalsScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AppSettingsProvider>
+        <TopicProgressProvider>
+          <AppNavigator />
+        </TopicProgressProvider>
+      </AppSettingsProvider>
     </SafeAreaProvider>
   );
 }

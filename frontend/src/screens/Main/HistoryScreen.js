@@ -10,6 +10,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { HISTORY, USER } from "../../data/mockData";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
 
@@ -44,6 +46,9 @@ function levelColor(level) {
 
 export default function HistoryScreen({ navigation }) {
   const insets = useSafeAreaInsets();
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
 
   const stats = useMemo(
     () => [
@@ -63,7 +68,12 @@ export default function HistoryScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top + 6 }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top + 6, backgroundColor: palette.page },
+      ]}
+    >
       <ScrollView
         style={[styles.pageScroll, WEB_SCROLL_STYLE]}
         contentContainerStyle={[
@@ -74,7 +84,7 @@ export default function HistoryScreen({ navigation }) {
       >
         <View style={styles.header}>
           <TouchableOpacity
-            style={styles.backButton}
+            style={[styles.backButton, isDark && { backgroundColor: palette.primary }]}
             activeOpacity={0.85}
             onPress={handleBack}
             accessibilityRole="button"
@@ -82,23 +92,23 @@ export default function HistoryScreen({ navigation }) {
           >
             <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.title}>Tiến độ</Text>
+          <Text style={[styles.title, { color: isDark ? palette.text : "#16172A" }]}>Tiến độ</Text>
         </View>
 
         <View style={styles.statsRow}>
           {stats.map((stat) => (
-            <View key={stat.label} style={styles.statCard}>
-              <Text style={styles.statLabel}>{stat.label}</Text>
-              <Text style={styles.statValue}>{stat.value}</Text>
+            <View key={stat.label} style={[styles.statCard, isDark && { backgroundColor: palette.soft }]}>
+              <Text style={[styles.statLabel, isDark && { color: palette.textMuted }]}>{stat.label}</Text>
+              <Text style={[styles.statValue, isDark && { color: palette.text }]}>{stat.value}</Text>
             </View>
           ))}
         </View>
 
-        <Text style={styles.blockLabel}>HOẠT ĐỘNG 3 THÁNG QUA</Text>
-        <View style={styles.heatmapCard}>
+        <Text style={[styles.blockLabel, isDark && { color: palette.textMuted }]}>HOẠT ĐỘNG 3 THÁNG QUA</Text>
+        <View style={[styles.heatmapCard, isDark && { backgroundColor: palette.card }]}>
           <View style={styles.monthLabels}>
             {WEEK_LABELS.map((label) => (
-              <Text key={label} style={styles.monthLabelText}>
+              <Text key={label} style={[styles.monthLabelText, isDark && { color: "#64748B" }]}>
                 {label}
               </Text>
             ))}
@@ -107,7 +117,7 @@ export default function HistoryScreen({ navigation }) {
           <View style={styles.heatmapGrid}>
             <View style={styles.dayLabelsColumn}>
               {DAY_LABELS.map((label) => (
-                <Text key={label} style={styles.dayLabelText}>
+                <Text key={label} style={[styles.dayLabelText, isDark && { color: "#64748B" }]}>
                   {label}
                 </Text>
               ))}
@@ -128,23 +138,23 @@ export default function HistoryScreen({ navigation }) {
           </View>
 
           <View style={styles.legend}>
-            <Text style={styles.legendText}>Ít</Text>
+            <Text style={[styles.legendText, isDark && { color: "#94A3B8" }]}>Ít</Text>
             {[0, 1, 1, 2, 2].map((level, index) => (
               <View
                 key={`legend-cell-${index}`}
                 style={[styles.legendCell, { backgroundColor: levelColor(level) }]}
               />
             ))}
-            <Text style={styles.legendText}>Nhiều</Text>
+            <Text style={[styles.legendText, isDark && { color: "#94A3B8" }]}>Nhiều</Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>CHI TIẾT TỪNG NGÀY</Text>
+        <Text style={[styles.sectionTitle, isDark && { color: "#94A3B8" }]}>CHI TIẾT TỪNG NGÀY</Text>
 
         <View style={styles.list}>
           {HISTORY.map((dayItem) => (
             <View key={dayItem.date} style={styles.dayGroup}>
-              <Text style={styles.dayDate}>{dayItem.date}</Text>
+              <Text style={[styles.dayDate, isDark && { color: "#E2E8F0" }]}>{dayItem.date}</Text>
               {dayItem.items.map((entry, entryIndex) => (
                 <View key={`${dayItem.date}-${entry}`} style={styles.entryRow}>
                   <View
@@ -153,7 +163,7 @@ export default function HistoryScreen({ navigation }) {
                       { backgroundColor: getDotColor(dayItem.date, entryIndex) },
                     ]}
                   />
-                  <Text style={styles.entryText}>{entry}</Text>
+                  <Text style={[styles.entryText, isDark && { color: "#CBD5E1" }]}>{entry}</Text>
                 </View>
               ))}
             </View>

@@ -10,6 +10,8 @@ import {
   StatusBar,
   Image,
 } from "react-native";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 const { width } = Dimensions.get("window");
 
@@ -41,6 +43,9 @@ const slides = [
 ];
 
 export default function OnboardingScreen({ navigation }) {
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
   const ONBOARDING_DONE_KEY = "onboarding_done";
@@ -83,9 +88,9 @@ export default function OnboardingScreen({ navigation }) {
       />
 
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={[styles.title, isDark && { color: palette.text }]}>{item.title}</Text>
         <Text style={styles.titleHighlight}>{item.titleHighlight}</Text>
-        <Text style={styles.description}>{item.description}</Text>
+        <Text style={[styles.description, isDark && { color: palette.textMuted }]}>{item.description}</Text>
       </View>
     </View>
   );
@@ -93,13 +98,13 @@ export default function OnboardingScreen({ navigation }) {
   const isLastSlide = currentIndex === slides.length - 1;
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+    <View style={[styles.container, { backgroundColor: palette.page }]}>
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
 
       {/* Nút bỏ qua */}
       {!isLastSlide && (
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-          <Text style={styles.skipText}>Bỏ qua</Text>
+          <Text style={[styles.skipText, isDark && { color: "#E2E8F0" }]}>Bỏ qua</Text>
         </TouchableOpacity>
       )}
 

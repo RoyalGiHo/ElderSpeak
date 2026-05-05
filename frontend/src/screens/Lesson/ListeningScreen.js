@@ -11,7 +11,15 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Speech from "expo-speech";
-import { LESSONS } from "../../data/mockData";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import {
+  getSentenceExercise,
+  advanceLessonPosition,
+  countTotalSentencesInTopic,
+  countLessonUnits,
+  countSentencesInUnit,
+  getGlobalSentenceStep,
+} from "../../data/mockData";
 
 const C = {
   pageBg: "#F7FAF4",
@@ -41,15 +49,6 @@ const C = {
 };
 
 const LABELS = ["A", "B", "C", "D"];
-
-function parseLessonMeta(meta) {
-  if (typeof meta !== "string") return { current: 3, total: 6 };
-  const m = meta.match(/(\d+)\s*\/\s*(\d+)/);
-  if (m) return { current: Number(m[1]), total: Number(m[2]) };
-  const bai = meta.match(/(\d+)\s*bài/);
-  if (bai) return { current: 1, total: Number(bai[1]) || 6 };
-  return { current: 3, total: 6 };
-}
 
 function listeningKeywords(sentence, sentenceVi) {
   const en =
@@ -92,15 +91,15 @@ export default function ListeningScreen() {
   const topicId = params.lessonTopicId != null ? String(params.lessonTopicId) : "1";
   const lessonIndex =
     typeof params.lessonIndex === "number" ? params.lessonIndex : 0;
+  const sentenceIndex =
+    typeof params.sentenceIndex === "number" ? params.sentenceIndex : 0;
 
-  const lessonsList = LESSONS[topicId] ?? LESSONS["1"] ?? [];
-  const lesson = lessonsList[lessonIndex] ?? lessonsList[0];
-
-  const { current, total } = useMemo(
-    () => parseLessonMeta(lessonMeta),
-    [lessonMeta]
-  );
-  const progressRatio = total > 0 ? Math.min(current / total, 1) : 0;
+  const lesson = getSentenceExercise(topicId, lessonIndex, sentenceIndex);
+  const unitsCount = countLessonUnits(topicId);
+  const inUnitCount = countSentencesInUnit(topicId, lessonIndex);
+  const totalSteps = countTotalSentencesInTopic(topicId);
+  const globalStep = getGlobalSentenceStep(topicId, lessonIndex, sentenceIndex);
+  const progressRatio = totalSteps > 0 ? Math.min(globalStep / totalSteps, 1) : 0;
 
   const options = lesson?.listenOptions ?? [];
   const answerIndex =
@@ -109,10 +108,15 @@ export default function ListeningScreen() {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [revealed, setRevealed] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const textScale =
+    settings.fontSize === "A+" ? 1.08 : settings.fontSize === "A-" ? 0.92 : 1;
+  const speechLanguage = settings.voiceAccent === "uk" ? "en-GB" : "en-US";
 
   const bars = useMemo(
-    () => waveformHeights(lesson?.id ?? `${lessonIndex}`, 28),
-    [lesson?.id, lessonIndex]
+    () => waveformHeights(`${lessonIndex}-${sentenceIndex}-${lesson?.id ?? ""}`, 28),
+    [lesson?.id, lessonIndex, sentenceIndex]
   );
 
   useEffect(() => {
@@ -120,7 +124,7 @@ export default function ListeningScreen() {
     setSelectedIndex(null);
     setRevealed(false);
     setIsSpeaking(false);
-  }, [lesson?.id, lessonIndex]);
+  }, [lesson?.id, lessonIndex, sentenceIndex]);
 
   const { en: keywordEn, vi: keywordVi } = useMemo(
     () => listeningKeywords(lesson?.sentence, lesson?.sentenceVi),
@@ -139,14 +143,14 @@ export default function ListeningScreen() {
       Speech.stop();
       setIsSpeaking(true);
       Speech.speak(lesson.sentence, {
-        language: "en-US",
+        language: speechLanguage,
         rate: slow ? 0.45 : 0.92,
         onDone: () => setIsSpeaking(false),
         onStopped: () => setIsSpeaking(false),
         onError: () => setIsSpeaking(false),
       });
     },
-    [lesson?.sentence]
+    [lesson?.sentence, speechLanguage]
   );
 
   const onPlay = useCallback(() => speak(false), [speak]);
@@ -169,20 +173,23 @@ export default function ListeningScreen() {
   const onNext = useCallback(() => {
     if (!revealed) return;
     Speech.stop();
-    if (lessonIndex + 1 < lessonsList.length) {
-      navigation.replace("Listening", {
-        ...params,
-        lessonTopicId: topicId,
-        lessonIndex: lessonIndex + 1,
-      });
-    } else {
+    const next = advanceLessonPosition(topicId, lessonIndex, sentenceIndex);
+    if (next.topicComplete) {
+      const total = countTotalSentencesInTopic(topicId);
       navigation.navigate("Result", {
         mode: "listening",
         topicTitle,
         lessonTopicId: topicId,
         lessonMeta,
-        lessonCurrent: lessonIndex + 1,
-        lessonTotal: lessonsList.length,
+        lessonCurrent: total,
+        lessonTotal: total,
+      });
+    } else {
+      navigation.replace("Listening", {
+        ...params,
+        lessonTopicId: topicId,
+        lessonIndex: next.lessonIndex,
+        sentenceIndex: next.sentenceIndex,
       });
     }
   }, [
@@ -190,7 +197,7 @@ export default function ListeningScreen() {
     navigation,
     params,
     lessonIndex,
-    lessonsList.length,
+    sentenceIndex,
     topicId,
     topicTitle,
     lessonMeta,
@@ -211,7 +218,12 @@ export default function ListeningScreen() {
   const isCorrect = revealed && selectedIndex === answerIndex;
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top, backgroundColor: C.pageBg }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top, backgroundColor: isDark ? "#0B1220" : C.pageBg },
+      ]}
+    >
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
@@ -220,41 +232,50 @@ export default function ListeningScreen() {
       >
         <View style={styles.headerRow}>
           <TouchableOpacity
-            style={styles.backBtn}
+            style={[styles.backBtn, isDark && { backgroundColor: "#1E293B" }]}
             onPress={() => navigation.goBack()}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
             activeOpacity={0.75}
           >
-            <Ionicons name="chevron-back" size={22} color={C.primaryDark} />
+            <Ionicons name="chevron-back" size={22} color={isDark ? "#A7F3D0" : C.primaryDark} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle} numberOfLines={1}>
+          <Text style={[styles.headerTitle, isDark && { color: "#A7F3D0" }]} numberOfLines={1}>
             {topicTitle} • Luyện nghe
           </Text>
-          <Text style={styles.progressText}>
-            {current}/{total}
+          <Text style={[styles.progressText, isDark && { color: "#86EFAC" }]}>
+            {globalStep}/{totalSteps}
           </Text>
         </View>
 
-        <View style={styles.progressBarTrack}>
+        <Text style={[styles.lessonPartMeta, isDark && { color: "#CBD5E1" }]} numberOfLines={1}>
+          Phần {lessonIndex + 1}/{Math.max(unitsCount, 1)} · Câu {sentenceIndex + 1}/
+          {Math.max(inUnitCount, 1)}
+        </Text>
+
+        <View style={[styles.progressBarTrack, isDark && { backgroundColor: "#1E293B" }]}>
           <View
             style={[styles.progressBarFill, { width: `${progressRatio * 100}%` }]}
           />
         </View>
 
-        <View style={styles.instructionBanner}>
+        <View style={[styles.instructionBanner, isDark && { backgroundColor: "#1F2937" }]}>
           <View style={styles.instructionIconCircle}>
             <Ionicons name="volume-high" size={18} color="#FFFFFF" />
           </View>
-          <Text style={styles.instructionText}>
+          <Text style={[styles.instructionText, isDark && { color: "#D1FAE5" }]}>
             Nghe câu rồi chọn nghĩa đúng
           </Text>
         </View>
 
-        <View style={styles.audioCard}>
+        <View style={[styles.audioCard, isDark && { backgroundColor: "#111827" }]}>
           <View style={styles.audioRow}>
             <TouchableOpacity
-              style={[styles.playCircle, isSpeaking && styles.playCircleActive]}
+              style={[
+                styles.playCircle,
+                isSpeaking && styles.playCircleActive,
+                isDark && { backgroundColor: "#16A34A" },
+              ]}
               onPress={onPlay}
               activeOpacity={0.85}
               accessibilityRole="button"
@@ -262,7 +283,7 @@ export default function ListeningScreen() {
             >
               <Ionicons name="play" size={28} color="#FFFFFF" style={{ marginLeft: 4 }} />
             </TouchableOpacity>
-            <View style={styles.waveform}>
+            <View style={[styles.waveform, isDark && { backgroundColor: "#1F2937" }]}>
               {bars.map((h, i) => {
                 const active = isSpeaking && i % 3 === 0;
                 return (
@@ -283,15 +304,17 @@ export default function ListeningScreen() {
             </View>
           </View>
           <TouchableOpacity
-            style={styles.slowPill}
+            style={[styles.slowPill, isDark && { backgroundColor: "#0F172A", borderColor: "#22C55E" }]}
             onPress={onSlowPlay}
             activeOpacity={0.85}
           >
-            <Text style={styles.slowPillText}>Nghe chậm lại</Text>
+            <Text style={[styles.slowPillText, isDark && { color: "#86EFAC" }]}>Nghe chậm lại</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.question}>Câu vừa nghe có nghĩa là gì?</Text>
+        <Text style={[styles.question, { fontSize: 17 * textScale }, isDark && { color: "#E5E7EB" }]}>
+          Câu vừa nghe có nghĩa là gì?
+        </Text>
 
         <View style={styles.options}>
           {options.map((label, idx) => {
@@ -343,15 +366,23 @@ export default function ListeningScreen() {
                     <Text style={letterTextStyle}>{letter}</Text>
                   )}
                 </View>
-                <Text style={labelStyle}>{label}</Text>
+                <Text
+                  style={[
+                    labelStyle,
+                    { fontSize: 16 * textScale },
+                    isDark && !revealed && { color: "#E5E7EB" },
+                  ]}
+                >
+                  {label}
+                </Text>
               </Pressable>
             );
           })}
         </View>
 
         {revealed && !isCorrect && (
-          <View style={styles.feedbackBox}>
-            <Text style={styles.feedbackText}>
+          <View style={[styles.feedbackBox, isDark && { backgroundColor: "#3F1D1D" }]}>
+            <Text style={[styles.feedbackText, isDark && { color: "#FECACA" }]}>
               Chưa đúng. Đáp án đúng là{" "}
               <Text style={styles.feedbackBold}>“{correctOption}”</Text>
               {keywordEn && keywordVi ? (
@@ -373,16 +404,19 @@ export default function ListeningScreen() {
           styles.footer,
           {
             paddingBottom: Math.max(insets.bottom, 14),
-            borderTopColor: C.divider,
+              borderTopColor: isDark ? "#1E293B" : C.divider,
           },
         ]}
       >
         <TouchableOpacity
-          style={styles.btnListenAgain}
+          style={[
+            styles.btnListenAgain,
+            isDark && { borderColor: "#22C55E", backgroundColor: "#0F172A" },
+          ]}
           onPress={onListenAgain}
           activeOpacity={0.85}
         >
-          <Text style={styles.btnListenAgainText}>Nghe lại</Text>
+          <Text style={[styles.btnListenAgainText, isDark && { color: "#86EFAC" }]}>Nghe lại</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.btnNext, !revealed && styles.btnNextDisabled]}
@@ -435,8 +469,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     color: C.primary,
-    minWidth: 40,
+    minWidth: 52,
     textAlign: "right",
+  },
+  lessonPartMeta: {
+    marginTop: 6,
+    fontSize: 14,
+    fontWeight: "600",
+    color: C.primaryDark,
+    paddingHorizontal: 2,
   },
   progressBarTrack: {
     height: 6,

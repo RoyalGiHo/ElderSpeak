@@ -10,6 +10,7 @@ import {
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useAppSettings } from "../../store/AppSettingsContext";
 const C = {
   bg: "#FFFFFF",
   pageBg: "#F7FAFC",
@@ -62,6 +63,8 @@ export default function ChooseModeScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const insets = useSafeAreaInsets();
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
 
   const params = route.params ?? {};
   const topicTitle =
@@ -72,9 +75,16 @@ export default function ChooseModeScreen() {
     typeof params.lessonMeta === "string"
       ? params.lessonMeta
       : "6 bài · Chưa bắt đầu";
+  const lessonTopicId =
+    params.lessonTopicId != null ? String(params.lessonTopicId) : undefined;
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top, backgroundColor: C.pageBg }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top, backgroundColor: isDark ? "#0B1220" : C.pageBg },
+      ]}
+    >
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
@@ -88,15 +98,15 @@ export default function ChooseModeScreen() {
             accessibilityLabel="Quay lại"
             activeOpacity={0.75}
           >
-            <Ionicons name="chevron-back" size={22} color={C.primary} />
+            <Ionicons name="chevron-back" size={22} color={isDark ? "#93C5FD" : C.primary} />
           </TouchableOpacity>
-          <Text style={styles.topicPill} numberOfLines={1}>
+          <Text style={[styles.topicPill, isDark && { color: "#93C5FD" }]} numberOfLines={1}>
             {topicTitle}
           </Text>
         </View>
 
-        <Text style={styles.mainTitle}>CHỌN CHẾ ĐỘ HỌC</Text>
-        <Text style={styles.meta}>{lessonMeta}</Text>
+        <Text style={[styles.mainTitle, isDark && { color: "#E2E8F0" }]}>CHỌN CHẾ ĐỘ HỌC</Text>
+        <Text style={[styles.meta, isDark && { color: "#94A3B8" }]}>{lessonMeta}</Text>
 
         <View style={styles.cards}>
           {MODE_CARDS.map((m) => (
@@ -111,6 +121,7 @@ export default function ChooseModeScreen() {
                 navigation.navigate(m.navigate, {
                   topicTitle,
                   lessonMeta,
+                  ...(lessonTopicId ? { lessonTopicId } : {}),
                 })
               }
             >

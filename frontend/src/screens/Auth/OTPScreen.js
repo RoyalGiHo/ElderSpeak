@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PrimaryButton from "../../components/PrimaryButton";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 const MOCK_OTP = "1234";
 const IS_LOGGED_IN_KEY = "is_logged_in";
 
@@ -16,6 +18,9 @@ export default function OTPScreen({ navigation, route }) {
   const { mode, phone } = route.params || {};
   const [otp, setOtp] = useState(["", "", "", ""]);
   const inputs = useRef([]);
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
 
   const handlePress = (digit) => {
     const idx = otp.findIndex((d) => d === "");
@@ -51,28 +56,37 @@ export default function OTPScreen({ navigation, route }) {
   const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "⌫"];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
-        <Text style={styles.backText}>← Mã OTP</Text>
+        <Text style={[styles.backText, { color: palette.text }]}>← Mã OTP</Text>
       </TouchableOpacity>
 
       <View style={styles.content}>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.subtitle, { color: palette.text }]}>
           Nhập mật mã được gửi SMS{"\n"}tới điện thoại của bạn
         </Text>
 
         {phone && (
-          <Text style={styles.phoneHint}>Mã đã được gửi tới {phone}</Text>
+          <Text style={[styles.phoneHint, { color: palette.textMuted }]}>
+            Mã đã được gửi tới {phone}
+          </Text>
         )}
 
         {/* 4 ô OTP */}
         <View style={styles.otpRow}>
           {otp.map((digit, i) => (
-            <View key={i} style={[styles.otpBox, digit && styles.otpBoxFilled]}>
-              <Text style={styles.otpDigit}>{digit || "*"}</Text>
+            <View
+              key={i}
+              style={[
+                styles.otpBox,
+                isDark && { backgroundColor: palette.card },
+                digit && styles.otpBoxFilled,
+              ]}
+            >
+              <Text style={[styles.otpDigit, { color: palette.text }]}>{digit || "*"}</Text>
             </View>
           ))}
         </View>
@@ -98,7 +112,7 @@ export default function OTPScreen({ navigation, route }) {
             style={styles.key}
             onPress={() => (k === "⌫" ? handleDelete() : handlePress(k))}
           >
-            <Text style={styles.keyText}>{k}</Text>
+            <Text style={[styles.keyText, { color: palette.text }]}>{k}</Text>
           </TouchableOpacity>
         ))}
       </View>

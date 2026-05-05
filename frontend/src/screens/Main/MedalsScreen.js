@@ -10,6 +10,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MEDALS } from "../../data/mockData";
+import { useAppSettings } from "../../store/AppSettingsContext";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
 
@@ -45,6 +46,8 @@ function MedalRow({ medal }) {
 
 export default function MedalsScreen({ navigation }) {
   const insets = useSafeAreaInsets();
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
 
   const { earnedList, lockedList, earnedCount, total } = useMemo(() => {
     const earnedList = MEDALS.filter((m) => m.earned);
@@ -66,7 +69,12 @@ export default function MedalsScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top + 6 }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top + 6, backgroundColor: isDark ? "#0F172A" : "#FFFFFF" },
+      ]}
+    >
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -77,7 +85,7 @@ export default function MedalsScreen({ navigation }) {
         >
           <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Thành tích</Text>
+        <Text style={[styles.headerTitle, isDark && { color: "#E2E8F0" }]}>Thành tích</Text>
       </View>
 
       <ScrollView
@@ -89,10 +97,10 @@ export default function MedalsScreen({ navigation }) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.summary}>
-          <Text style={styles.summaryCount}>
+          <Text style={[styles.summaryCount, isDark && { color: "#E2E8F0" }]}>
             {earnedCount} / {total}
           </Text>
-          <Text style={styles.summaryLabel}>huy chương đã nhận</Text>
+          <Text style={[styles.summaryLabel, isDark && { color: "#94A3B8" }]}>huy chương đã nhận</Text>
         </View>
 
         <Text style={styles.sectionLabel}>Đã nhận</Text>

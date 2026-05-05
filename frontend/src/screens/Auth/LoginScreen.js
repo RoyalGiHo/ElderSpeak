@@ -11,10 +11,15 @@ import { MOCK_USERS } from "../../data/mockData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import PrimaryButton from "../../components/PrimaryButton";
+import { useAppSettings } from "../../store/AppSettingsContext";
+import { THEME } from "../../data/themePalette";
 
 const IS_LOGGED_IN_KEY = "is_logged_in";
 
 export default function LoginScreen({ navigation }) {
+  const { settings } = useAppSettings();
+  const isDark = settings.darkMode;
+  const palette = isDark ? THEME.dark : THEME.light;
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -41,21 +46,21 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       {/* Logo */}
       <View style={styles.logoArea}>
         <Text style={styles.logoText}>ElderSpeak</Text>
-        <Text style={styles.tagline}>EASY TO BETTER EVERYDAY</Text>
+        <Text style={[styles.tagline, { color: palette.textMuted }]}>EASY TO BETTER EVERYDAY</Text>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.title}>Đăng nhập nào</Text>
+        <Text style={[styles.title, { color: palette.text }]}>Đăng nhập nào</Text>
 
         {/* Số điện thoại */}
-        <View style={styles.inputRow}>
+        <View style={[styles.inputRow, { backgroundColor: isDark ? palette.card : "#F5F5F5" }]}>
           <Text style={styles.inputIcon}>📞</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: palette.text }]}
             placeholder="Số điện thoại"
             keyboardType="phone-pad"
             autoCapitalize="none"
@@ -69,10 +74,10 @@ export default function LoginScreen({ navigation }) {
         </View>
 
         {/* Mật khẩu */}
-        <View style={styles.inputRow}>
+        <View style={[styles.inputRow, { backgroundColor: isDark ? palette.card : "#F5F5F5" }]}>
           <Text style={styles.inputIcon}>🔒</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: palette.text }]}
             placeholder="Mật khẩu"
             secureTextEntry={!showPassword}
             autoCapitalize="none"
