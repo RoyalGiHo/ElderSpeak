@@ -38,6 +38,8 @@ import FeedbackScreen from "./src/screens/Main/FeedbackScreen";
 import MedalsScreen from "./src/screens/Main/MedalsScreen";
 
 import { useFonts, Audiowide_400Regular } from "@expo-google-fonts/audiowide";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Feather from "@expo/vector-icons/Feather";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -71,7 +73,6 @@ function MainTabs() {
 
   return (
     <Tab.Navigator
-      key={`tabs-${initialTab}`}
       initialRouteName={initialTab}
       detachInactiveScreens={false}
       screenListeners={({ route }) => ({
@@ -156,7 +157,11 @@ function MainTabs() {
 }
 
 export default function App() {
-  const [fontsLoaded] = useFonts({ Audiowide_400Regular });
+  const [fontsLoaded] = useFonts({
+    Audiowide_400Regular,
+    ...Ionicons.font,
+    ...Feather.font,
+  });
   const [isBootstrapping, setIsBootstrapping] = useState(true);
   const [initialRouteName, setInitialRouteName] = useState("Onboarding");
 
