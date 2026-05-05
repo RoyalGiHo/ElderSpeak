@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-} from 'react-native';
+} from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import PrimaryButton from "../../components/PrimaryButton";
 
 export default function RegisterScreen({ navigation }) {
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(true);
 
@@ -18,7 +20,7 @@ export default function RegisterScreen({ navigation }) {
     if (!phone || !password) return;
     if (!agreed) return;
     // Mock: không cần backend, đi thẳng sang FillProfile
-    navigation.navigate('FillProfile', { phone });
+    navigation.navigate("FillProfile", { phone });
   };
 
   return (
@@ -55,7 +57,7 @@ export default function RegisterScreen({ navigation }) {
             onChangeText={setPassword}
           />
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Text style={styles.eyeIcon}>{showPassword ? '👁️' : '🙈'}</Text>
+            <Text style={styles.eyeIcon}>{showPassword ? "👁️" : "🙈"}</Text>
           </TouchableOpacity>
         </View>
 
@@ -64,33 +66,31 @@ export default function RegisterScreen({ navigation }) {
           style={styles.agreeRow}
           onPress={() => setAgreed(!agreed)}
         >
-          <Text style={styles.agreeIcon}>{agreed ? '✅' : '⬜'}</Text>
+          <View style={[styles.checkbox, agreed && styles.checkboxChecked]}>
+            {agreed && <Text style={styles.checkmark}>✓</Text>}
+          </View>
           <Text style={styles.agreeText}>Đồng ý các điều khoản</Text>
         </TouchableOpacity>
 
-        {/* Nút đăng kí */}
-        <TouchableOpacity
-          style={[styles.primaryButton, (!phone || !password || !agreed) && styles.disabled]}
+        <PrimaryButton
+          label="Đăng kí"
           onPress={handleRegister}
           disabled={!phone || !password || !agreed}
-        >
-          <Text style={styles.primaryButtonText}>Đăng kí</Text>
-          <Text style={styles.arrow}>→</Text>
-        </TouchableOpacity>
+        />
 
         <Text style={styles.continueWith}>Tiếp tục với</Text>
         <View style={styles.socialRow}>
           <TouchableOpacity style={styles.socialCircle}>
-            <Text style={styles.socialIcon}>G</Text>
+            <FontAwesome name="google" size={22} color="#EA4335" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialCircle}>
-            <Text style={styles.socialIcon}></Text>
+            <FontAwesome name="apple" size={22} color="#000" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.loginRow}>
           <Text style={styles.loginText}>Đã có tài khoản? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.loginLink}>Đăng nhập</Text>
           </TouchableOpacity>
         </View>
@@ -100,57 +100,76 @@ export default function RegisterScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  logoArea: { alignItems: 'center', marginTop: 48 },
-  logoText: { fontSize: 28, fontWeight: '800', color: '#3D5CFF' },
-  tagline: { fontSize: 11, color: '#999', letterSpacing: 1, marginTop: 4 },
-  content: { flex: 1, justifyContent: 'center', paddingHorizontal: 32 },
-  title: { fontSize: 22, fontWeight: '700', color: '#1a1a1a', marginBottom: 24 },
+  container: { flex: 1, backgroundColor: "#fff" },
+  logoArea: { alignItems: "center", marginTop: 48 },
+  logoText: {
+    fontFamily: "Audiowide_400Regular",
+    fontSize: 28,
+    color: "#3D5CFF",
+  },
+  tagline: { fontSize: 11, color: "#999", letterSpacing: 1, marginTop: 4 },
+  content: { flex: 1, justifyContent: "center", paddingHorizontal: 32 },
+  title: {
+    textAlign: "center",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1a1a1a",
+    marginBottom: 24,
+  },
   inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
     borderRadius: 12,
     paddingHorizontal: 16,
     marginBottom: 12,
     height: 52,
   },
   inputIcon: { fontSize: 16, marginRight: 10 },
-  input: { flex: 1, fontSize: 15, color: '#1a1a1a' },
+  input: { flex: 1, fontSize: 15, color: "#1a1a1a" },
   eyeIcon: { fontSize: 16 },
   agreeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
   agreeIcon: { fontSize: 20, marginRight: 10 },
-  agreeText: { fontSize: 14, color: '#333' },
-  primaryButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#3D5CFF',
-    borderRadius: 30,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+  agreeText: { fontSize: 14, color: "#333" },
+  continueWith: {
+    textAlign: "center",
+    color: "#999",
+    fontSize: 13,
+    marginBottom: 12,
+  },
+  socialRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 16,
     marginBottom: 24,
   },
-  disabled: { backgroundColor: '#A0A8E0' },
-  primaryButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  arrow: { color: '#fff', fontSize: 18, fontWeight: '600' },
-  continueWith: { textAlign: 'center', color: '#999', fontSize: 13, marginBottom: 12 },
-  socialRow: { flexDirection: 'row', justifyContent: 'center', gap: 16, marginBottom: 24 },
   socialCircle: {
     width: 48,
     height: 48,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderColor: "#E0E0E0",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  socialIcon: { fontSize: 18, fontWeight: '700' },
-  loginRow: { flexDirection: 'row', justifyContent: 'center' },
-  loginText: { color: '#666', fontSize: 14 },
-  loginLink: { color: '#3D5CFF', fontSize: 14, fontWeight: '600' },
+  socialIcon: { fontSize: 18, fontWeight: "700" },
+  loginRow: { flexDirection: "row", justifyContent: "center" },
+  loginText: { color: "#666", fontSize: 14 },
+  loginLink: { color: "#3D5CFF", fontSize: 14, fontWeight: "600" },
+  checkbox: {
+    width: 18,
+    height: 18,
+    borderWidth: 1.5,
+    borderColor: "#999",
+    borderRadius: 4,
+    marginRight: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxChecked: { backgroundColor: "#3D5CFF", borderColor: "#3D5CFF" },
+  checkmark: { color: "#fff", fontSize: 12, fontWeight: "700" },
 });
