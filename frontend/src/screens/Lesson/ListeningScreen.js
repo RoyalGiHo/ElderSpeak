@@ -176,7 +176,14 @@ export default function ListeningScreen() {
         lessonIndex: lessonIndex + 1,
       });
     } else {
-      navigation.navigate("Result", { mode: "listening", topicTitle });
+      navigation.navigate("Result", {
+        mode: "listening",
+        topicTitle,
+        lessonTopicId: topicId,
+        lessonMeta,
+        lessonCurrent: lessonIndex + 1,
+        lessonTotal: lessonsList.length,
+      });
     }
   }, [
     revealed,
@@ -186,6 +193,7 @@ export default function ListeningScreen() {
     lessonsList.length,
     topicId,
     topicTitle,
+    lessonMeta,
   ]);
 
   if (!lesson || options.length === 0) {

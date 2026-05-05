@@ -118,9 +118,24 @@ export default function ReadingScreen() {
       });
       setShowFeedback(false);
     } else {
-      navigation.navigate("Result", { mode: "reading", topicTitle });
+      navigation.navigate("Result", {
+        mode: "reading",
+        topicTitle,
+        lessonTopicId: topicId,
+        lessonMeta,
+        lessonCurrent: lessonIndex + 1,
+        lessonTotal: lessonsList.length,
+      });
     }
-  }, [navigation, params, lessonIndex, lessonsList.length, topicId, topicTitle]);
+  }, [
+    navigation,
+    params,
+    lessonIndex,
+    lessonsList.length,
+    topicId,
+    topicTitle,
+    lessonMeta,
+  ]);
 
   if (!lesson) {
     return (

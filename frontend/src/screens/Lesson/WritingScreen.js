@@ -129,7 +129,14 @@ export default function WritingScreen() {
         setPickedIndices([]);
         setSubmitResult(null);
       } else {
-        navigation.navigate("Result", { mode: "writing", topicTitle });
+        navigation.navigate("Result", {
+          mode: "writing",
+          topicTitle,
+          lessonTopicId: topicId,
+          lessonMeta,
+          lessonCurrent: lessonIndex + 1,
+          lessonTotal: lessonsList.length,
+        });
       }
       return;
     }
@@ -146,6 +153,7 @@ export default function WritingScreen() {
     params,
     topicId,
     topicTitle,
+    lessonMeta,
   ]);
 
   if (!lesson || !writeWords.length || !writeAnswer.length) {
