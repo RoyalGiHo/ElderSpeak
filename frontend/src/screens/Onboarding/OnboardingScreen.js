@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
   Text,
@@ -38,19 +39,29 @@ const slides = [
 export default function OnboardingScreen({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
+  const ONBOARDING_DONE_KEY = "onboarding_done";
+
+  const finishOnboarding = async () => {
+    try {
+      await AsyncStorage.setItem(ONBOARDING_DONE_KEY, "true");
+    } catch (error) {
+      // Keep navigation flow even if persistence fails on this device.
+    } finally {
+      navigation.replace("LetLogIn");
+    }
+  };
 
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {
       flatListRef.current.scrollToIndex({ index: currentIndex + 1 });
       setCurrentIndex(currentIndex + 1);
     } else {
-      // TODO: navigate sang màn hình chính
-      navigation.replace("LetLogIn");
+      finishOnboarding();
     }
   };
 
   const handleSkip = () => {
-    navigation.replace("LetLogIn");
+    finishOnboarding();
   };
 
   const onViewableItemsChanged = useRef(({ viewableItems }) => {

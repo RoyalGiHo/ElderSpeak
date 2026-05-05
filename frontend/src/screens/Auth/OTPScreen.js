@@ -7,8 +7,10 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MOCK_OTP = '1234';
+const IS_LOGGED_IN_KEY = "is_logged_in";
 
 export default function OTPScreen({ navigation, route }) {
   const { mode, phone } = route.params || {};
@@ -33,9 +35,10 @@ export default function OTPScreen({ navigation, route }) {
     setOtp(next);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const entered = otp.join('');
     if (entered === MOCK_OTP) {
+      await AsyncStorage.setItem(IS_LOGGED_IN_KEY, "true");
       if (mode === 'register') {
         navigation.replace('MainTabs');
       } else {

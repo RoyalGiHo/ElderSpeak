@@ -8,6 +8,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { MOCK_USERS } from '../../data/mockData';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const IS_LOGGED_IN_KEY = "is_logged_in";
 
 export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState('');
@@ -16,11 +19,12 @@ export default function LoginScreen({ navigation }) {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const user = MOCK_USERS.find(
       (u) => u.phone === phone && u.password === password
     );
     if (user) {
+      await AsyncStorage.setItem(IS_LOGGED_IN_KEY, "true");
       navigation.replace('MainTabs');
     } else {
       setError('Số điện thoại hoặc mật khẩu không đúng');

@@ -2,6 +2,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text, Platform, TouchableOpacity } from "react-native";
 
 // Onboarding
@@ -37,15 +39,47 @@ import MedalsScreen from "./src/screens/Main/MedalsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const ONBOARDING_DONE_KEY = "onboarding_done";
+const IS_LOGGED_IN_KEY = "is_logged_in";
+const LAST_TAB_KEY = "last_main_tab";
 
 function MainTabs() {
   const tabBarBottomPad = Platform.OS === "ios" ? 22 : 16;
   const tabBarHeight = Platform.OS === "ios" ? 96 : 88;
+  const [tabReady, setTabReady] = useState(false);
+  const [initialTab, setInitialTab] = useState("Home");
+
+  useEffect(() => {
+    const loadLastTab = async () => {
+      try {
+        const savedTab = await AsyncStorage.getItem(LAST_TAB_KEY);
+        if (savedTab === "Home" || savedTab === "Vocabulary" || savedTab === "Profile") {
+          setInitialTab(savedTab);
+        }
+      } finally {
+        setTabReady(true);
+      }
+    };
+    loadLastTab();
+  }, []);
+
+  if (!tabReady) {
+    return null;
+  }
 
   return (
     <Tab.Navigator
+      key={`tabs-${initialTab}`}
+      initialRouteName={initialTab}
+      detachInactiveScreens={false}
+      screenListeners={({ route }) => ({
+        tabPress: () => {
+          AsyncStorage.setItem(LAST_TAB_KEY, route.name).catch(() => {});
+        },
+      })}
       screenOptions={({ route }) => ({
         headerShown: false,
+        unmountOnBlur: false,
         tabBarActiveTintColor: "#0961F5",
         tabBarInactiveTintColor: "#A0A4AB",
         tabBarStyle: {
@@ -120,12 +154,40 @@ function MainTabs() {
 }
 
 export default function App() {
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
+  const [initialRouteName, setInitialRouteName] = useState("Onboarding");
+
+  useEffect(() => {
+    const loadInitialRoute = async () => {
+      try {
+        const onboardingDone = await AsyncStorage.getItem(ONBOARDING_DONE_KEY);
+        const isLoggedIn = await AsyncStorage.getItem(IS_LOGGED_IN_KEY);
+        if (isLoggedIn === "true") {
+          setInitialRouteName("MainTabs");
+        } else if (onboardingDone === "true") {
+          setInitialRouteName("LetLogIn");
+        } else {
+          setInitialRouteName("Onboarding");
+        }
+      } catch (error) {
+        setInitialRouteName("Onboarding");
+      } finally {
+        setIsBootstrapping(false);
+      }
+    };
+    loadInitialRoute();
+  }, []);
+
+  if (isBootstrapping) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="Onboarding"
+        initialRouteName={initialRouteName}
       >
         {/* Onboarding */}
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
