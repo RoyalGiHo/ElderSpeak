@@ -223,21 +223,21 @@ export const MEDALS = [
     name: "Kiên trì 7 ngày",
     desc: "Học 7 ngày liên tiếp",
     earned: true,
-    icon: "🥉",
+    icon: "🌟",
   },
   {
     id: "4",
     name: "Bác sĩ tí hon",
     desc: "Hoàn thành chủ đề Khám bệnh",
     earned: false,
-    icon: "🏅",
+    icon: "🥉",
   },
   {
     id: "5",
     name: "Nhà du lịch",
     desc: "Hoàn thành chủ đề Nhập cảnh",
     earned: false,
-    icon: "🏅",
+    icon: "✈️",
   },
   {
     id: "6",
@@ -245,6 +245,20 @@ export const MEDALS = [
     desc: "Học 30 ngày liên tiếp",
     earned: false,
     icon: "🔥",
+  },
+  {
+    id: "7",
+    name: "Phát âm chuẩn",
+    desc: "Hoàn thành 10 bài luyện nói",
+    earned: false,
+    icon: "🎤",
+  },
+  {
+    id: "8",
+    name: "Mua sắm thông thái",
+    desc: "Hoàn thành chủ đề Mua sắm",
+    earned: false,
+    icon: "🛒",
   },
 ];
 
