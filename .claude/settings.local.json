@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Youwi\\\\OneDrive\\\\Desktop\\\\252\\\\Mobile\\\\ElderSpeak\" -Force)",
-      "Bash(Select-Object Name, PSIsContainer)",
-      "Bash(Format-Table -AutoSize)"
-    ]
-  }
-}
