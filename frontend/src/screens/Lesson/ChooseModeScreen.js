@@ -1,7 +1,6 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
@@ -10,6 +9,7 @@ import {
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 const C = {
   bg: "#FFFFFF",

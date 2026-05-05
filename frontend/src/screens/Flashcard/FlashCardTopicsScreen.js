@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Pressable,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Text from "../../components/AppText";
 import { TOPICS } from "../../data/mockData";
 import { useTopicProgress } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";

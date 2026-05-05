@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
@@ -10,6 +9,7 @@ import {
   StatusBar,
   Image,
 } from "react-native";
+import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
 

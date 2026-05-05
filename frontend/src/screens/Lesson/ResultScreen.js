@@ -1,7 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useRef } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -9,6 +8,7 @@ import {
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Text from "../../components/AppText";
 import { USER } from "../../data/mockData";
 import {
   useTopicProgress,

@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Pressable,
   SafeAreaView,
 } from "react-native";
+import Text from "../../components/AppText";
 import { useNavigation } from "@react-navigation/native";
 import {
   USER,
