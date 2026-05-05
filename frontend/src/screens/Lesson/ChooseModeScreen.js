@@ -107,7 +107,12 @@ export default function ChooseModeScreen() {
                 { backgroundColor: m.bg },
                 pressed && styles.modeCardPressed,
               ]}
-              onPress={() => navigation.navigate(m.navigate)}
+              onPress={() =>
+                navigation.navigate(m.navigate, {
+                  topicTitle,
+                  lessonMeta,
+                })
+              }
             >
               <View style={[styles.iconCircle, { backgroundColor: m.circle }]}>
                 <Ionicons name={m.icon} size={26} color="#FFFFFF" />

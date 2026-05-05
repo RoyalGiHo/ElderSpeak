@@ -166,6 +166,7 @@ export const LESSONS = {
       id: "1",
       sentence: "I have a stomachache.",
       sentenceVi: "Tôi bị đau bụng.",
+      phonetic: "ay · hæv · ə · ˈstʌm.ək.eɪk",
       listenOptions: [
         "Tôi bị đau đầu.",
         "Tôi bị đau bụng.",
@@ -188,6 +189,7 @@ export const LESSONS = {
       id: "2",
       sentence: "I need to see a doctor.",
       sentenceVi: "Tôi cần gặp bác sĩ.",
+      phonetic: "ay · niːd · tuː · siː · ə · ˈdɒk.tər",
       listenOptions: [
         "Tôi cần mua thuốc.",
         "Tôi cần gặp bác sĩ.",
