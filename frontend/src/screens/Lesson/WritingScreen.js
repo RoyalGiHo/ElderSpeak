@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Pressable,
+  Modal,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -89,6 +90,7 @@ export default function WritingScreen() {
   const [pickedIndices, setPickedIndices] = useState([]);
   /** null | 'correct' | 'incorrect' */
   const [submitResult, setSubmitResult] = useState(null);
+  const [isResultModalVisible, setResultModalVisible] = useState(false);
   const { settings } = useAppSettings();
   const isDark = settings.darkMode;
   const textScale =
@@ -96,6 +98,7 @@ export default function WritingScreen() {
 
   useEffect(() => {
     setSubmitResult(null);
+    setResultModalVisible(false);
   }, [pickedIndices]);
 
   const userWords = useMemo(
@@ -149,6 +152,7 @@ export default function WritingScreen() {
 
     const ok = answersMatch(userWords, writeAnswer);
     setSubmitResult(ok ? "correct" : "incorrect");
+    setResultModalVisible(true);
   }, [
     submitResult,
     userWords,
@@ -261,36 +265,6 @@ export default function WritingScreen() {
           </Text>
         </View>
 
-        {submitResult === "correct" && (
-          <View style={[styles.feedbackOk, isDark && { backgroundColor: "#14532D" }]}>
-            <View style={styles.feedbackOkHeader}>
-              <View style={styles.feedbackOkIcon}>
-                <Ionicons name="checkmark" size={18} color="#FFFFFF" />
-              </View>
-              <Text style={[styles.feedbackOkTitle, isDark && { color: "#DCFCE7" }]}>Đúng rồi!</Text>
-            </View>
-            <Text style={[styles.feedbackDetail, isDark && { color: "#DCFCE7" }]}>
-              Đáp án: {lesson.sentence}
-            </Text>
-            <Text style={[styles.feedbackDetail, isDark && { color: "#DCFCE7" }]}>
-              Bạn gõ: {composed}.
-            </Text>
-          </View>
-        )}
-
-        {submitResult === "incorrect" && (
-          <View style={[styles.feedbackBad, isDark && { backgroundColor: "#3F1D1D" }]}>
-            <View style={styles.feedbackBadHeader}>
-              <View style={styles.feedbackBadIcon}>
-                <Ionicons name="close" size={18} color="#FFFFFF" />
-              </View>
-              <Text style={[styles.feedbackBadTitle, isDark && { color: "#FECACA" }]}>Chưa đúng</Text>
-            </View>
-            <Text style={[styles.feedbackBadDetail, isDark && { color: "#FECACA" }]}>
-              Hãy dùng gợi ý, sắp xếp lại câu rồi thử lại.
-            </Text>
-          </View>
-        )}
       </ScrollView>
 
       <View
@@ -314,6 +288,61 @@ export default function WritingScreen() {
           <Ionicons name="arrow-forward" size={22} color="#FFFFFF" style={{ marginLeft: 8 }} />
         </TouchableOpacity>
       </View>
+
+      <Modal
+        visible={isResultModalVisible && submitResult != null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setResultModalVisible(false)}
+      >
+        <Pressable
+          style={styles.modalBackdrop}
+          onPress={() => setResultModalVisible(false)}
+        >
+          <Pressable
+            style={[
+              styles.modalCard,
+              submitResult === "correct" ? styles.feedbackOk : styles.feedbackBad,
+              isDark && submitResult === "correct" && { backgroundColor: "#14532D" },
+              isDark && submitResult === "incorrect" && { backgroundColor: "#3F1D1D" },
+            ]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            {submitResult === "correct" ? (
+              <>
+                <View style={styles.feedbackOkHeader}>
+                  <View style={styles.feedbackOkIcon}>
+                    <Ionicons name="checkmark" size={18} color="#FFFFFF" />
+                  </View>
+                  <Text style={[styles.feedbackOkTitle, isDark && { color: "#DCFCE7" }]}>
+                    Đúng rồi!
+                  </Text>
+                </View>
+                <Text style={[styles.feedbackDetail, isDark && { color: "#DCFCE7" }]}>
+                  Đáp án: {lesson.sentence}
+                </Text>
+                <Text style={[styles.feedbackDetail, isDark && { color: "#DCFCE7" }]}>
+                  Bạn gõ: {composed}.
+                </Text>
+              </>
+            ) : (
+              <>
+                <View style={styles.feedbackBadHeader}>
+                  <View style={styles.feedbackBadIcon}>
+                    <Ionicons name="close" size={18} color="#FFFFFF" />
+                  </View>
+                  <Text style={[styles.feedbackBadTitle, isDark && { color: "#FECACA" }]}>
+                    Chưa đúng
+                  </Text>
+                </View>
+                <Text style={[styles.feedbackBadDetail, isDark && { color: "#FECACA" }]}>
+                  Hãy dùng gợi ý, sắp xếp lại câu rồi thử lại.
+                </Text>
+              </>
+            )}
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -532,6 +561,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: C.errorDetail,
     lineHeight: 20,
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  modalCard: {
+    width: "100%",
+    maxWidth: 420,
   },
   footer: {
     flexDirection: "row",
