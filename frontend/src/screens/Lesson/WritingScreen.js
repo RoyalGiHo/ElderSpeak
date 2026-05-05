@@ -20,6 +20,7 @@ import {
   countSentencesInUnit,
   getGlobalSentenceStep,
 } from "../../data/mockData";
+import { playSfx } from "../../utils/soundEffects";
 
 const C = {
   bg: "#FFFFFF",
@@ -115,20 +116,23 @@ export default function WritingScreen() {
   const onTapWord = useCallback(
     (index) => {
       if (!writeWords.length) return;
+      playSfx("tap", settings.soundFx);
       setPickedIndices((prev) => {
         if (prev.includes(index)) return prev;
         return [...prev, index];
       });
     },
-    [writeWords.length]
+    [writeWords.length, settings.soundFx]
   );
 
   const onClear = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     setPickedIndices([]);
     setSubmitResult(null);
-  }, []);
+  }, [settings.soundFx]);
 
   const onNext = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     if (submitResult === "correct") {
       if (isRandomReview && reviewQueue) {
         const nextCursor = reviewCursor + 1;
@@ -184,6 +188,7 @@ export default function WritingScreen() {
     const ok = answersMatch(userWords, writeAnswer);
     setSubmitResult(ok ? "correct" : "incorrect");
     setResultModalVisible(true);
+    playSfx(ok ? "success" : "error", settings.soundFx);
   }, [
     submitResult,
     userWords,
@@ -198,6 +203,7 @@ export default function WritingScreen() {
     isRandomReview,
     reviewQueue,
     reviewCursor,
+    settings.soundFx,
   ]);
 
   if (!lesson || !writeWords.length || !writeAnswer.length) {
@@ -227,7 +233,10 @@ export default function WritingScreen() {
         <View style={styles.headerRow}>
           <TouchableOpacity
             style={[styles.backBtn, isDark && { backgroundColor: "#1F2937" }]}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.goBack();
+            }}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
           >

@@ -20,6 +20,7 @@ import {
   countSentencesInUnit,
   getGlobalSentenceStep,
 } from "../../data/mockData";
+import { playSfx } from "../../utils/soundEffects";
 
 const C = {
   pageBg: "#F7FAF4",
@@ -163,19 +164,23 @@ export default function ListeningScreen() {
   const onSelectOption = useCallback(
     (idx) => {
       if (revealed) return;
+      playSfx("tap", settings.soundFx);
       setSelectedIndex(idx);
       setRevealed(true);
+      playSfx(idx === answerIndex ? "success" : "error", settings.soundFx);
     },
-    [revealed]
+    [revealed, settings.soundFx, answerIndex]
   );
 
   const onListenAgain = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     Speech.stop();
     onPlay();
-  }, [onPlay]);
+  }, [onPlay, settings.soundFx]);
 
   const onNext = useCallback(() => {
     if (!revealed) return;
+    playSfx("tap", settings.soundFx);
     Speech.stop();
     if (isRandomReview && reviewQueue) {
       const nextCursor = reviewCursor + 1;
@@ -232,6 +237,7 @@ export default function ListeningScreen() {
     isRandomReview,
     reviewQueue,
     reviewCursor,
+    settings.soundFx,
   ]);
 
   if (!lesson || options.length === 0) {
@@ -264,7 +270,10 @@ export default function ListeningScreen() {
         <View style={styles.headerRow}>
           <TouchableOpacity
             style={[styles.backBtn, isDark && { backgroundColor: "#1E293B" }]}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.goBack();
+            }}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
             activeOpacity={0.75}
@@ -336,7 +345,10 @@ export default function ListeningScreen() {
           </View>
           <TouchableOpacity
             style={[styles.slowPill, isDark && { backgroundColor: "#0F172A", borderColor: "#22C55E" }]}
-            onPress={onSlowPlay}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              onSlowPlay();
+            }}
             activeOpacity={0.85}
           >
             <Text style={[styles.slowPillText, isDark && { color: "#86EFAC" }]}>Nghe chậm lại</Text>

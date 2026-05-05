@@ -4,13 +4,14 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 const MOCK_OTP = "1234";
 const IS_LOGGED_IN_KEY = "is_logged_in";
 
@@ -59,7 +60,10 @@ export default function OTPScreen({ navigation, route }) {
     <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          playSfx("tap", settings.soundFx);
+          navigation.goBack();
+        }}
       >
         <Text style={[styles.backText, { color: palette.text }]}>← Mã OTP</Text>
       </TouchableOpacity>
@@ -110,7 +114,10 @@ export default function OTPScreen({ navigation, route }) {
           <TouchableOpacity
             key={k}
             style={styles.key}
-            onPress={() => (k === "⌫" ? handleDelete() : handlePress(k))}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              k === "⌫" ? handleDelete() : handlePress(k);
+            }}
           >
             <Text style={[styles.keyText, { color: palette.text }]}>{k}</Text>
           </TouchableOpacity>

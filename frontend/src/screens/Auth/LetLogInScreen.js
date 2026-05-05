@@ -3,13 +3,14 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome } from "@expo/vector-icons";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 
 export default function LetLogInScreen({ navigation }) {
   const { settings } = useAppSettings();
@@ -68,7 +69,10 @@ export default function LetLogInScreen({ navigation }) {
         {/* Chưa có tài khoản */}
         <TouchableOpacity
           style={styles.registerRow}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            navigation.navigate("Register");
+          }}
           activeOpacity={0.8}
         >
           <Text style={styles.registerText}>Chưa có tài khoản? </Text>
@@ -78,7 +82,10 @@ export default function LetLogInScreen({ navigation }) {
         {/* Debug: xem lại Onboarding */}
         <TouchableOpacity
           style={styles.debugButton}
-          onPress={() => navigation.navigate("Onboarding")}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            navigation.navigate("Onboarding");
+          }}
         >
           <Text style={styles.debugButtonText}>Xem lại Onboarding</Text>
         </TouchableOpacity>

@@ -19,6 +19,7 @@ import {
   countSentencesInUnit,
   getGlobalSentenceStep,
 } from "../../data/mockData";
+import { playSfx } from "../../utils/soundEffects";
 
 const C = {
   bg: "#FFFFFF",
@@ -103,20 +104,24 @@ export default function ReadingScreen() {
       : "");
 
   const onMicPressIn = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     setIsHoldingMic(true);
     setShowFeedback(false);
-  }, []);
+  }, [settings.soundFx]);
 
   const onMicPressOut = useCallback(() => {
     setIsHoldingMic(false);
     setShowFeedback(true);
-  }, []);
+    playSfx("success", settings.soundFx);
+  }, [settings.soundFx]);
 
   const onRetry = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     setShowFeedback(false);
-  }, []);
+  }, [settings.soundFx]);
 
   const onNext = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     if (isRandomReview && reviewQueue) {
       const nextCursor = reviewCursor + 1;
       const nextItem = reviewQueue[nextCursor];
@@ -173,6 +178,7 @@ export default function ReadingScreen() {
     isRandomReview,
     reviewQueue,
     reviewCursor,
+    settings.soundFx,
   ]);
 
   if (!lesson) {
@@ -202,7 +208,10 @@ export default function ReadingScreen() {
         <View style={styles.headerRow}>
           <TouchableOpacity
             style={[styles.backBtn, isDark && { backgroundColor: "#1E293B" }]}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.goBack();
+            }}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
           >

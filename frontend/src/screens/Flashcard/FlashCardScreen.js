@@ -14,6 +14,7 @@ import Text from "../../components/AppText";
 import { FLASHCARDS, TOPICS } from "../../data/mockData";
 import { useTopicProgress } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { playSfx } from "../../utils/soundEffects";
 
 const C = {
   pageBg: "#F7F8FA",
@@ -83,19 +84,22 @@ export default function FlashCardScreen() {
 
   const handleRemember = useCallback(() => {
     if (!card) return;
+    playSfx("success", settings.soundFx);
     setRememberedIds((prev) => (prev.includes(card.id) ? prev : [...prev, card.id]));
     setForgottenIds((prev) => prev.filter((id) => id !== card.id));
     moveNext();
-  }, [card, moveNext]);
+  }, [card, moveNext, settings.soundFx]);
 
   const handleForget = useCallback(() => {
     if (!card) return;
+    playSfx("error", settings.soundFx);
     setForgottenIds((prev) => (prev.includes(card.id) ? prev : [...prev, card.id]));
     setRememberedIds((prev) => prev.filter((id) => id !== card.id));
     moveNext();
-  }, [card, moveNext]);
+  }, [card, moveNext, settings.soundFx]);
 
   const finishSession = useCallback(() => {
+    playSfx("success", settings.soundFx);
     if (!completionSaved && topicIds.length > 0) {
       markTopicsCompleted(topicIds, {
         remembered: rememberedIds.length,
@@ -113,11 +117,13 @@ export default function FlashCardScreen() {
     forgottenIds.length,
     total,
     navigation,
+    settings.soundFx,
   ]);
 
   const exitSession = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     navigation.goBack();
-  }, [navigation]);
+  }, [navigation, settings.soundFx]);
 
   const speakCurrentCard = useCallback(() => {
     if (!card || settings.soundFx === false) return;
@@ -158,7 +164,10 @@ export default function FlashCardScreen() {
         <View style={styles.headerRow}>
           <TouchableOpacity
             style={[styles.backBtn, isDark && { backgroundColor: "#1E293B" }]}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.goBack();
+            }}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
             activeOpacity={0.8}
@@ -181,7 +190,10 @@ export default function FlashCardScreen() {
 
         <Pressable
           style={[styles.cardWrap, isDark && { backgroundColor: "#111827", borderColor: "#334155" }]}
-          onPress={() => setIsFront((prev) => !prev)}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            setIsFront((prev) => !prev);
+          }}
           accessibilityRole="button"
           accessibilityLabel="Lật thẻ"
         >
@@ -220,14 +232,24 @@ export default function FlashCardScreen() {
                     settings.soundFx === false && styles.audioBtnDisabled,
                   ]}
                   activeOpacity={0.8}
-                  onPress={speakCurrentCard}
+                  onPress={() => {
+                    playSfx("tap", settings.soundFx);
+                    speakCurrentCard();
+                  }}
                   disabled={settings.soundFx === false}
                 >
                   <Ionicons name="volume-high" size={24} color={C.primary} />
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity style={styles.flipHint} activeOpacity={0.85}>
+              <TouchableOpacity
+                style={styles.flipHint}
+                activeOpacity={0.85}
+                onPress={() => {
+                  playSfx("tap", settings.soundFx);
+                  setIsFront(false);
+                }}
+              >
                 <Ionicons name="hand-left-outline" size={18} color={C.primary} />
                 <Text style={[styles.flipHintText, isDark && { color: "#93C5FD" }]}>Chạm để lật</Text>
               </TouchableOpacity>
@@ -302,7 +324,10 @@ export default function FlashCardScreen() {
             currentIndex === 0 && styles.prevBtnDisabled,
             isDark && { backgroundColor: "#1E293B", borderColor: "#334155" },
           ]}
-          onPress={movePrevious}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            movePrevious();
+          }}
           activeOpacity={0.85}
           disabled={currentIndex === 0}
         >
@@ -325,7 +350,10 @@ export default function FlashCardScreen() {
         ) : (
           <TouchableOpacity
             style={styles.nextBtn}
-            onPress={isLastCard ? exitSession : moveNext}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              isLastCard ? exitSession() : moveNext();
+            }}
             activeOpacity={0.85}
           >
             <Text style={styles.nextText}>{isLastCard ? "Thoát" : "Tiếp thẻ"}</Text>

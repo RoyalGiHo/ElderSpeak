@@ -4,8 +4,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { MOCK_USERS } from "../../data/mockData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
@@ -13,6 +13,7 @@ import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 
 const IS_LOGGED_IN_KEY = "is_logged_in";
 
@@ -88,7 +89,12 @@ export default function LoginScreen({ navigation }) {
               setError("");
             }}
           />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <TouchableOpacity
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              setShowPassword(!showPassword);
+            }}
+          >
             <Text style={styles.eyeIcon}>{showPassword ? "👁️" : "🙈"}</Text>
           </TouchableOpacity>
         </View>
@@ -97,7 +103,10 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.optionsRow}>
           <TouchableOpacity
             style={styles.rememberRow}
-            onPress={() => setRememberMe(!rememberMe)}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              setRememberMe(!rememberMe);
+            }}
           >
             <View
               style={[styles.checkbox, rememberMe && styles.checkboxChecked]}
@@ -107,9 +116,10 @@ export default function LoginScreen({ navigation }) {
             <Text style={styles.rememberText}>Ghi nhớ đăng nhập</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("OTP", { mode: "forgotPassword" })
-            }
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.navigate("OTP", { mode: "forgotPassword" });
+            }}
           >
             <Text style={styles.forgotText}>Quên mật khẩu</Text>
           </TouchableOpacity>
@@ -132,7 +142,10 @@ export default function LoginScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.registerRow}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            navigation.navigate("Register");
+          }}
           activeOpacity={0.8}
         >
           <Text style={styles.registerText}>Chưa có tài khoản? </Text>

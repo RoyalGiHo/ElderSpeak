@@ -4,12 +4,13 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 
 export default function FillProfileScreen({ navigation, route }) {
   const { phone } = route.params || {};
@@ -30,7 +31,10 @@ export default function FillProfileScreen({ navigation, route }) {
     <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          playSfx("tap", settings.soundFx);
+          navigation.goBack();
+        }}
       >
         <Text style={[styles.backText, { color: palette.text }]}>← Cập nhật thông tin</Text>
       </TouchableOpacity>
@@ -41,7 +45,10 @@ export default function FillProfileScreen({ navigation, route }) {
           <View style={styles.avatar}>
             <Text style={styles.avatarIcon}>👤</Text>
           </View>
-          <TouchableOpacity style={styles.editBadge}>
+          <TouchableOpacity
+            style={styles.editBadge}
+            onPress={() => playSfx("tap", settings.soundFx)}
+          >
             <Text style={styles.editIcon}>✏️</Text>
           </TouchableOpacity>
         </View>

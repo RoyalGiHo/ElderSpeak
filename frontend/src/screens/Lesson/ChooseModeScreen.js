@@ -14,6 +14,7 @@ import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { useTopicProgress, TOPIC_KIND } from "../../store/TopicProgressContext";
 import { TOPICS, getLessonUnits } from "../../data/mockData";
+import { playSfx } from "../../utils/soundEffects";
 const C = {
   bg: "#FFFFFF",
   pageBg: "#F7FAFC",
@@ -138,6 +139,7 @@ export default function ChooseModeScreen() {
   }, [progress]);
 
   const onStartRandomReview = React.useCallback(() => {
+    playSfx("tap", settings.soundFx);
     const eligibleTopics = lessonTopicId
       ? completedTopicIds.includes(lessonTopicId)
         ? [lessonTopicId]
@@ -176,7 +178,7 @@ export default function ChooseModeScreen() {
       reviewTotal: reviewQueue.length,
       fromRandomReview: true,
     });
-  }, [completedTopicIds, lessonTopicId, navigation, topicTitle]);
+  }, [completedTopicIds, lessonTopicId, navigation, topicTitle, settings.soundFx]);
 
   return (
     <View
@@ -193,7 +195,10 @@ export default function ChooseModeScreen() {
         <View style={styles.topRow}>
           <TouchableOpacity
             style={styles.backBtn}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.goBack();
+            }}
             accessibilityRole="button"
             accessibilityLabel="Quay lại"
             activeOpacity={0.75}
@@ -218,11 +223,14 @@ export default function ChooseModeScreen() {
                 pressed && styles.modeCardPressed,
               ]}
               onPress={() =>
-                navigation.navigate(m.navigate, {
-                  topicTitle,
-                  lessonMeta,
-                  ...(lessonTopicId ? { lessonTopicId } : {}),
-                })
+                {
+                  playSfx("tap", settings.soundFx);
+                  navigation.navigate(m.navigate, {
+                    topicTitle,
+                    lessonMeta,
+                    ...(lessonTopicId ? { lessonTopicId } : {}),
+                  });
+                }
               }
             >
               <View style={[styles.iconCircle, { backgroundColor: m.circle }]}>
@@ -253,9 +261,10 @@ export default function ChooseModeScreen() {
       >
         <TouchableOpacity
           style={styles.footerHome}
-          onPress={() =>
-            navigation.navigate("MainTabs", { screen: "Home" })
-          }
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            navigation.navigate("MainTabs", { screen: "Home" });
+          }}
           activeOpacity={0.85}
         >
           <Ionicons name="home-outline" size={22} color={C.footerGreyIcon} />

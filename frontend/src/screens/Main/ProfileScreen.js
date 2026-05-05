@@ -2,9 +2,9 @@ import React, { useCallback, useState } from "react";
 import {
   View,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
@@ -13,6 +13,7 @@ import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
 import { USER } from "../../data/mockData";
+import { playSfx } from "../../utils/soundEffects";
 
 const IS_LOGGED_IN_KEY = "is_logged_in";
 const LAST_TAB_KEY = "last_main_tab";
@@ -38,6 +39,7 @@ export default function ProfileScreen({ navigation }) {
   ];
 
   const handleLogout = async () => {
+    playSfx("tap", settings.soundFx);
     await AsyncStorage.removeItem(IS_LOGGED_IN_KEY);
     await AsyncStorage.removeItem(LAST_TAB_KEY);
     navigation.reset({
@@ -82,7 +84,10 @@ export default function ProfileScreen({ navigation }) {
           <TouchableOpacity
             style={[styles.editButton, isDark && { borderColor: palette.accentText }]}
             activeOpacity={0.8}
-            onPress={() => navigation.navigate("EditProfile")}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.navigate("EditProfile");
+            }}
           >
             <Text style={[styles.editButtonText, isDark && { color: palette.accentText }]}>Chỉnh sửa</Text>
           </TouchableOpacity>
@@ -94,7 +99,10 @@ export default function ProfileScreen({ navigation }) {
             <TouchableOpacity
               key={row.label}
               style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
-              onPress={() => navigation.navigate(row.screen)}
+              onPress={() => {
+                playSfx("tap", settings.soundFx);
+                navigation.navigate(row.screen);
+              }}
               activeOpacity={0.78}
             >
               <Feather name={row.icon} size={28} color={isDark ? "#CBD5E1" : "#17192B"} />
@@ -110,6 +118,7 @@ export default function ProfileScreen({ navigation }) {
               key={row.label}
               style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
               onPress={() => {
+                playSfx("tap", settings.soundFx);
                 if (row.screen) navigation.navigate(row.screen);
               }}
               activeOpacity={0.78}

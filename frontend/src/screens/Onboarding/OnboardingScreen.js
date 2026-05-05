@@ -11,6 +11,7 @@ import {
 import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 import Onboarding1Svg from "../../design/onboarding1.svg";
 import Onboarding2Svg from "../../design/onboarding2.svg";
 import Onboarding3Svg from "../../design/onboarding3.svg";
@@ -63,6 +64,7 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   const handleNext = () => {
+    playSfx("tap", settings.soundFx);
     if (currentIndex < slides.length - 1) {
       flatListRef.current.scrollToIndex({ index: currentIndex + 1 });
       setCurrentIndex(currentIndex + 1);
@@ -72,6 +74,7 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   const handleSkip = () => {
+    playSfx("tap", settings.soundFx);
     finishOnboarding();
   };
 

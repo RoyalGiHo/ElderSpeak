@@ -4,14 +4,15 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
 import { USER } from "../../data/mockData";
+import { playSfx } from "../../utils/soundEffects";
 
 const USER_PROFILE_KEY = "user_profile";
 
@@ -68,7 +69,13 @@ export default function EditProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          playSfx("tap", settings.soundFx);
+          navigation.goBack();
+        }}
+      >
         <Text style={[styles.backText, { color: palette.text }]}>← Chỉnh sửa thông tin</Text>
       </TouchableOpacity>
 
@@ -77,7 +84,10 @@ export default function EditProfileScreen({ navigation }) {
           <View style={[styles.avatar, { backgroundColor: isDark ? "#1C2340" : "#E8EAFF" }]}>
             <Text style={styles.avatarIcon}>👤</Text>
           </View>
-          <TouchableOpacity style={styles.editBadge}>
+          <TouchableOpacity
+            style={styles.editBadge}
+            onPress={() => playSfx("tap", settings.soundFx)}
+          >
             <Text style={styles.editIcon}>✏️</Text>
           </TouchableOpacity>
         </View>

@@ -1,11 +1,17 @@
 import React from "react";
 import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
+import { useAppSettings } from "../store/AppSettingsContext";
+import { playSfx } from "../utils/soundEffects";
 
 export default function PrimaryButton({ label, onPress, disabled, style }) {
+  const { settings } = useAppSettings();
   return (
     <TouchableOpacity
       style={[styles.button, disabled && styles.disabled, style]}
-      onPress={onPress}
+      onPress={() => {
+        playSfx("tap", settings.soundFx);
+        onPress?.();
+      }}
       disabled={disabled}
     >
       <Text style={styles.text}>{label}</Text>

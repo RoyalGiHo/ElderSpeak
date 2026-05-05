@@ -15,6 +15,7 @@ import {
   TOPIC_KIND,
 } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { playSfx } from "../../utils/soundEffects";
 
 /** Palette aligned with frontend/Design/ResultPage.png */
 const C = {
@@ -150,10 +151,12 @@ export default function ResultScreen() {
   ]);
 
   const onBack = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     navigation.goBack();
-  }, [navigation]);
+  }, [navigation, settings.soundFx]);
 
   const onRedo = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     const screen = MODE_TO_SCREEN[mode];
     if (screen) {
       navigation.navigate(screen, {
@@ -170,11 +173,12 @@ export default function ResultScreen() {
         lessonTopicId,
       });
     }
-  }, [navigation, mode, topicTitle, lessonMeta, lessonTopicId]);
+  }, [navigation, mode, topicTitle, lessonMeta, lessonTopicId, settings.soundFx]);
 
   const onNext = useCallback(() => {
+    playSfx("tap", settings.soundFx);
     navigation.navigate("MainTabs");
-  }, [navigation]);
+  }, [navigation, settings.soundFx]);
 
   const bottomPad = Math.max(insets.bottom, 12);
 

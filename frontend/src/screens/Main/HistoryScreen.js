@@ -12,6 +12,7 @@ import Text from "../../components/AppText";
 import { HISTORY, USER } from "../../data/mockData";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
 
@@ -60,6 +61,7 @@ export default function HistoryScreen({ navigation }) {
   );
 
   const handleBack = () => {
+    playSfx("tap", settings.soundFx);
     if (navigation.canGoBack()) {
       navigation.goBack();
       return;

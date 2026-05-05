@@ -4,13 +4,14 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome } from "@expo/vector-icons";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 
 export default function RegisterScreen({ navigation }) {
   const { settings } = useAppSettings();
@@ -61,7 +62,12 @@ export default function RegisterScreen({ navigation }) {
             value={password}
             onChangeText={setPassword}
           />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <TouchableOpacity
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              setShowPassword(!showPassword);
+            }}
+          >
             <Text style={styles.eyeIcon}>{showPassword ? "👁️" : "🙈"}</Text>
           </TouchableOpacity>
         </View>
@@ -69,7 +75,10 @@ export default function RegisterScreen({ navigation }) {
         {/* Đồng ý điều khoản */}
         <TouchableOpacity
           style={styles.agreeRow}
-          onPress={() => setAgreed(!agreed)}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            setAgreed(!agreed);
+          }}
         >
           <View style={[styles.checkbox, agreed && styles.checkboxChecked]}>
             {agreed && <Text style={styles.checkmark}>✓</Text>}
@@ -95,7 +104,12 @@ export default function RegisterScreen({ navigation }) {
 
         <View style={styles.loginRow}>
           <Text style={styles.loginText}>Đã có tài khoản? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.navigate("Login");
+            }}
+          >
             <Text style={styles.loginLink}>Đăng nhập</Text>
           </TouchableOpacity>
         </View>

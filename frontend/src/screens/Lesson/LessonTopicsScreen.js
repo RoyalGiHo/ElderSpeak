@@ -20,6 +20,7 @@ import {
   TOPIC_KIND,
 } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { playSfx } from "../../utils/soundEffects";
 
 const C = {
   pageBg: "#F5F9FF",
@@ -59,6 +60,7 @@ export default function LessonTopicsScreen() {
   );
 
   const handleOpenTopic = (topic) => {
+    playSfx("tap", settings.soundFx);
     const summary = lessonTopicSummaryLine(topic.id);
     if (summary === "Sắp có dữ liệu") {
       Alert.alert("Sắp ra mắt", `Chưa có bài học cho chủ đề "${topic.name}".`);
@@ -72,6 +74,7 @@ export default function LessonTopicsScreen() {
   };
 
   const handleLongPress = (topic) => {
+    playSfx("tap", settings.soundFx);
     if (!isCompleted(topic.id, TOPIC_KIND.LESSON)) return;
     Alert.alert(
       "Học lại chủ đề?",
@@ -97,11 +100,12 @@ export default function LessonTopicsScreen() {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backBtn}
-          onPress={() =>
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
             navigation.canGoBack()
               ? navigation.goBack()
-              : navigation.navigate("MainTabs", { screen: "Home" })
-          }
+              : navigation.navigate("MainTabs", { screen: "Home" });
+          }}
           accessibilityRole="button"
           accessibilityLabel="Quay lại"
           activeOpacity={0.75}

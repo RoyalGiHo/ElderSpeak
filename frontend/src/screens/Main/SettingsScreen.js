@@ -17,6 +17,7 @@ import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { useTopicProgress } from "../../store/TopicProgressContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
 
@@ -55,6 +56,7 @@ export default function SettingsScreen({ navigation }) {
   );
 
   const handleBack = () => {
+    playSfx("tap", settings.soundFx);
     if (navigation.canGoBack()) {
       navigation.goBack();
       return;
@@ -63,6 +65,7 @@ export default function SettingsScreen({ navigation }) {
   };
 
   const handleResetDemoProgress = () => {
+    playSfx("tap", settings.soundFx);
     Alert.alert(
       "Reset tiến độ demo?",
       "Tiến độ Flashcard và Lesson sẽ về trạng thái chưa học.",
@@ -116,7 +119,10 @@ export default function SettingsScreen({ navigation }) {
                     { backgroundColor: palette.soft },
                     selected && styles.fontButtonSelected,
                   ]}
-                  onPress={() => setFontSize(item)}
+                  onPress={() => {
+                    playSfx("tap", settings.soundFx);
+                    setFontSize(item);
+                  }}
                   activeOpacity={0.86}
                 >
                   <Text
@@ -178,7 +184,10 @@ export default function SettingsScreen({ navigation }) {
           style={[styles.row, !settings.dailyReminder && styles.rowDisabled]}
           activeOpacity={0.78}
           disabled={!settings.dailyReminder}
-          onPress={() => setShowTimePicker(true)}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            setShowTimePicker(true);
+          }}
         >
           <Text style={[styles.rowLabel, { color: palette.text }]}>Giờ thông báo</Text>
           <View style={styles.rightInline}>
@@ -249,7 +258,10 @@ export default function SettingsScreen({ navigation }) {
       >
         <Pressable
           style={styles.modalBackdrop}
-          onPress={() => setShowTimePicker(false)}
+          onPress={() => {
+            playSfx("tap", settings.soundFx);
+            setShowTimePicker(false);
+          }}
         >
           <Pressable style={[styles.modalCard, { backgroundColor: palette.card }]} onPress={() => {}}>
             <Text style={[styles.modalTitle, { color: palette.text }]}>Chọn giờ thông báo</Text>
@@ -261,6 +273,7 @@ export default function SettingsScreen({ navigation }) {
                   style={[styles.timeOption, { borderBottomColor: palette.border }]}
                   activeOpacity={0.8}
                   onPress={() => {
+                    playSfx("tap", settings.soundFx);
                     setReminderTime(time);
                     setShowTimePicker(false);
                   }}

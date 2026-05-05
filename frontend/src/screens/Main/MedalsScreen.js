@@ -11,6 +11,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Text from "../../components/AppText";
 import { MEDALS } from "../../data/mockData";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { playSfx } from "../../utils/soundEffects";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
 
@@ -61,6 +62,7 @@ export default function MedalsScreen({ navigation }) {
   }, []);
 
   const handleBack = () => {
+    playSfx("tap", settings.soundFx);
     if (navigation.canGoBack()) {
       navigation.goBack();
       return;

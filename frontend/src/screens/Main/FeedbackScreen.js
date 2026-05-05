@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { playSfx } from "../../utils/soundEffects";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
 
@@ -92,6 +93,7 @@ export default function FeedbackScreen({ navigation }) {
   const canSubmit = rating > 0;
 
   const handleBack = () => {
+    playSfx("tap", settings.soundFx);
     if (navigation.canGoBack()) {
       navigation.goBack();
       return;
@@ -100,6 +102,7 @@ export default function FeedbackScreen({ navigation }) {
   };
 
   const toggleTopic = (id) => {
+    playSfx("tap", settings.soundFx);
     setSelectedTopics((prev) =>
       prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]
     );
@@ -107,6 +110,7 @@ export default function FeedbackScreen({ navigation }) {
 
   const handleSubmit = () => {
     if (!canSubmit) return;
+    playSfx("success", settings.soundFx);
     Alert.alert(
       "Cảm ơn bạn!",
       "Phản hồi của bạn đã được ghi nhận. Chúng tôi sẽ sớm cải thiện ứng dụng.",
@@ -151,7 +155,13 @@ export default function FeedbackScreen({ navigation }) {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.ratingBlock}>
-            <StarRating value={rating} onChange={setRating} />
+            <StarRating
+              value={rating}
+              onChange={(next) => {
+                playSfx("tap", settings.soundFx);
+                setRating(next);
+              }}
+            />
             <Text style={[styles.ratingLabel, isDark && { color: "#94A3B8" }]}>{ratingLabel}</Text>
           </View>
 

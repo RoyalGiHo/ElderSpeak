@@ -5,8 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Pressable,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Text from "../../components/AppText";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -21,6 +21,7 @@ import {
 } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { playSfx } from "../../utils/soundEffects";
 
 const C = {
   bg: "#F5F9FF",
@@ -371,7 +372,10 @@ export default function HomeScreen() {
                   borderColor: isDark ? "#475569" : "#C9D5EA",
                 },
               ]}
-              onPress={() => navigation.navigate("Profile")}
+              onPress={() => {
+                playSfx("tap", settings.soundFx);
+                navigation.navigate("Profile");
+              }}
               accessibilityRole="button"
               accessibilityLabel="Hồ sơ"
             >
@@ -393,6 +397,7 @@ export default function HomeScreen() {
           ]}
           activeOpacity={0.9}
           onPress={() => {
+            playSfx("tap", settings.soundFx);
             const { lessonTopicId, title, current, total, subtitle } =
               HOME_CURRENT_LESSON;
             const line = lessonTopicSummaryLine(lessonTopicId);
@@ -469,7 +474,10 @@ export default function HomeScreen() {
         <View style={styles.sectionHead}>
           <Text style={[styles.sectionTitle, { color: isDark ? palette.text : C.navy }]}>Chủ đề bài học</Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate("LessonTopics")}
+            onPress={() => {
+              playSfx("tap", settings.soundFx);
+              navigation.navigate("LessonTopics");
+            }}
             accessibilityRole="button"
             accessibilityLabel="Xem tất cả chủ đề bài học"
           >
@@ -498,13 +506,16 @@ export default function HomeScreen() {
                 item={liveItem}
                 isDark={isDark}
                 onPress={() =>
-                  navigation.navigate("ChooseMode", {
-                    topicTitle: homeCardTopicTitle(item),
-                    lessonMeta: liveItem.footer,
-                    ...(item.lessonTopicId
-                      ? { lessonTopicId: item.lessonTopicId }
-                      : {}),
-                  })
+                  {
+                    playSfx("tap", settings.soundFx);
+                    navigation.navigate("ChooseMode", {
+                      topicTitle: homeCardTopicTitle(item),
+                      lessonMeta: liveItem.footer,
+                      ...(item.lessonTopicId
+                        ? { lessonTopicId: item.lessonTopicId }
+                        : {}),
+                    });
+                  }
                 }
               />
             );

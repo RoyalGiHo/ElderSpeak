@@ -13,6 +13,7 @@ import Text from "../../components/AppText";
 import { TOPICS } from "../../data/mockData";
 import { useTopicProgress } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { playSfx } from "../../utils/soundEffects";
 
 const C = {
   pageBg: "#EEF1F7",
@@ -61,6 +62,7 @@ export default function FlashCardTopicsScreen({ navigation }) {
   );
 
   const toggleTopic = (topicId) => {
+    playSfx("tap", settings.soundFx);
     setSelectedIds((prev) =>
       prev.includes(topicId)
         ? prev.filter((id) => id !== topicId)
@@ -69,6 +71,7 @@ export default function FlashCardTopicsScreen({ navigation }) {
   };
 
   const onLongPressTopic = (topic) => {
+    playSfx("tap", settings.soundFx);
     if (!isCompleted(topic.id)) return;
     Alert.alert(
       "Học lại chủ đề?",
@@ -88,10 +91,12 @@ export default function FlashCardTopicsScreen({ navigation }) {
 
   const handleConfirm = () => {
     if (!canConfirm) return;
+    playSfx("tap", settings.soundFx);
     navigation.navigate("FlashCard", { topicIds: selectedIds });
   };
 
   const handleBack = () => {
+    playSfx("tap", settings.soundFx);
     if (navigation.canGoBack()) {
       navigation.goBack();
       return;
