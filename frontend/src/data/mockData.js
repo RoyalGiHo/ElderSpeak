@@ -31,6 +31,8 @@ export const HOME_TOPIC_CARDS = [
   {
     id: "home-medical",
     label: "KHÁM BỆNH",
+    /** Tiêu đề trên màn Chọn chế độ (theo mockup ChooseModePage). */
+    chooseModeTopicTitle: "Đi khám bệnh",
     footer: "6 bài · Chưa bắt đầu",
     badge: null,
     theme: "blue",

@@ -1,4 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, Platform, TouchableOpacity } from "react-native";
@@ -20,6 +21,7 @@ import ProfileScreen from "./src/screens/Main/ProfileScreen";
 
 // Lesson
 import ChooseModeScreen from "./src/screens/Lesson/ChooseModeScreen";
+import ReadingScreen from "./src/screens/Lesson/ReadingScreen";
 import ListeningScreen from "./src/screens/Lesson/ListeningScreen";
 import WritingScreen from "./src/screens/Lesson/WritingScreen";
 import ResultScreen from "./src/screens/Lesson/ResultScreen";
@@ -119,6 +121,7 @@ function MainTabs() {
 
 export default function App() {
   return (
+    <SafeAreaProvider>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
@@ -139,6 +142,7 @@ export default function App() {
 
         {/* Lesson */}
         <Stack.Screen name="ChooseMode" component={ChooseModeScreen} />
+        <Stack.Screen name="Reading" component={ReadingScreen} />
         <Stack.Screen name="Listening" component={ListeningScreen} />
         <Stack.Screen name="Writing" component={WritingScreen} />
         <Stack.Screen name="Result" component={ResultScreen} />
@@ -153,5 +157,6 @@ export default function App() {
         <Stack.Screen name="Medals" component={MedalsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

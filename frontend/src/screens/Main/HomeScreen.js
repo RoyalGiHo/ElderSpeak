@@ -260,6 +260,12 @@ const topicIconStyles = StyleSheet.create({
   },
 });
 
+function homeCardTopicTitle(item) {
+  if (item.chooseModeTopicTitle) return item.chooseModeTopicTitle;
+  const lower = item.label.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 function TopicCard({ item, onPress }) {
   const th = TOPIC_THEMES[item.theme];
   return (
@@ -329,7 +335,12 @@ export default function HomeScreen() {
         <TouchableOpacity
           style={styles.lessonCard}
           activeOpacity={0.9}
-          onPress={() => navigation.navigate("ChooseMode")}
+          onPress={() =>
+            navigation.navigate("ChooseMode", {
+              topicTitle: HOME_CURRENT_LESSON.title,
+              lessonMeta: HOME_CURRENT_LESSON.subtitle,
+            })
+          }
         >
           <View style={styles.lessonIconBox}>
             <LessonChatIcon />
@@ -377,7 +388,12 @@ export default function HomeScreen() {
             <TopicCard
               key={item.id}
               item={item}
-              onPress={() => navigation.navigate("ChooseMode")}
+              onPress={() =>
+                navigation.navigate("ChooseMode", {
+                  topicTitle: homeCardTopicTitle(item),
+                  lessonMeta: item.footer,
+                })
+              }
             />
           ))}
         </ScrollView>
