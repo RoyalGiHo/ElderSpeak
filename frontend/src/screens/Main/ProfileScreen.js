@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -8,17 +8,24 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
+import { useFocusEffect } from "@react-navigation/native";
 import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import { USER } from "../../data/mockData";
 
 const IS_LOGGED_IN_KEY = "is_logged_in";
 const LAST_TAB_KEY = "last_main_tab";
+const USER_PROFILE_KEY = "user_profile";
 
 export default function ProfileScreen({ navigation }) {
   const { settings } = useAppSettings();
   const isDark = settings.darkMode;
   const palette = isDark ? THEME.dark : THEME.light;
+  const [profile, setProfile] = useState({
+    name: USER.name,
+    memberSince: USER.memberSince,
+  });
   const achievementRows = [
     { label: "Thành tích", icon: "award", screen: "Medals" },
     { label: "Tiến độ", icon: "bar-chart-2", screen: "History" },
@@ -39,18 +46,43 @@ export default function ProfileScreen({ navigation }) {
     });
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      const loadProfile = async () => {
+        try {
+          const raw = await AsyncStorage.getItem(USER_PROFILE_KEY);
+          if (!raw) {
+            setProfile({ name: USER.name, memberSince: USER.memberSince });
+            return;
+          }
+          const parsed = JSON.parse(raw);
+          setProfile({
+            name: parsed.name || USER.name,
+            memberSince: parsed.memberSince || USER.memberSince,
+          });
+        } catch {
+          setProfile({ name: USER.name, memberSince: USER.memberSince });
+        }
+      };
+      loadProfile();
+    }, [])
+  );
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: palette.page }]}>
       <View style={styles.contentContainer}>
         <View style={styles.header}>
           <Ionicons name="person-circle" size={84} color={isDark ? "#93C5FD" : "#0A1A47"} />
-          <Text style={[styles.userName, { color: isDark ? palette.text : "#1F2D64" }]}>Bác A</Text>
+          <Text style={[styles.userName, { color: isDark ? palette.text : "#1F2D64" }]}>
+            {profile.name}
+          </Text>
           <Text style={[styles.memberText, { color: isDark ? palette.textMuted : "#6E7284" }]}>
-            Thành viên từ tháng 1 / 2025
+            Thành viên từ {profile.memberSince}
           </Text>
           <TouchableOpacity
             style={[styles.editButton, isDark && { borderColor: palette.accentText }]}
             activeOpacity={0.8}
+            onPress={() => navigation.navigate("EditProfile")}
           >
             <Text style={[styles.editButtonText, isDark && { color: palette.accentText }]}>Chỉnh sửa</Text>
           </TouchableOpacity>

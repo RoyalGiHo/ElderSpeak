@@ -66,6 +66,7 @@ export default function FlashCardScreen() {
   const card = cards[currentIndex];
   const progress = total > 0 ? (currentIndex + 1) / total : 0;
   const isLastCard = total > 0 && currentIndex + 1 >= total;
+  const isAllRemembered = total > 0 && rememberedIds.length === total;
   const textScale =
     settings.fontSize === "A+" ? 1.08 : settings.fontSize === "A-" ? 0.92 : 1;
   const speechLanguage = settings.voiceAccent === "uk" ? "en-GB" : "en-US";
@@ -74,6 +75,11 @@ export default function FlashCardScreen() {
     setCurrentIndex((prev) => (prev + 1 < total ? prev + 1 : prev));
     setIsFront(true);
   }, [total]);
+
+  const movePrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 >= 0 ? prev - 1 : prev));
+    setIsFront(true);
+  }, []);
 
   const handleRemember = useCallback(() => {
     if (!card) return;
@@ -108,6 +114,10 @@ export default function FlashCardScreen() {
     total,
     navigation,
   ]);
+
+  const exitSession = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   const speakCurrentCard = useCallback(() => {
     if (!card || settings.soundFx === false) return;
@@ -262,13 +272,16 @@ export default function FlashCardScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.counterBar, isDark && { backgroundColor: "#111827", borderColor: "#334155" }]}>
-          <View style={styles.counterItem}>
-            <Text style={styles.counterRemember}>✓ {rememberedIds.length} đã nhớ</Text>
+        <View style={styles.counterRow}>
+          <View style={[styles.counterForgetBox, isDark && { backgroundColor: "#3A1116", borderColor: "#8B2B35" }]}>
+            <Text style={[styles.counterForget, isDark && { color: "#FDA4AF" }]}>
+              ✗ {forgottenIds.length} chưa nhớ
+            </Text>
           </View>
-          <View style={styles.counterDivider} />
-          <View style={styles.counterItem}>
-            <Text style={styles.counterForget}>✗ {forgottenIds.length} chưa nhớ</Text>
+          <View style={[styles.counterRememberBox, isDark && { backgroundColor: "#102A1B", borderColor: "#1F6F3F" }]}>
+            <Text style={[styles.counterRemember, isDark && { color: "#86EFAC" }]}>
+              ✓ {rememberedIds.length} đã nhớ
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -284,13 +297,23 @@ export default function FlashCardScreen() {
         ]}
       >
         <TouchableOpacity
-          style={[styles.homeBtn, isDark && { backgroundColor: "#1F2937" }]}
-          onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}
+          style={[
+            styles.prevBtn,
+            currentIndex === 0 && styles.prevBtnDisabled,
+            isDark && { backgroundColor: "#1E293B", borderColor: "#334155" },
+          ]}
+          onPress={movePrevious}
           activeOpacity={0.85}
+          disabled={currentIndex === 0}
         >
-          <Text style={[styles.homeText, isDark && { color: "#CBD5E1" }]}>Về trang chủ</Text>
+          <Ionicons
+            name="arrow-back"
+            size={19}
+            color={currentIndex === 0 ? "#9CA3AF" : isDark ? "#BFDBFE" : C.primary}
+          />
+          <Text style={[styles.prevText, currentIndex === 0 && styles.prevTextDisabled]}>Thẻ trước</Text>
         </TouchableOpacity>
-        {isLastCard ? (
+        {isAllRemembered ? (
           <TouchableOpacity
             style={styles.finishBtn}
             onPress={finishSession}
@@ -302,11 +325,15 @@ export default function FlashCardScreen() {
         ) : (
           <TouchableOpacity
             style={styles.nextBtn}
-            onPress={moveNext}
+            onPress={isLastCard ? exitSession : moveNext}
             activeOpacity={0.85}
           >
-            <Text style={styles.nextText}>Tiếp thẻ</Text>
-            <Ionicons name="arrow-forward" size={19} color="#FFFFFF" />
+            <Text style={styles.nextText}>{isLastCard ? "Thoát" : "Tiếp thẻ"}</Text>
+            <Ionicons
+              name={isLastCard ? "exit-outline" : "arrow-forward"}
+              size={19}
+              color="#FFFFFF"
+            />
           </TouchableOpacity>
         )}
       </View>
@@ -442,17 +469,31 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   rememberText: { fontSize: 21, fontWeight: "700", color: C.success },
-  counterBar: {
+  counterRow: {
     marginTop: 14,
+    flexDirection: "row",
+    gap: 12,
+  },
+  counterRememberBox: {
+    flex: 1,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: "#E3E5E8",
-    backgroundColor: "#F7F7F3",
-    flexDirection: "row",
-    overflow: "hidden",
+    borderColor: "#C6DDAC",
+    backgroundColor: C.successBg,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 11,
   },
-  counterItem: { flex: 1, paddingVertical: 11, alignItems: "center" },
-  counterDivider: { width: 1, backgroundColor: "#E3E5E8" },
+  counterForgetBox: {
+    flex: 1,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: "#E8A7B0",
+    backgroundColor: C.dangerBg,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 11,
+  },
   counterRemember: { fontSize: 18, color: C.success, fontWeight: "600" },
   counterForget: { fontSize: 18, color: C.danger, fontWeight: "600" },
   footer: {
@@ -464,15 +505,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
   },
-  homeBtn: {
+  prevBtn: {
     flex: 1,
     borderRadius: 14,
-    backgroundColor: C.actionMuted,
+    borderWidth: 1.5,
+    borderColor: "#C9D4E5",
+    backgroundColor: "#EDF3FD",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    flexDirection: "row",
+    gap: 6,
   },
-  homeText: { fontSize: 20, color: "#7C7E77", fontWeight: "600" },
+  prevBtnDisabled: {
+    opacity: 0.55,
+  },
+  prevText: { fontSize: 17, color: C.primary, fontWeight: "700" },
+  prevTextDisabled: { color: "#9CA3AF" },
   nextBtn: {
     flex: 1,
     borderRadius: 14,
@@ -493,6 +543,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
-  nextText: { fontSize: 20, color: "#FFFFFF", fontWeight: "700" },
+  nextText: { fontSize: 19, color: "#FFFFFF", fontWeight: "700" },
   emptyText: { marginTop: 28, textAlign: "center", fontSize: 16, color: C.textMuted },
 });

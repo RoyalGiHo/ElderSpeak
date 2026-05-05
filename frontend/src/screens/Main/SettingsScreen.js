@@ -9,11 +9,13 @@ import {
   Modal,
   Pressable,
   useColorScheme,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { useTopicProgress } from "../../store/TopicProgressContext";
 import { THEME } from "../../data/themePalette";
 
 const WEB_SCROLL_STYLE = Platform.OS === "web" ? { overflowY: "auto" } : null;
@@ -43,6 +45,7 @@ export default function SettingsScreen({ navigation }) {
     setSoundFx,
     setVoiceAccent,
   } = useAppSettings();
+  const { resetAll } = useTopicProgress();
   const isDark = settings.darkMode;
   const palette = isDark ? THEME.dark : THEME.light;
 
@@ -57,6 +60,21 @@ export default function SettingsScreen({ navigation }) {
       return;
     }
     navigation.navigate("Profile");
+  };
+
+  const handleResetDemoProgress = () => {
+    Alert.alert(
+      "Reset tiến độ demo?",
+      "Tiến độ Flashcard và Lesson sẽ về trạng thái chưa học.",
+      [
+        { text: "Huỷ", style: "cancel" },
+        {
+          text: "Reset",
+          style: "destructive",
+          onPress: () => resetAll(),
+        },
+      ]
+    );
   };
 
   return (
@@ -210,6 +228,17 @@ export default function SettingsScreen({ navigation }) {
             trackColor={trackColor}
           />
         </View>
+        <Divider style={{ borderBottomColor: palette.border }} />
+
+        <SectionTitle style={{ color: palette.textMuted }}>DỮ LIỆU DEMO</SectionTitle>
+        <TouchableOpacity
+          style={[styles.resetDemoBtn, { borderColor: "#EF4444", backgroundColor: "#FEF2F2" }]}
+          activeOpacity={0.82}
+          onPress={handleResetDemoProgress}
+        >
+          <Ionicons name="refresh" size={18} color="#B91C1C" />
+          <Text style={styles.resetDemoBtnText}>Reset tiến độ đã học</Text>
+        </TouchableOpacity>
       </ScrollView>
 
       <Modal
@@ -406,5 +435,24 @@ const styles = StyleSheet.create({
   timeOptionTextActive: {
     color: "#2C56C9",
     fontWeight: "800",
+  },
+  resetDemoBtn: {
+    marginTop: 10,
+    marginBottom: 6,
+    minHeight: 52,
+    borderRadius: 14,
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  resetDemoBtnText: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontWeight: "800",
+    color: "#B91C1C",
   },
 });

@@ -20,6 +20,7 @@ import OTPScreen from "./src/screens/Auth/OTPScreen";
 import HomeScreen from "./src/screens/Main/HomeScreen";
 import FlashCardTopicsScreen from "./src/screens/Flashcard/FlashCardTopicsScreen";
 import ProfileScreen from "./src/screens/Main/ProfileScreen";
+import EditProfileScreen from "./src/screens/Main/EditProfileScreen";
 
 // Lesson
 import LessonTopicsScreen from "./src/screens/Lesson/LessonTopicsScreen";
@@ -257,6 +258,7 @@ function AppNavigator() {
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen name="Feedback" component={FeedbackScreen} />
         <Stack.Screen name="Medals" component={MedalsScreen} />
+        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
