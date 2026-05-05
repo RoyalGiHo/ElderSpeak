@@ -123,19 +123,21 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.continueWith}>Tiếp tục với</Text>
         <View style={styles.socialRow}>
           <TouchableOpacity style={styles.socialCircle}>
-            <FontAwesome name="google" size={20} color="#EA4335" />
+            <FontAwesome name="google" size={30} color="#EA4335" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialCircle}>
-            <FontAwesome name="apple" size={20} color="#000" />
+            <FontAwesome name="apple" size={30} color="#000" />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.registerRow}>
+        <TouchableOpacity
+          style={styles.registerRow}
+          onPress={() => navigation.navigate("Register")}
+          activeOpacity={0.8}
+        >
           <Text style={styles.registerText}>Chưa có tài khoản? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={styles.registerLink}>Đăng kí</Text>
-          </TouchableOpacity>
-        </View>
+          <Text style={styles.registerLink}>Đăng kí</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -162,59 +164,73 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F5F5F5",
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    marginBottom: 12,
-    height: 52,
+    borderRadius: 14,
+    paddingHorizontal: 18,
+    marginBottom: 14,
+    minHeight: 60,
   },
-  inputIcon: { fontSize: 16, marginRight: 10 },
-  input: { flex: 1, fontSize: 15, color: "#1a1a1a" },
-  eyeIcon: { fontSize: 16 },
+  inputIcon: { fontSize: 18, marginRight: 12 },
+  input: { flex: 1, fontSize: 17, color: "#1a1a1a" },
+  eyeIcon: { fontSize: 18 },
   optionsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
   },
-  rememberRow: { flexDirection: "row", alignItems: "center" },
+  rememberRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 6,
+    paddingRight: 8,
+  },
   checkbox: {
-    width: 18,
-    height: 18,
+    width: 26,
+    height: 26,
     borderWidth: 1.5,
     borderColor: "#999",
-    borderRadius: 4,
-    marginRight: 8,
+    borderRadius: 6,
+    marginRight: 10,
     alignItems: "center",
     justifyContent: "center",
   },
   checkboxChecked: { backgroundColor: "#3D5CFF", borderColor: "#3D5CFF" },
-  checkmark: { color: "#fff", fontSize: 12, fontWeight: "700" },
-  rememberText: { fontSize: 13, color: "#666" },
-  forgotText: { fontSize: 13, color: "#1a1a1a", fontWeight: "500" },
+  checkmark: { color: "#fff", fontSize: 15, fontWeight: "700" },
+  rememberText: { fontSize: 15, color: "#666" },
+  forgotText: { fontSize: 15, color: "#1a1a1a", fontWeight: "600" },
   errorText: { color: "red", fontSize: 13, marginBottom: 8 },
   continueWith: {
     textAlign: "center",
     color: "#999",
-    fontSize: 13,
+    fontSize: 16,
     marginBottom: 12,
   },
   socialRow: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 16,
-    marginBottom: 24,
+    gap: 22,
+    marginBottom: 26,
   },
   socialCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
     borderWidth: 1,
     borderColor: "#E0E0E0",
     alignItems: "center",
     justifyContent: "center",
   },
   socialIcon: { fontSize: 18, fontWeight: "700" },
-  registerRow: { flexDirection: "row", justifyContent: "center" },
-  registerText: { color: "#666", fontSize: 14 },
-  registerLink: { color: "#3D5CFF", fontSize: 14, fontWeight: "600" },
+  registerRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 12,
+    minHeight: 48,
+  },
+  registerText: { color: "#666", fontSize: 16 },
+  registerLink: { color: "#3D5CFF", fontSize: 19, fontWeight: "700" },
 });

@@ -7,18 +7,20 @@ import {
   StyleSheet,
   Dimensions,
   StatusBar,
-  Image,
 } from "react-native";
 import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
+import Onboarding1Svg from "../../design/onboarding1.svg";
+import Onboarding2Svg from "../../design/onboarding2.svg";
+import Onboarding3Svg from "../../design/onboarding3.svg";
 
 const { width } = Dimensions.get("window");
 
 const slides = [
   {
     id: "1",
-    image: require("../../design/onboarding1.png"),
+    image: Onboarding1Svg,
     title: "Nói chuyện với cháu",
     titleHighlight: "Tự tin hơn mỗi ngày",
     description:
@@ -26,7 +28,7 @@ const slides = [
   },
   {
     id: "2",
-    image: require("../../design/onboarding2.png"),
+    image: Onboarding2Svg,
     title: "Học lúc nào cũng được",
     titleHighlight: "Không cần mạng",
     description:
@@ -34,7 +36,7 @@ const slides = [
   },
   {
     id: "3",
-    image: require("../../design/onboarding3.png"),
+    image: Onboarding3Svg,
     title: "Ghi nhận",
     titleHighlight: "Từng bước tiến của bạn",
     description:
@@ -79,21 +81,25 @@ export default function OnboardingScreen({ navigation }) {
     }
   }).current;
 
-  const renderSlide = ({ item }) => (
-    <View style={styles.slide}>
-      <Image
-        source={item.image}
-        style={styles.imagePlaceholder}
-        resizeMode="contain"
-      />
+  const renderSlide = ({ item }) => {
+    const SlideSvg = item.image;
 
-      <View style={styles.textContainer}>
-        <Text style={[styles.title, isDark && { color: palette.text }]}>{item.title}</Text>
-        <Text style={styles.titleHighlight}>{item.titleHighlight}</Text>
-        <Text style={[styles.description, isDark && { color: palette.textMuted }]}>{item.description}</Text>
+    return (
+      <View style={styles.slide}>
+        <View style={styles.imagePlaceholder}>
+          <SlideSvg width="100%" height="100%" />
+        </View>
+
+        <View style={styles.textContainer}>
+          <Text style={[styles.title, isDark && { color: palette.text }]}>{item.title}</Text>
+          <Text style={styles.titleHighlight}>{item.titleHighlight}</Text>
+          <Text style={[styles.description, isDark && { color: palette.textMuted }]}>
+            {item.description}
+          </Text>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   const isLastSlide = currentIndex === slides.length - 1;
 

@@ -286,8 +286,8 @@ function TopicCard({ item, onPress, isDark }) {
         {
           backgroundColor: isDark ? "#111827" : th.card,
           opacity: pressed ? 0.92 : 1,
-          borderWidth: isDark ? 1 : 0,
-          borderColor: isDark ? "#334155" : "transparent",
+          borderWidth: 1.5,
+          borderColor: isDark ? "#475569" : "#C9D5EA",
         },
       ]}
       onPress={onPress}
@@ -344,17 +344,33 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={[styles.headerBlock, { backgroundColor: isDark ? palette.card : C.white }]}>
+        <View
+          style={[
+            styles.headerBlock,
+            {
+              backgroundColor: isDark ? palette.card : C.white,
+              borderWidth: 1.5,
+              borderColor: isDark ? "#475569" : "#C9D5EA",
+            },
+          ]}
+        >
           <View style={styles.headerRow}>
             <Text style={[styles.greeting, { color: isDark ? palette.text : C.navy }]}>
               {greetingLine()}
-              {", "}
+              {",\n"}
               <Text style={[styles.greetingName, { color: isDark ? palette.text : C.navy }]}>
                 {USER.name}
               </Text>
             </Text>
             <TouchableOpacity
-              style={[styles.avatar, isDark && { backgroundColor: palette.soft }]}
+              style={[
+                styles.avatar,
+                {
+                  backgroundColor: isDark ? palette.soft : C.avatarBg,
+                  borderWidth: 1.5,
+                  borderColor: isDark ? "#475569" : "#C9D5EA",
+                },
+              ]}
               onPress={() => navigation.navigate("Profile")}
               accessibilityRole="button"
               accessibilityLabel="Hồ sơ"
@@ -367,7 +383,14 @@ export default function HomeScreen() {
         </View>
 
         <TouchableOpacity
-          style={[styles.lessonCard, isDark && { backgroundColor: palette.soft }]}
+          style={[
+            styles.lessonCard,
+            {
+              backgroundColor: isDark ? palette.soft : C.progressCard,
+              borderWidth: 1.5,
+              borderColor: isDark ? "#475569" : "#B9CDF0",
+            },
+          ]}
           activeOpacity={0.9}
           onPress={() => {
             const { lessonTopicId, title, current, total, subtitle } =
@@ -402,22 +425,49 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <View style={styles.statsRow}>
-          <View style={[styles.statCard, isDark && { backgroundColor: "#1E293B" }]}>
+          <View
+            style={[
+              styles.statCard,
+              {
+                backgroundColor: isDark ? "#1E293B" : C.statCard,
+                borderWidth: 1.5,
+                borderColor: isDark ? "#475569" : "#AEC8F6",
+              },
+            ]}
+          >
             <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.streak}</Text>
             <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Ngày liên tiếp</Text>
           </View>
-          <View style={[styles.statCard, isDark && { backgroundColor: "#1E293B" }]}>
+          <View
+            style={[
+              styles.statCard,
+              {
+                backgroundColor: isDark ? "#1E293B" : C.statCard,
+                borderWidth: 1.5,
+                borderColor: isDark ? "#475569" : "#AEC8F6",
+              },
+            ]}
+          >
             <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.totalWords}</Text>
             <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Từ đã học</Text>
           </View>
-          <View style={[styles.statCard, isDark && { backgroundColor: "#1E293B" }]}>
+          <View
+            style={[
+              styles.statCard,
+              {
+                backgroundColor: isDark ? "#1E293B" : C.statCard,
+                borderWidth: 1.5,
+                borderColor: isDark ? "#475569" : "#AEC8F6",
+              },
+            ]}
+          >
             <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.medals}</Text>
             <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Huy chương</Text>
           </View>
         </View>
 
         <View style={styles.sectionHead}>
-          <Text style={[styles.sectionTitle, { color: isDark ? palette.text : C.navy }]}>Chọn chủ đề bài học</Text>
+          <Text style={[styles.sectionTitle, { color: isDark ? palette.text : C.navy }]}>Chủ đề bài học</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("LessonTopics")}
             accessibilityRole="button"

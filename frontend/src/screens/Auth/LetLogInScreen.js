@@ -28,15 +28,33 @@ export default function LetLogInScreen({ navigation }) {
         <Text style={[styles.title, { color: palette.text }]}>Bắt đầu nào</Text>
 
         {/* Google */}
-        <TouchableOpacity style={[styles.socialButton, isDark && { borderColor: "#334155", backgroundColor: "#111827" }]}>
+        <TouchableOpacity
+          style={[
+            styles.socialButton,
+            styles.googleButton,
+            isDark && styles.socialButtonDark,
+            isDark && styles.googleButtonDark,
+          ]}
+        >
           <FontAwesome name="google" size={22} color="#EA4335" />
-          <Text style={[styles.socialText, isDark && { color: "#E2E8F0" }]}> Đăng nhập với Google</Text>
+          <Text style={[styles.socialText, isDark && styles.socialTextDark]}>
+            Đăng nhập với Google
+          </Text>
         </TouchableOpacity>
 
         {/* Apple */}
-        <TouchableOpacity style={[styles.socialButton, isDark && { borderColor: "#334155", backgroundColor: "#111827" }]}>
-          <FontAwesome name="apple" size={22} color="#000" />
-          <Text style={[styles.socialText, isDark && { color: "#E2E8F0" }]}> Đăng nhập với Apple</Text>
+        <TouchableOpacity
+          style={[
+            styles.socialButton,
+            styles.appleButton,
+            isDark && styles.socialButtonDark,
+            isDark && styles.appleButtonDark,
+          ]}
+        >
+          <FontAwesome name="apple" size={22} color={isDark ? "#E2E8F0" : "#000"} />
+          <Text style={[styles.socialText, isDark && styles.socialTextDark]}>
+            Đăng nhập với Apple
+          </Text>
         </TouchableOpacity>
 
         <Text style={[styles.orText, isDark && { color: "#94A3B8" }]}>(hoặc)</Text>
@@ -48,12 +66,14 @@ export default function LetLogInScreen({ navigation }) {
         />
 
         {/* Chưa có tài khoản */}
-        <View style={styles.registerRow}>
+        <TouchableOpacity
+          style={styles.registerRow}
+          onPress={() => navigation.navigate("Register")}
+          activeOpacity={0.8}
+        >
           <Text style={styles.registerText}>Chưa có tài khoản? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={styles.registerLink}>Đăng kí</Text>
-          </TouchableOpacity>
-        </View>
+          <Text style={styles.registerLink}>Đăng kí</Text>
+        </TouchableOpacity>
 
         {/* Debug: xem lại Onboarding */}
         <TouchableOpacity
@@ -104,22 +124,46 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 12,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
+    borderWidth: 1.5,
+    borderColor: "#D6DCEB",
+    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     paddingVertical: 14,
     marginBottom: 12,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 8,
+    elevation: 3,
   },
-  socialIcon: {
-    fontSize: 18,
-    fontWeight: "700",
-    marginRight: 16,
-    width: 24,
-    textAlign: "center",
+  socialButtonDark: {
+    borderColor: "#334155",
+    backgroundColor: "#111827",
+    shadowOpacity: 0.22,
+  },
+  googleButton: {
+    borderColor: "#F6C8C4",
+    backgroundColor: "#FFF7F6",
+  },
+  googleButtonDark: {
+    borderColor: "#7F1D1D",
+    backgroundColor: "#1F1616",
+  },
+  appleButton: {
+    borderColor: "#D4D8E4",
+    backgroundColor: "#F8FAFC",
+  },
+  appleButtonDark: {
+    borderColor: "#475569",
+    backgroundColor: "#111827",
   },
   socialText: {
     fontSize: 15,
     color: "#1a1a1a",
+    fontWeight: "700",
+  },
+  socialTextDark: {
+    color: "#E2E8F0",
   },
   orText: {
     textAlign: "center",
@@ -130,16 +174,22 @@ const styles = StyleSheet.create({
   registerRow: {
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
     marginTop: 24,
+    alignSelf: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 12,
+    minHeight: 48,
   },
   registerText: {
     color: "#666",
-    fontSize: 14,
+    fontSize: 16,
   },
   registerLink: {
     color: "#3D5CFF",
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 19,
+    fontWeight: "700",
   },
   debugButton: {
     marginTop: 16,
