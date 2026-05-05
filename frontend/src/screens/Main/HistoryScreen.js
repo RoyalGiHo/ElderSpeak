@@ -64,82 +64,84 @@ export default function HistoryScreen({ navigation }) {
 
   return (
     <View style={[styles.root, { paddingTop: insets.top + 6 }]}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          activeOpacity={0.85}
-          onPress={handleBack}
-          accessibilityRole="button"
-          accessibilityLabel="Quay lại"
-        >
-          <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
-        </TouchableOpacity>
-        <Text style={styles.title}>Tiến độ</Text>
-      </View>
+      <ScrollView
+        style={[styles.pageScroll, WEB_SCROLL_STYLE]}
+        contentContainerStyle={[
+          styles.pageContent,
+          { paddingBottom: insets.bottom + 24 },
+        ]}
+        showsVerticalScrollIndicator
+      >
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            activeOpacity={0.85}
+            onPress={handleBack}
+            accessibilityRole="button"
+            accessibilityLabel="Quay lại"
+          >
+            <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Tiến độ</Text>
+        </View>
 
-      <View style={styles.statsRow}>
-        {stats.map((stat) => (
-          <View key={stat.label} style={styles.statCard}>
-            <Text style={styles.statLabel}>{stat.label}</Text>
-            <Text style={styles.statValue}>{stat.value}</Text>
-          </View>
-        ))}
-      </View>
-
-      <Text style={styles.blockLabel}>HOẠT ĐỘNG 3 THÁNG QUA</Text>
-      <View style={styles.heatmapCard}>
-        <View style={styles.monthLabels}>
-          {WEEK_LABELS.map((label) => (
-            <Text key={label} style={styles.monthLabelText}>
-              {label}
-            </Text>
+        <View style={styles.statsRow}>
+          {stats.map((stat) => (
+            <View key={stat.label} style={styles.statCard}>
+              <Text style={styles.statLabel}>{stat.label}</Text>
+              <Text style={styles.statValue}>{stat.value}</Text>
+            </View>
           ))}
         </View>
 
-        <View style={styles.heatmapGrid}>
-          <View style={styles.dayLabelsColumn}>
-            {DAY_LABELS.map((label) => (
-              <Text key={label} style={styles.dayLabelText}>
+        <Text style={styles.blockLabel}>HOẠT ĐỘNG 3 THÁNG QUA</Text>
+        <View style={styles.heatmapCard}>
+          <View style={styles.monthLabels}>
+            {WEEK_LABELS.map((label) => (
+              <Text key={label} style={styles.monthLabelText}>
                 {label}
               </Text>
             ))}
           </View>
 
-          <View style={styles.rowsWrap}>
-            {HEATMAP_ROWS.map((row, rowIndex) => (
-              <View key={`row-${rowIndex}`} style={styles.row}>
-                {row.map((level, colIndex) => (
-                  <View
-                    key={`cell-${rowIndex}-${colIndex}`}
-                    style={[styles.cell, { backgroundColor: levelColor(level) }]}
-                  />
-                ))}
-              </View>
+          <View style={styles.heatmapGrid}>
+            <View style={styles.dayLabelsColumn}>
+              {DAY_LABELS.map((label) => (
+                <Text key={label} style={styles.dayLabelText}>
+                  {label}
+                </Text>
+              ))}
+            </View>
+
+            <View style={styles.rowsWrap}>
+              {HEATMAP_ROWS.map((row, rowIndex) => (
+                <View key={`row-${rowIndex}`} style={styles.row}>
+                  {row.map((level, colIndex) => (
+                    <View
+                      key={`cell-${rowIndex}-${colIndex}`}
+                      style={[styles.cell, { backgroundColor: levelColor(level) }]}
+                    />
+                  ))}
+                </View>
+              ))}
+            </View>
+          </View>
+
+          <View style={styles.legend}>
+            <Text style={styles.legendText}>Ít</Text>
+            {[0, 1, 1, 2, 2].map((level, index) => (
+              <View
+                key={`legend-cell-${index}`}
+                style={[styles.legendCell, { backgroundColor: levelColor(level) }]}
+              />
             ))}
+            <Text style={styles.legendText}>Nhiều</Text>
           </View>
         </View>
 
-        <View style={styles.legend}>
-          <Text style={styles.legendText}>Ít</Text>
-          {[0, 1, 1, 2, 2].map((level, index) => (
-            <View
-              key={`legend-cell-${index}`}
-              style={[styles.legendCell, { backgroundColor: levelColor(level) }]}
-            />
-          ))}
-          <Text style={styles.legendText}>Nhiều</Text>
-        </View>
-      </View>
+        <Text style={styles.sectionTitle}>CHI TIẾT TỪNG NGÀY</Text>
 
-      <Text style={styles.sectionTitle}>CHI TIẾT TỪNG NGÀY</Text>
-
-      <View style={styles.listWrap}>
-        <ScrollView
-          style={[styles.list, WEB_SCROLL_STYLE]}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator
-          nestedScrollEnabled
-        >
+        <View style={styles.list}>
           {HISTORY.map((dayItem) => (
             <View key={dayItem.date} style={styles.dayGroup}>
               <Text style={styles.dayDate}>{dayItem.date}</Text>
@@ -156,8 +158,8 @@ export default function HistoryScreen({ navigation }) {
               ))}
             </View>
           ))}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -166,7 +168,13 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: "#ECEEF4",
+  },
+  pageScroll: {
+    flex: 1,
+  },
+  pageContent: {
     paddingHorizontal: 16,
+    paddingBottom: 24,
   },
   header: {
     position: "relative",
@@ -303,16 +311,8 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: -0.6,
   },
-  listWrap: {
-    flex: 1,
-    minHeight: 0,
-    overflow: "hidden",
-  },
   list: {
-    flex: 1,
-  },
-  listContent: {
-    paddingBottom: 24,
+    marginTop: 2,
   },
   dayGroup: {
     marginTop: 6,

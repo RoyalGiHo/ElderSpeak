@@ -73,12 +73,6 @@ export default function FlashCardTopicsScreen({ navigation }) {
       </View>
 
       <Text style={styles.mainTitle}>Chọn chủ đề bạn muốn</Text>
-      <View style={styles.hintBox}>
-        <Text style={styles.hintText}>
-          Bạn có thể chọn nhiều chủ đề cùng lúc{"\n"}
-          Các từ sẽ được trộn ngẫu nhiên
-        </Text>
-      </View>
 
       <ScrollView
         contentContainerStyle={styles.listContent}
