@@ -49,6 +49,14 @@ export default function LetLogInScreen({ navigation }) {
             <Text style={styles.registerLink}>Đăng kí</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Debug: xem lại Onboarding */}
+        <TouchableOpacity
+          style={styles.debugButton}
+          onPress={() => navigation.navigate("Onboarding")}
+        >
+          <Text style={styles.debugButtonText}>Xem lại Onboarding</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -127,5 +135,20 @@ const styles = StyleSheet.create({
     color: "#3D5CFF",
     fontSize: 14,
     fontWeight: "600",
+  },
+  debugButton: {
+    marginTop: 16,
+    alignSelf: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#D0D0D0",
+    borderStyle: "dashed",
+  },
+  debugButtonText: {
+    color: "#888",
+    fontSize: 13,
+    fontWeight: "500",
   },
 });
