@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   StatusBar,
+  Image,
 } from "react-native";
 
 const { width } = Dimensions.get("window");
@@ -15,6 +16,7 @@ const { width } = Dimensions.get("window");
 const slides = [
   {
     id: "1",
+    image: require("../../design/onboarding1.png"),
     title: "Nói chuyện với cháu",
     titleHighlight: "Tự tin hơn mỗi ngày",
     description:
@@ -22,6 +24,7 @@ const slides = [
   },
   {
     id: "2",
+    image: require("../../design/onboarding2.png"),
     title: "Học lúc nào cũng được",
     titleHighlight: "Không cần mạng",
     description:
@@ -29,6 +32,7 @@ const slides = [
   },
   {
     id: "3",
+    image: require("../../design/onboarding3.png"),
     title: "Ghi nhận",
     titleHighlight: "Từng bước tiến của bạn",
     description:
@@ -72,10 +76,11 @@ export default function OnboardingScreen({ navigation }) {
 
   const renderSlide = ({ item }) => (
     <View style={styles.slide}>
-      {/* Placeholder cho illustration */}
-      <View style={styles.imagePlaceholder}>
-        <Text style={styles.placeholderText}>🖼️ Hình minh họa</Text>
-      </View>
+      <Image
+        source={item.image}
+        style={styles.imagePlaceholder}
+        resizeMode="contain"
+      />
 
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
@@ -167,11 +172,9 @@ const styles = StyleSheet.create({
   },
   imagePlaceholder: {
     marginHorizontal: 24,
-    height: 280,
-    backgroundColor: "#F0F2FF",
+    height: 400,
+    width: width - 48,
     borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
   },
   placeholderText: {
     fontSize: 16,

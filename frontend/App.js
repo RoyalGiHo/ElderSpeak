@@ -37,6 +37,8 @@ import HistoryScreen from "./src/screens/Main/HistoryScreen";
 import FeedbackScreen from "./src/screens/Main/FeedbackScreen";
 import MedalsScreen from "./src/screens/Main/MedalsScreen";
 
+import { useFonts, Audiowide_400Regular } from "@expo-google-fonts/audiowide";
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const ONBOARDING_DONE_KEY = "onboarding_done";
@@ -154,6 +156,7 @@ function MainTabs() {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({ Audiowide_400Regular });
   const [isBootstrapping, setIsBootstrapping] = useState(true);
   const [initialRouteName, setInitialRouteName] = useState("Onboarding");
 
@@ -178,47 +181,47 @@ export default function App() {
     loadInitialRoute();
   }, []);
 
-  if (isBootstrapping) {
+  if (!fontsLoaded || isBootstrapping) {
     return null;
   }
 
   return (
     <SafeAreaProvider>
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName={initialRouteName}
-      >
-        {/* Onboarding */}
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{ headerShown: false }}
+          initialRouteName={initialRouteName}
+        >
+          {/* Onboarding */}
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
 
-        {/* Auth */}
-        <Stack.Screen name="LetLogIn" component={LetLogInScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="FillProfile" component={FillProfileScreen} />
-        <Stack.Screen name="OTP" component={OTPScreen} />
+          {/* Auth */}
+          <Stack.Screen name="LetLogIn" component={LetLogInScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="FillProfile" component={FillProfileScreen} />
+          <Stack.Screen name="OTP" component={OTPScreen} />
 
-        {/* Main */}
-        <Stack.Screen name="MainTabs" component={MainTabs} />
+          {/* Main */}
+          <Stack.Screen name="MainTabs" component={MainTabs} />
 
-        {/* Lesson */}
-        <Stack.Screen name="ChooseMode" component={ChooseModeScreen} />
-        <Stack.Screen name="Reading" component={ReadingScreen} />
-        <Stack.Screen name="Listening" component={ListeningScreen} />
-        <Stack.Screen name="Writing" component={WritingScreen} />
-        <Stack.Screen name="Result" component={ResultScreen} />
+          {/* Lesson */}
+          <Stack.Screen name="ChooseMode" component={ChooseModeScreen} />
+          <Stack.Screen name="Reading" component={ReadingScreen} />
+          <Stack.Screen name="Listening" component={ListeningScreen} />
+          <Stack.Screen name="Writing" component={WritingScreen} />
+          <Stack.Screen name="Result" component={ResultScreen} />
 
-        {/* Flashcard */}
-        <Stack.Screen name="FlashCard" component={FlashCardScreen} />
+          {/* Flashcard */}
+          <Stack.Screen name="FlashCard" component={FlashCardScreen} />
 
-        {/* Profile sub */}
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="History" component={HistoryScreen} />
-        <Stack.Screen name="Feedback" component={FeedbackScreen} />
-        <Stack.Screen name="Medals" component={MedalsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          {/* Profile sub */}
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="History" component={HistoryScreen} />
+          <Stack.Screen name="Feedback" component={FeedbackScreen} />
+          <Stack.Screen name="Medals" component={MedalsScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }

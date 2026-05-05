@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import PrimaryButton from "../../components/PrimaryButton";
 
 export default function FillProfileScreen({ navigation, route }) {
   const { phone } = route.params || {};
@@ -74,14 +75,11 @@ export default function FillProfileScreen({ navigation, route }) {
           />
         </View>
 
-        <TouchableOpacity
-          style={[styles.primaryButton, !name && styles.disabled]}
+        <PrimaryButton
+          label="Xác nhận"
           onPress={handleConfirm}
           disabled={!name}
-        >
-          <Text style={styles.primaryButtonText}>Xác nhận</Text>
-          <Text style={styles.arrow}>→</Text>
-        </TouchableOpacity>
+        />
       </View>
     </SafeAreaView>
   );
@@ -125,17 +123,4 @@ const styles = StyleSheet.create({
   },
   inputIcon: { fontSize: 16, marginRight: 10 },
   input: { flex: 1, fontSize: 15, color: "#1a1a1a" },
-  primaryButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#3D5CFF",
-    borderRadius: 30,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    marginTop: 16,
-  },
-  disabled: { backgroundColor: "#A0A8E0" },
-  primaryButtonText: { color: "#fff", fontSize: 16, fontWeight: "700" },
-  arrow: { color: "#fff", fontSize: 18, fontWeight: "600" },
 });
