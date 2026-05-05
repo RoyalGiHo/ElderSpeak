@@ -1,31 +1,674 @@
-import React from "react";
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Speech from "expo-speech";
+import { LESSONS } from "../../data/mockData";
 
-export default function ListeningScreen({ navigation }) {
+const C = {
+  pageBg: "#F7FAF4",
+  bg: "#FFFFFF",
+  primary: "#669922",
+  primaryDark: "#3D5C20",
+  progressTrack: "#E8F5E9",
+  backCircle: "#E8F5CE",
+  instructionBg: "#F1F8E9",
+  instructionIconBg: "#446B1F",
+  instructionText: "#2E4A16",
+  audioCardBg: "#E8EDE3",
+  audioCardInner: "#DCE5D6",
+  waveformMuted: "#A5C07A",
+  waveformAccent: "#669922",
+  navy: "#111827",
+  muted: "#9E9E9E",
+  optionIdleBg: "#F5F5F5",
+  optionIdleBorder: "#E0E0E0",
+  successBg: "#E8F5E9",
+  successBorder: "#669922",
+  errorBg: "#FFEBEE",
+  errorBorder: "#D32F2F",
+  errorText: "#C62828",
+  pillOutlineBorder: "#669922",
+  divider: "#E5E7EB",
+};
+
+const LABELS = ["A", "B", "C", "D"];
+
+function parseLessonMeta(meta) {
+  if (typeof meta !== "string") return { current: 3, total: 6 };
+  const m = meta.match(/(\d+)\s*\/\s*(\d+)/);
+  if (m) return { current: Number(m[1]), total: Number(m[2]) };
+  const bai = meta.match(/(\d+)\s*bài/);
+  if (bai) return { current: 1, total: Number(bai[1]) || 6 };
+  return { current: 3, total: 6 };
+}
+
+function listeningKeywords(sentence, sentenceVi) {
+  const en =
+    sentence
+      ?.replace(/[.,!?']/g, "")
+      .split(/\s+/)
+      .filter((w) => w && !["I", "a", "an", "the", "to", "have", "need", "see"].includes(w))
+      .pop() ?? "";
+  const viMatch = typeof sentenceVi === "string" ? sentenceVi.match(/bị\s+(.+?)\.?$/i) : null;
+  const vi = viMatch ? viMatch[1].trim() : (sentenceVi ?? "").replace(/^Tôi bị\s*/i, "").replace(/\.$/, "");
+  return { en: en.toLowerCase(), vi };
+}
+
+function waveformHeights(seed, count = 28) {
+  const bars = [];
+  let s =
+    String(seed)
+      .split("")
+      .reduce((a, c) => a + c.charCodeAt(0), 0) || 7;
+  for (let i = 0; i < count; i++) {
+    s = (s * 9301 + 49297) % 233280;
+    bars.push(6 + (s % 22));
+  }
+  return bars;
+}
+
+export default function ListeningScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const insets = useSafeAreaInsets();
+
+  const params = route.params ?? {};
+  const topicTitle =
+    typeof params.topicTitle === "string" ? params.topicTitle : "Đi khám bệnh";
+  const lessonMeta =
+    typeof params.lessonMeta === "string"
+      ? params.lessonMeta
+      : "6 bài · Chưa bắt đầu";
+
+  const topicId = params.lessonTopicId != null ? String(params.lessonTopicId) : "1";
+  const lessonIndex =
+    typeof params.lessonIndex === "number" ? params.lessonIndex : 0;
+
+  const lessonsList = LESSONS[topicId] ?? LESSONS["1"] ?? [];
+  const lesson = lessonsList[lessonIndex] ?? lessonsList[0];
+
+  const { current, total } = useMemo(
+    () => parseLessonMeta(lessonMeta),
+    [lessonMeta]
+  );
+  const progressRatio = total > 0 ? Math.min(current / total, 1) : 0;
+
+  const options = lesson?.listenOptions ?? [];
+  const answerIndex =
+    typeof lesson?.listenAnswer === "number" ? lesson.listenAnswer : 0;
+
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [revealed, setRevealed] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const bars = useMemo(
+    () => waveformHeights(lesson?.id ?? `${lessonIndex}`, 28),
+    [lesson?.id, lessonIndex]
+  );
+
+  useEffect(() => {
+    Speech.stop();
+    setSelectedIndex(null);
+    setRevealed(false);
+    setIsSpeaking(false);
+  }, [lesson?.id, lessonIndex]);
+
+  const { en: keywordEn, vi: keywordVi } = useMemo(
+    () => listeningKeywords(lesson?.sentence, lesson?.sentenceVi),
+    [lesson?.sentence, lesson?.sentenceVi]
+  );
+
+  useEffect(() => {
+    return () => {
+      Speech.stop();
+    };
+  }, []);
+
+  const speak = useCallback(
+    (slow) => {
+      if (!lesson?.sentence) return;
+      Speech.stop();
+      setIsSpeaking(true);
+      Speech.speak(lesson.sentence, {
+        language: "en-US",
+        rate: slow ? 0.45 : 0.92,
+        onDone: () => setIsSpeaking(false),
+        onStopped: () => setIsSpeaking(false),
+        onError: () => setIsSpeaking(false),
+      });
+    },
+    [lesson?.sentence]
+  );
+
+  const onPlay = useCallback(() => speak(false), [speak]);
+  const onSlowPlay = useCallback(() => speak(true), [speak]);
+
+  const onSelectOption = useCallback(
+    (idx) => {
+      if (revealed) return;
+      setSelectedIndex(idx);
+      setRevealed(true);
+    },
+    [revealed]
+  );
+
+  const onListenAgain = useCallback(() => {
+    Speech.stop();
+    onPlay();
+  }, [onPlay]);
+
+  const onNext = useCallback(() => {
+    if (!revealed) return;
+    Speech.stop();
+    if (lessonIndex + 1 < lessonsList.length) {
+      navigation.replace("Listening", {
+        ...params,
+        lessonTopicId: topicId,
+        lessonIndex: lessonIndex + 1,
+      });
+    } else {
+      navigation.navigate("Result", { mode: "listening", topicTitle });
+    }
+  }, [
+    revealed,
+    navigation,
+    params,
+    lessonIndex,
+    lessonsList.length,
+    topicId,
+    topicTitle,
+  ]);
+
+  if (!lesson || options.length === 0) {
+    return (
+      <View style={[styles.root, { paddingTop: insets.top }]}>
+        <Text style={styles.fallbackText}>Không có bài luyện nghe.</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.fallbackLink}>Quay lại</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const correctOption = options[answerIndex] ?? "";
+  const isCorrect = revealed && selectedIndex === answerIndex;
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Bài nghe</Text>
-      <Text style={styles.subtitle}>Màn hình đang được hoàn thiện.</Text>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate("Result", { mode: "listening" })}
+    <View style={[styles.root, { paddingTop: insets.top, backgroundColor: C.pageBg }]}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.btnText}>Hoàn thành (thử)</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+        <View style={styles.headerRow}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => navigation.goBack()}
+            accessibilityRole="button"
+            accessibilityLabel="Quay lại"
+            activeOpacity={0.75}
+          >
+            <Ionicons name="chevron-back" size={22} color={C.primaryDark} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle} numberOfLines={1}>
+            {topicTitle} • Luyện nghe
+          </Text>
+          <Text style={styles.progressText}>
+            {current}/{total}
+          </Text>
+        </View>
+
+        <View style={styles.progressBarTrack}>
+          <View
+            style={[styles.progressBarFill, { width: `${progressRatio * 100}%` }]}
+          />
+        </View>
+
+        <View style={styles.instructionBanner}>
+          <View style={styles.instructionIconCircle}>
+            <Ionicons name="volume-high" size={18} color="#FFFFFF" />
+          </View>
+          <Text style={styles.instructionText}>
+            Nghe câu rồi chọn nghĩa đúng
+          </Text>
+        </View>
+
+        <View style={styles.audioCard}>
+          <View style={styles.audioRow}>
+            <TouchableOpacity
+              style={[styles.playCircle, isSpeaking && styles.playCircleActive]}
+              onPress={onPlay}
+              activeOpacity={0.85}
+              accessibilityRole="button"
+              accessibilityLabel="Phát âm thanh"
+            >
+              <Ionicons name="play" size={28} color="#FFFFFF" style={{ marginLeft: 4 }} />
+            </TouchableOpacity>
+            <View style={styles.waveform}>
+              {bars.map((h, i) => {
+                const active = isSpeaking && i % 3 === 0;
+                return (
+                  <View
+                    key={i}
+                    style={[
+                      styles.waveBar,
+                      {
+                        height: h + (active ? 6 : 0),
+                        backgroundColor:
+                          i % 4 === 0 ? C.waveformAccent : C.waveformMuted,
+                        opacity: isSpeaking ? 1 : 0.85,
+                      },
+                    ]}
+                  />
+                );
+              })}
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.slowPill}
+            onPress={onSlowPlay}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.slowPillText}>Nghe chậm lại</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.question}>Câu vừa nghe có nghĩa là gì?</Text>
+
+        <View style={styles.options}>
+          {options.map((label, idx) => {
+            const letter = LABELS[idx] ?? String(idx + 1);
+            let cardStyle = styles.optionCard;
+            let letterCircleStyle = styles.optionLetterIdle;
+            let letterTextStyle = styles.optionLetterTextIdle;
+            let labelStyle = styles.optionLabel;
+
+            if (revealed) {
+              const isThisCorrect = idx === answerIndex;
+              const isThisWrong = idx === selectedIndex && idx !== answerIndex;
+              if (isThisCorrect) {
+                cardStyle = { ...styles.optionCard, ...styles.optionCorrect };
+                letterCircleStyle = styles.optionLetterOk;
+                letterTextStyle = styles.optionLetterTextOk;
+                labelStyle = styles.optionLabelActive;
+              } else if (isThisWrong) {
+                cardStyle = { ...styles.optionCard, ...styles.optionWrong };
+                letterCircleStyle = styles.optionLetterBad;
+                letterTextStyle = styles.optionLetterTextBad;
+                labelStyle = styles.optionLabelActive;
+              } else {
+                cardStyle = { ...styles.optionCard, ...styles.optionDisabled };
+                labelStyle = styles.optionLabelMuted;
+              }
+            }
+
+            const showCheck = revealed && idx === answerIndex;
+            const showX =
+              revealed && idx === selectedIndex && idx !== answerIndex;
+
+            return (
+              <Pressable
+                key={`${idx}-${label}`}
+                style={({ pressed }) => [
+                  cardStyle,
+                  !revealed && pressed && { opacity: 0.92 },
+                ]}
+                onPress={() => onSelectOption(idx)}
+                disabled={revealed}
+              >
+                <View style={letterCircleStyle}>
+                  {showCheck ? (
+                    <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                  ) : showX ? (
+                    <Ionicons name="close" size={16} color="#FFFFFF" />
+                  ) : (
+                    <Text style={letterTextStyle}>{letter}</Text>
+                  )}
+                </View>
+                <Text style={labelStyle}>{label}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        {revealed && !isCorrect && (
+          <View style={styles.feedbackBox}>
+            <Text style={styles.feedbackText}>
+              Chưa đúng. Đáp án đúng là{" "}
+              <Text style={styles.feedbackBold}>“{correctOption}”</Text>
+              {keywordEn && keywordVi ? (
+                <>
+                  {" "}
+                  – <Text style={styles.feedbackBold}>{keywordEn}</Text> ={" "}
+                  <Text style={styles.feedbackBold}>{keywordVi}</Text>.
+                </>
+              ) : (
+                "."
+              )}
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+
+      <View
+        style={[
+          styles.footer,
+          {
+            paddingBottom: Math.max(insets.bottom, 14),
+            borderTopColor: C.divider,
+          },
+        ]}
+      >
+        <TouchableOpacity
+          style={styles.btnListenAgain}
+          onPress={onListenAgain}
+          activeOpacity={0.85}
+        >
+          <Text style={styles.btnListenAgainText}>Nghe lại</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.btnNext, !revealed && styles.btnNextDisabled]}
+          onPress={onNext}
+          activeOpacity={0.85}
+          disabled={!revealed}
+        >
+          <Text style={styles.btnNextText}>Tiếp theo</Text>
+          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" style={{ marginLeft: 6 }} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 24 },
-  title: { fontSize: 24, fontWeight: "700", color: "#3D5CFF" },
-  subtitle: { fontSize: 16, color: "#666", marginTop: 8 },
-  btn: {
-    marginTop: 24,
-    backgroundColor: "#3D5CFF",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
+  root: { flex: 1 },
+  scroll: { flex: 1 },
+  scrollContent: { paddingHorizontal: 20, paddingBottom: 28 },
+  fallbackText: { fontSize: 16, color: C.muted, textAlign: "center", marginTop: 40 },
+  fallbackLink: {
+    marginTop: 16,
+    fontSize: 16,
+    color: C.primary,
+    textAlign: "center",
+    fontWeight: "600",
   },
-  btnText: { color: "#fff", fontSize: 16, fontWeight: "600" },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+    gap: 8,
+  },
+  backBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: C.backCircle,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerTitle: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: "700",
+    color: C.primaryDark,
+    textAlign: "center",
+  },
+  progressText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: C.primary,
+    minWidth: 40,
+    textAlign: "right",
+  },
+  progressBarTrack: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: C.progressTrack,
+    marginTop: 12,
+    overflow: "hidden",
+  },
+  progressBarFill: {
+    height: "100%",
+    backgroundColor: C.primary,
+    borderRadius: 3,
+  },
+  instructionBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: C.instructionBg,
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    marginTop: 20,
+    gap: 12,
+  },
+  instructionIconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: C.instructionIconBg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  instructionText: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: "600",
+    color: C.instructionText,
+  },
+  audioCard: {
+    backgroundColor: C.audioCardBg,
+    borderRadius: 16,
+    padding: 18,
+    marginTop: 18,
+  },
+  audioRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  playCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: C.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  playCircleActive: {
+    backgroundColor: C.primaryDark,
+  },
+  waveform: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 48,
+    backgroundColor: C.audioCardInner,
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    overflow: "hidden",
+  },
+  waveBar: {
+    width: 3,
+    borderRadius: 2,
+    alignSelf: "center",
+  },
+  slowPill: {
+    alignSelf: "center",
+    marginTop: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 22,
+    borderRadius: 999,
+    borderWidth: 1.5,
+    borderColor: C.pillOutlineBorder,
+    backgroundColor: C.bg,
+  },
+  slowPillText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: C.primary,
+  },
+  question: {
+    marginTop: 22,
+    fontSize: 17,
+    fontWeight: "700",
+    color: C.navy,
+  },
+  options: {
+    marginTop: 14,
+    gap: 12,
+  },
+  optionCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 14,
+    borderWidth: 1.5,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    backgroundColor: C.optionIdleBg,
+    borderColor: C.optionIdleBorder,
+    gap: 12,
+  },
+  optionCorrect: {
+    backgroundColor: C.successBg,
+    borderColor: C.successBorder,
+  },
+  optionWrong: {
+    backgroundColor: C.errorBg,
+    borderColor: C.errorBorder,
+  },
+  optionDisabled: {
+    opacity: 0.72,
+    backgroundColor: "#EEEEEE",
+    borderColor: "#E0E0E0",
+  },
+  optionLetterIdle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.bg,
+    borderWidth: 1.5,
+    borderColor: C.optionIdleBorder,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  optionLetterOk: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  optionLetterBad: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.errorBorder,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  optionLetterTextIdle: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: C.muted,
+  },
+  optionLetterTextOk: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
+  optionLetterTextBad: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
+  optionLabel: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "600",
+    color: C.navy,
+  },
+  optionLabelActive: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "600",
+    color: C.navy,
+  },
+  optionLabelMuted: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "500",
+    color: C.muted,
+  },
+  feedbackBox: {
+    marginTop: 18,
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: C.errorBg,
+    borderWidth: 1.5,
+    borderColor: C.errorBorder,
+  },
+  feedbackText: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: C.errorText,
+    fontWeight: "500",
+  },
+  feedbackBold: {
+    fontWeight: "700",
+    color: C.errorText,
+  },
+  footer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    backgroundColor: C.bg,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  btnListenAgain: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 999,
+    borderWidth: 1.5,
+    borderColor: C.primary,
+    backgroundColor: C.bg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  btnListenAgainText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: C.primary,
+  },
+  btnNext: {
+    flex: 1,
+    flexDirection: "row",
+    paddingVertical: 14,
+    borderRadius: 999,
+    backgroundColor: C.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  btnNextDisabled: {
+    opacity: 0.45,
+  },
+  btnNextText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
 });
