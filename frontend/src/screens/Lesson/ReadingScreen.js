@@ -69,6 +69,10 @@ export default function ReadingScreen() {
       : "6 bài · Chưa bắt đầu";
 
   const topicId = params.lessonTopicId != null ? String(params.lessonTopicId) : "1";
+  const reviewQueue = Array.isArray(params.reviewQueue) ? params.reviewQueue : null;
+  const reviewCursor =
+    typeof params.reviewCursor === "number" ? params.reviewCursor : -1;
+  const isRandomReview = Boolean(params.fromRandomReview) && !!reviewQueue;
   const lessonIndex =
     typeof params.lessonIndex === "number" ? params.lessonIndex : 0;
   const sentenceIndex =
@@ -113,6 +117,31 @@ export default function ReadingScreen() {
   }, []);
 
   const onNext = useCallback(() => {
+    if (isRandomReview && reviewQueue) {
+      const nextCursor = reviewCursor + 1;
+      const nextItem = reviewQueue[nextCursor];
+      if (!nextItem) {
+        navigation.navigate("ChooseMode", {
+          topicTitle,
+          lessonMeta: "Ôn ngẫu nhiên hoàn tất",
+          lessonTopicId: topicId,
+        });
+        return;
+      }
+      navigation.replace(nextItem.mode, {
+        ...params,
+        topicTitle,
+        lessonMeta: `Ôn ngẫu nhiên · ${nextCursor + 1}/${reviewQueue.length}`,
+        lessonTopicId: String(nextItem.lessonTopicId),
+        lessonIndex: nextItem.lessonIndex,
+        sentenceIndex: nextItem.sentenceIndex,
+        reviewCursor: nextCursor,
+        fromRandomReview: true,
+      });
+      setShowFeedback(false);
+      return;
+    }
+
     const next = advanceLessonPosition(topicId, lessonIndex, sentenceIndex);
     if (next.topicComplete) {
       const total = countTotalSentencesInTopic(topicId);
@@ -141,6 +170,9 @@ export default function ReadingScreen() {
     topicId,
     topicTitle,
     lessonMeta,
+    isRandomReview,
+    reviewQueue,
+    reviewCursor,
   ]);
 
   if (!lesson) {

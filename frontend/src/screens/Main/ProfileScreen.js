@@ -33,7 +33,7 @@ export default function ProfileScreen({ navigation }) {
 
   const accountRows = [
     { label: "Cài đặt", icon: "settings", screen: "Settings" },
-    { label: "Đánh giá ứng dụng", icon: "star", screen: "Feedback" },
+    { label: "Đánh giá ứng dụng", icon: "star" },
     { label: "Hỗ trợ / Phản hồi", icon: "tool", screen: "Feedback" },
   ];
 
@@ -109,7 +109,9 @@ export default function ProfileScreen({ navigation }) {
             <TouchableOpacity
               key={row.label}
               style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
-              onPress={() => navigation.navigate(row.screen)}
+              onPress={() => {
+                if (row.screen) navigation.navigate(row.screen);
+              }}
               activeOpacity={0.78}
             >
               <Feather name={row.icon} size={28} color={isDark ? "#CBD5E1" : "#17192B"} />

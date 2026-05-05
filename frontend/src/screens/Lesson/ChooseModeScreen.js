@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Alert,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -11,6 +12,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { useTopicProgress, TOPIC_KIND } from "../../store/TopicProgressContext";
+import { TOPICS, getLessonUnits } from "../../data/mockData";
 const C = {
   bg: "#FFFFFF",
   pageBg: "#F7FAFC",
@@ -59,11 +62,61 @@ const MODE_CARDS = [
   },
 ];
 
+const REVIEW_MODES = ["Reading", "Listening", "Writing"];
+const REVIEW_QUESTION_COUNT = 12;
+
+function shuffleArray(list) {
+  const arr = [...list];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+  return arr;
+}
+
+function randomPick(list) {
+  if (!Array.isArray(list) || list.length === 0) return undefined;
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function buildRandomReviewQueue(topicIds, totalCount = REVIEW_QUESTION_COUNT) {
+  const queue = [];
+  const safeTopicIds = Array.isArray(topicIds) ? topicIds : [];
+  if (safeTopicIds.length === 0) return queue;
+
+  const attempts = Math.max(totalCount * 8, 40);
+  for (let i = 0; i < attempts && queue.length < totalCount; i += 1) {
+    const topicId = randomPick(safeTopicIds);
+    if (!topicId) continue;
+    const units = getLessonUnits(String(topicId));
+    if (!Array.isArray(units) || units.length === 0) continue;
+
+    const lessonIndex = Math.floor(Math.random() * units.length);
+    const sentences = units[lessonIndex]?.sentences ?? [];
+    if (!Array.isArray(sentences) || sentences.length === 0) continue;
+
+    const sentenceIndex = Math.floor(Math.random() * sentences.length);
+    const mode = randomPick(REVIEW_MODES);
+    if (!mode) continue;
+
+    queue.push({
+      mode,
+      lessonTopicId: String(topicId),
+      lessonIndex,
+      sentenceIndex,
+    });
+  }
+  return queue;
+}
+
 export default function ChooseModeScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const insets = useSafeAreaInsets();
   const { settings } = useAppSettings();
+  const { progress } = useTopicProgress();
   const isDark = settings.darkMode;
 
   const params = route.params ?? {};
@@ -77,6 +130,53 @@ export default function ChooseModeScreen() {
       : "6 bài · Chưa bắt đầu";
   const lessonTopicId =
     params.lessonTopicId != null ? String(params.lessonTopicId) : undefined;
+  const completedTopicIds = React.useMemo(() => {
+    const lessonProgress = progress?.[TOPIC_KIND.LESSON] ?? {};
+    return Object.entries(lessonProgress)
+      .filter(([, value]) => Boolean(value?.completed))
+      .map(([id]) => String(id));
+  }, [progress]);
+
+  const onStartRandomReview = React.useCallback(() => {
+    const eligibleTopics = lessonTopicId
+      ? completedTopicIds.includes(lessonTopicId)
+        ? [lessonTopicId]
+        : []
+      : completedTopicIds;
+
+    if (eligibleTopics.length === 0) {
+      Alert.alert(
+        "Chưa có dữ liệu ôn",
+        "Bác cần hoàn thành ít nhất 1 chủ đề trong bài học trước khi ôn ngẫu nhiên."
+      );
+      return;
+    }
+
+    const reviewQueue = buildRandomReviewQueue(eligibleTopics);
+    if (reviewQueue.length === 0) {
+      Alert.alert(
+        "Không tạo được bài ôn",
+        "Hiện chưa có đủ câu trong các chủ đề đã học. Bác thử lại sau nhé."
+      );
+      return;
+    }
+
+    const first = reviewQueue[0];
+    const topicName =
+      TOPICS.find((t) => String(t.id) === String(first.lessonTopicId))?.name ??
+      topicTitle;
+    navigation.navigate(first.mode, {
+      topicTitle: `${topicName} · Ôn ngẫu nhiên`,
+      lessonMeta: `${reviewQueue.length} câu · Trộn 3 chế độ`,
+      lessonTopicId: first.lessonTopicId,
+      lessonIndex: first.lessonIndex,
+      sentenceIndex: first.sentenceIndex,
+      reviewQueue,
+      reviewCursor: 0,
+      reviewTotal: reviewQueue.length,
+      fromRandomReview: true,
+    });
+  }, [completedTopicIds, lessonTopicId, navigation, topicTitle]);
 
   return (
     <View
@@ -163,7 +263,7 @@ export default function ChooseModeScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.footerRandom}
-          onPress={() => navigation.navigate("FlashCard")}
+          onPress={onStartRandomReview}
           activeOpacity={0.85}
         >
           <Ionicons name="shuffle-outline" size={22} color="#FFFFFF" />
