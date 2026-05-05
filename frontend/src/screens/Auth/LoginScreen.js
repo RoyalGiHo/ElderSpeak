@@ -22,15 +22,22 @@ export default function LoginScreen({ navigation }) {
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
+    const cleanedPhone = phone.trim();
+    const cleanedPassword = password.trim();
     const user = MOCK_USERS.find(
-      (u) => u.phone === phone && u.password === password,
+      (u) => u.phone === cleanedPhone && u.password === cleanedPassword,
     );
-    if (user) {
-      await AsyncStorage.setItem(IS_LOGGED_IN_KEY, "true");
-      navigation.replace("MainTabs");
-    } else {
+    if (!user) {
       setError("Số điện thoại hoặc mật khẩu không đúng");
+      return;
     }
+    try {
+      await AsyncStorage.setItem(IS_LOGGED_IN_KEY, "true");
+    } catch (e) {
+      // AsyncStorage có thể fail trên Expo Go nếu version sai – vẫn cho vào app
+      console.warn("AsyncStorage setItem failed:", e);
+    }
+    navigation.replace("MainTabs");
   };
 
   return (
@@ -51,6 +58,8 @@ export default function LoginScreen({ navigation }) {
             style={styles.input}
             placeholder="Số điện thoại"
             keyboardType="phone-pad"
+            autoCapitalize="none"
+            autoCorrect={false}
             value={phone}
             onChangeText={(t) => {
               setPhone(t);
@@ -66,6 +75,8 @@ export default function LoginScreen({ navigation }) {
             style={styles.input}
             placeholder="Mật khẩu"
             secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoCorrect={false}
             value={password}
             onChangeText={(t) => {
               setPassword(t);
