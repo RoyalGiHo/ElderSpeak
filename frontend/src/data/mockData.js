@@ -109,7 +109,7 @@ export const FLASHCARDS = {
       meaning: "Bác sĩ",
       example: "The doctor is very kind.",
       exampleVi: "Bác sĩ rất tốt bụng.",
-      image: null,
+      image: require("../flashcardPics/doctor.jpg"),
     },
     {
       id: "2",
@@ -118,7 +118,7 @@ export const FLASHCARDS = {
       meaning: "Bệnh viện",
       example: "I went to the hospital.",
       exampleVi: "Tôi đã đến bệnh viện.",
-      image: null,
+      image: require("../flashcardPics/hospital.jpg"),
     },
     {
       id: "3",
@@ -127,7 +127,7 @@ export const FLASHCARDS = {
       meaning: "Thuốc",
       example: "Take this medicine twice a day.",
       exampleVi: "Uống thuốc này hai lần mỗi ngày.",
-      image: null,
+      image: require("../flashcardPics/medicine.jpg"),
     },
     {
       id: "4",
@@ -136,7 +136,7 @@ export const FLASHCARDS = {
       meaning: "Sốt",
       example: "I have a fever.",
       exampleVi: "Tôi bị sốt.",
-      image: null,
+      image: require("../flashcardPics/fever.jpg"),
     },
     {
       id: "5",
@@ -145,7 +145,7 @@ export const FLASHCARDS = {
       meaning: "Cuộc hẹn",
       example: "I have a doctor appointment.",
       exampleVi: "Tôi có cuộc hẹn với bác sĩ.",
-      image: null,
+      image: require("../flashcardPics/appointment.jpg"),
     },
     {
       id: "6",
@@ -154,7 +154,7 @@ export const FLASHCARDS = {
       meaning: "Y tá",
       example: "The nurse will help you.",
       exampleVi: "Y tá sẽ giúp bạn.",
-      image: null,
+      image: require("../flashcardPics/nurse.jpg"),
     },
     {
       id: "7",
@@ -163,7 +163,7 @@ export const FLASHCARDS = {
       meaning: "Đau",
       example: "I feel pain in my back.",
       exampleVi: "Tôi thấy đau ở lưng.",
-      image: null,
+      image: require("../flashcardPics/pain.jpg"),
     },
     {
       id: "8",
@@ -172,7 +172,7 @@ export const FLASHCARDS = {
       meaning: "Đau đầu",
       example: "I have a headache.",
       exampleVi: "Tôi bị đau đầu.",
-      image: null,
+      image: require("../flashcardPics/headache.jpg"),
     },
     {
       id: "9",
@@ -181,7 +181,7 @@ export const FLASHCARDS = {
       meaning: "Đau bụng",
       example: "She has a stomachache.",
       exampleVi: "Cô ấy bị đau bụng.",
-      image: null,
+      image: require("../flashcardPics/stomachache.jpg"),
     },
     {
       id: "10",
@@ -190,7 +190,7 @@ export const FLASHCARDS = {
       meaning: "Ho",
       example: "I have a bad cough.",
       exampleVi: "Tôi bị ho nặng.",
-      image: null,
+      image: require("../flashcardPics/cough.jpg"),
     },
     {
       id: "11",
@@ -199,7 +199,7 @@ export const FLASHCARDS = {
       meaning: "Cảm lạnh",
       example: "I caught a cold yesterday.",
       exampleVi: "Hôm qua tôi bị cảm lạnh.",
-      image: null,
+      image: require("../flashcardPics/cold.jpg"),
     },
     {
       id: "12",
@@ -208,7 +208,7 @@ export const FLASHCARDS = {
       meaning: "Hiệu thuốc",
       example: "The pharmacy is next to the hospital.",
       exampleVi: "Hiệu thuốc ở cạnh bệnh viện.",
-      image: null,
+      image: require("../flashcardPics/pharmacy.jpg"),
     },
     {
       id: "13",
@@ -217,7 +217,7 @@ export const FLASHCARDS = {
       meaning: "Đơn thuốc",
       example: "Here is your prescription.",
       exampleVi: "Đây là đơn thuốc của bạn.",
-      image: null,
+      image: require("../flashcardPics/Prescription.jpg"),
     },
     {
       id: "14",
@@ -226,7 +226,7 @@ export const FLASHCARDS = {
       meaning: "Viên thuốc",
       example: "Take one pill after meals.",
       exampleVi: "Uống một viên sau bữa ăn.",
-      image: null,
+      image: require("../flashcardPics/Pill.jpg"),
     },
     {
       id: "15",
@@ -235,7 +235,7 @@ export const FLASHCARDS = {
       meaning: "Tiêm",
       example: "The nurse gave me an injection.",
       exampleVi: "Y tá đã tiêm cho tôi.",
-      image: null,
+      image: require("../flashcardPics/Injection.jpg"),
     },
     {
       id: "16",
@@ -244,7 +244,7 @@ export const FLASHCARDS = {
       meaning: "Huyết áp",
       example: "My blood pressure is high.",
       exampleVi: "Huyết áp của tôi cao.",
-      image: null,
+      image: require("../flashcardPics/blood_pressure.jpg"),
     },
     {
       id: "17",
@@ -253,7 +253,7 @@ export const FLASHCARDS = {
       meaning: "Tim",
       example: "My heart beats fast.",
       exampleVi: "Tim tôi đập nhanh.",
-      image: null,
+      image: require("../flashcardPics/Heart.jpg"),
     },
     {
       id: "18",
@@ -262,7 +262,7 @@ export const FLASHCARDS = {
       meaning: "Phổi",
       example: "Smoking is bad for the lungs.",
       exampleVi: "Hút thuốc có hại cho phổi.",
-      image: null,
+      image: require("../flashcardPics/Lung.jpg"),
     },
     {
       id: "19",
@@ -271,7 +271,7 @@ export const FLASHCARDS = {
       meaning: "Thở",
       example: "Breathe deeply, please.",
       exampleVi: "Vui lòng hít thở sâu.",
-      image: null,
+      image: require("../flashcardPics/breathe.jpg"),
     },
     {
       id: "20",
@@ -280,7 +280,7 @@ export const FLASHCARDS = {
       meaning: "Triệu chứng",
       example: "What are your symptoms?",
       exampleVi: "Bạn có triệu chứng gì?",
-      image: null,
+      image: require("../flashcardPics/symtom.jpg"),
     },
     {
       id: "21",
@@ -289,7 +289,7 @@ export const FLASHCARDS = {
       meaning: "Dị ứng",
       example: "I have a peanut allergy.",
       exampleVi: "Tôi bị dị ứng đậu phộng.",
-      image: null,
+      image: require("../flashcardPics/Allergy.jpg"),
     },
     {
       id: "22",
@@ -298,7 +298,7 @@ export const FLASHCARDS = {
       meaning: "Mệt mỏi",
       example: "I feel very tired today.",
       exampleVi: "Hôm nay tôi rất mệt.",
-      image: null,
+      image: require("../flashcardPics/tired.png"),
     },
     {
       id: "23",
@@ -307,7 +307,7 @@ export const FLASHCARDS = {
       meaning: "Chóng mặt",
       example: "I feel dizzy when I stand up.",
       exampleVi: "Tôi thấy chóng mặt khi đứng dậy.",
-      image: null,
+      image: require("../flashcardPics/dizzy.jpg"),
     },
     {
       id: "24",
@@ -316,7 +316,7 @@ export const FLASHCARDS = {
       meaning: "Đau họng",
       example: "I have a sore throat.",
       exampleVi: "Tôi bị đau họng.",
-      image: null,
+      image: require("../flashcardPics/sore_throat.png"),
     },
     {
       id: "25",
@@ -325,7 +325,7 @@ export const FLASHCARDS = {
       meaning: "Nôn",
       example: "I want to vomit.",
       exampleVi: "Tôi muốn nôn.",
-      image: null,
+      image: require("../flashcardPics/Vomit.jpg"),
     },
     {
       id: "26",
@@ -334,7 +334,7 @@ export const FLASHCARDS = {
       meaning: "Tiêu chảy",
       example: "He has diarrhea.",
       exampleVi: "Anh ấy bị tiêu chảy.",
-      image: null,
+      image: require("../flashcardPics/Diarrhea.jpg"),
     },
     {
       id: "27",
@@ -343,7 +343,7 @@ export const FLASHCARDS = {
       meaning: "Chụp X-quang",
       example: "We need to take an X-ray.",
       exampleVi: "Chúng ta cần chụp X-quang.",
-      image: null,
+      image: require("../flashcardPics/X-ray.jpg"),
     },
     {
       id: "28",
@@ -352,7 +352,7 @@ export const FLASHCARDS = {
       meaning: "Phẫu thuật",
       example: "He had heart surgery.",
       exampleVi: "Anh ấy đã phẫu thuật tim.",
-      image: null,
+      image: require("../flashcardPics/Surgery.jpg"),
     },
     {
       id: "29",
@@ -361,7 +361,7 @@ export const FLASHCARDS = {
       meaning: "Bảo hiểm",
       example: "Do you have health insurance?",
       exampleVi: "Bạn có bảo hiểm y tế không?",
-      image: null,
+      image: require("../flashcardPics/Insurance.jpg"),
     },
     {
       id: "30",
@@ -370,7 +370,7 @@ export const FLASHCARDS = {
       meaning: "Cấp cứu",
       example: "Call an emergency!",
       exampleVi: "Gọi cấp cứu!",
-      image: null,
+      image: require("../flashcardPics/Emergency.jpg"),
     },
     {
       id: "31",
@@ -379,7 +379,7 @@ export const FLASHCARDS = {
       meaning: "Xe cứu thương",
       example: "The ambulance is coming.",
       exampleVi: "Xe cứu thương đang tới.",
-      image: null,
+      image: require("../flashcardPics/Ambulance.jpg"),
     },
     {
       id: "32",
@@ -388,7 +388,7 @@ export const FLASHCARDS = {
       meaning: "Hồi phục",
       example: "I hope you recover soon.",
       exampleVi: "Mong bạn sớm hồi phục.",
-      image: null,
+      image: require("../flashcardPics/Recover.jpg"),
     },
   ],
   2: [

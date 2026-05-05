@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback } from "react";
 import {
   View,
+  Image,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -200,8 +201,14 @@ export default function FlashCardScreen() {
           {isFront ? (
             <View style={styles.cardContent}>
               <View style={styles.imageArea}>
-                <Ionicons name="image-outline" size={44} color="#AAA9A3" />
-                <Text style={[styles.imageHint, isDark && { color: "#CBD5E1" }]}>Xem ảnh</Text>
+                {card?.image ? (
+                  <Image source={card.image} style={styles.cardImage} resizeMode="cover" />
+                ) : (
+                  <>
+                    <Ionicons name="image-outline" size={44} color="#AAA9A3" />
+                    <Text style={[styles.imageHint, isDark && { color: "#CBD5E1" }]}>Xem ảnh</Text>
+                  </>
+                )}
               </View>
               <View style={styles.divider} />
 
@@ -242,17 +249,10 @@ export default function FlashCardScreen() {
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity
-                style={styles.flipHint}
-                activeOpacity={0.85}
-                onPress={() => {
-                  playSfx("tap", settings.soundFx);
-                  setIsFront(false);
-                }}
-              >
+              <View style={styles.flipHint}>
                 <Ionicons name="hand-left-outline" size={18} color={C.primary} />
                 <Text style={[styles.flipHintText, isDark && { color: "#93C5FD" }]}>Chạm để lật</Text>
-              </TouchableOpacity>
+              </View>
             </View>
           ) : (
             <View style={styles.cardContent}>
@@ -410,6 +410,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#A8D5CD",
     alignItems: "center",
     justifyContent: "center",
+    overflow: "hidden",
+  },
+  cardImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 24,
   },
   imageHint: { marginTop: 4, fontSize: 17, color: "#6B6A63", fontWeight: "500" },
   divider: { marginTop: 14, marginBottom: 14, borderBottomWidth: 1, borderBottomColor: C.cardDivider },
