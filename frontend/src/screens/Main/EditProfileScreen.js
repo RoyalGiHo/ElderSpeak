@@ -12,11 +12,13 @@ import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
 import { USER } from "../../data/mockData";
+import { useSession } from "../../store/SessionContext";
 import { playSfx } from "../../utils/soundEffects";
 
 const USER_PROFILE_KEY = "user_profile";
 
 export default function EditProfileScreen({ navigation }) {
+  const { isGuest } = useSession();
   const [name, setName] = useState(USER.name);
   const [birthday, setBirthday] = useState("");
   const [email, setEmail] = useState("");
@@ -61,7 +63,9 @@ export default function EditProfileScreen({ navigation }) {
       memberSince,
     };
     try {
-      await AsyncStorage.setItem(USER_PROFILE_KEY, JSON.stringify(profile));
+      if (!isGuest) {
+        await AsyncStorage.setItem(USER_PROFILE_KEY, JSON.stringify(profile));
+      }
     } finally {
       navigation.goBack();
     }

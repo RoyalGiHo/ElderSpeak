@@ -9,10 +9,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { useSession } from "../../store/SessionContext";
 import { THEME } from "../../data/themePalette";
 import { playSfx } from "../../utils/soundEffects";
 
 export default function LetLogInScreen({ navigation }) {
+  const { enterGuestMode } = useSession();
   const { settings } = useAppSettings();
   const isDark = settings.darkMode;
   const palette = isDark ? THEME.dark : THEME.light;
@@ -65,6 +67,29 @@ export default function LetLogInScreen({ navigation }) {
           label="Đăng nhập tài khoản"
           onPress={() => navigation.navigate("Login")}
         />
+
+        <TouchableOpacity
+          style={[
+            styles.guestRow,
+            isDark && {
+              backgroundColor: "#111827",
+              borderColor: "#334155",
+            },
+          ]}
+          onPress={async () => {
+            playSfx("tap", settings.soundFx);
+            await enterGuestMode();
+            navigation.reset({ index: 0, routes: [{ name: "MainTabs" }] });
+          }}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.guestText, isDark && styles.guestTextDark]}>
+            Dùng thử với tư cách khách
+          </Text>
+          <Text style={[styles.guestHint, isDark && { color: "#94A3B8" }]}>
+            Không lưu tiến độ · Học thử mọi bài có sẵn
+          </Text>
+        </TouchableOpacity>
 
         {/* Chưa có tài khoản */}
         <TouchableOpacity
@@ -197,6 +222,31 @@ const styles = StyleSheet.create({
     color: "#3D5CFF",
     fontSize: 19,
     fontWeight: "700",
+  },
+  guestRow: {
+    marginTop: 20,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: "#C7DCF7",
+    backgroundColor: "#F0F7FF",
+    alignItems: "center",
+  },
+  guestText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1E3A8A",
+  },
+  guestTextDark: {
+    color: "#93C5FD",
+  },
+  guestHint: {
+    marginTop: 6,
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#64748B",
+    textAlign: "center",
   },
   debugButton: {
     marginTop: 16,

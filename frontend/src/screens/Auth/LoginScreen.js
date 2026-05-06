@@ -7,17 +7,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MOCK_USERS } from "../../data/mockData";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { useSession } from "../../store/SessionContext";
 import { THEME } from "../../data/themePalette";
 import { playSfx } from "../../utils/soundEffects";
 
-const IS_LOGGED_IN_KEY = "is_logged_in";
-
 export default function LoginScreen({ navigation }) {
+  const { enterAccountSession } = useSession();
   const { settings } = useAppSettings();
   const isDark = settings.darkMode;
   const palette = isDark ? THEME.dark : THEME.light;
@@ -38,10 +37,9 @@ export default function LoginScreen({ navigation }) {
       return;
     }
     try {
-      await AsyncStorage.setItem(IS_LOGGED_IN_KEY, "true");
+      await enterAccountSession();
     } catch (e) {
-      // AsyncStorage có thể fail trên Expo Go nếu version sai – vẫn cho vào app
-      console.warn("AsyncStorage setItem failed:", e);
+      console.warn("enterAccountSession failed:", e);
     }
     navigation.replace("MainTabs");
   };

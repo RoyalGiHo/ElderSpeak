@@ -20,6 +20,7 @@ import {
   TOPIC_KIND,
 } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { useSession } from "../../store/SessionContext";
 import { playSfx } from "../../utils/soundEffects";
 
 const C = {
@@ -52,6 +53,7 @@ export default function LessonTopicsScreen() {
   const insets = useSafeAreaInsets();
   const { isCompleted, resetTopic } = useTopicProgress();
   const { settings } = useAppSettings();
+  const { isGuest } = useSession();
   const isDark = settings.darkMode;
 
   const completedCount = useMemo(
@@ -117,9 +119,11 @@ export default function LessonTopicsScreen() {
 
       <Text style={[styles.mainTitle, isDark && { color: "#E2E8F0" }]}>Chọn chủ đề luyện tập</Text>
       <Text style={[styles.subTitle, isDark && { color: "#94A3B8" }]}>
-        Học mẫu câu qua nghe – đọc – viết. Đã hoàn thành{" "}
-        {completedCount}/{TOPICS.length} chủ đề
-        {completedCount > 0 ? "  ·  Nhấn giữ để học lại" : ""}
+        {isGuest
+          ? "Chế độ khách: tiến độ không được lưu. Bác có thể mở mọi chủ đề có bài học."
+          : `Học mẫu câu qua nghe – đọc – viết. Đã hoàn thành ${completedCount}/${TOPICS.length} chủ đề${
+              completedCount > 0 ? "  ·  Nhấn giữ để học lại" : ""
+            }`}
       </Text>
 
       <ScrollView

@@ -13,7 +13,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { useTopicProgress, TOPIC_KIND } from "../../store/TopicProgressContext";
-import { TOPICS, getLessonUnits } from "../../data/mockData";
+import { useSession } from "../../store/SessionContext";
+import {
+  TOPICS,
+  getLessonUnits,
+  lessonTopicSummaryLine,
+} from "../../data/mockData";
 import { playSfx } from "../../utils/soundEffects";
 const C = {
   bg: "#FFFFFF",
@@ -118,6 +123,7 @@ export default function ChooseModeScreen() {
   const insets = useSafeAreaInsets();
   const { settings } = useAppSettings();
   const { progress } = useTopicProgress();
+  const { isGuest } = useSession();
   const isDark = settings.darkMode;
 
   const params = route.params ?? {};
@@ -140,16 +146,31 @@ export default function ChooseModeScreen() {
 
   const onStartRandomReview = React.useCallback(() => {
     playSfx("tap", settings.soundFx);
-    const eligibleTopics = lessonTopicId
-      ? completedTopicIds.includes(lessonTopicId)
-        ? [lessonTopicId]
-        : []
-      : completedTopicIds;
+    const topicsWithLessons = TOPICS.filter(
+      (t) => lessonTopicSummaryLine(t.id) !== "Sắp có dữ liệu"
+    ).map((t) => String(t.id));
+
+    let eligibleTopics;
+    if (isGuest) {
+      eligibleTopics = lessonTopicId
+        ? topicsWithLessons.includes(String(lessonTopicId))
+          ? [String(lessonTopicId)]
+          : topicsWithLessons
+        : topicsWithLessons;
+    } else {
+      eligibleTopics = lessonTopicId
+        ? completedTopicIds.includes(lessonTopicId)
+          ? [lessonTopicId]
+          : []
+        : completedTopicIds;
+    }
 
     if (eligibleTopics.length === 0) {
       Alert.alert(
         "Chưa có dữ liệu ôn",
-        "Bác cần hoàn thành ít nhất 1 chủ đề trong bài học trước khi ôn ngẫu nhiên."
+        isGuest
+          ? "Hiện chưa có chủ đề bài học khả dụng để ôn."
+          : "Bác cần hoàn thành ít nhất 1 chủ đề trong bài học trước khi ôn ngẫu nhiên."
       );
       return;
     }
@@ -178,7 +199,14 @@ export default function ChooseModeScreen() {
       reviewTotal: reviewQueue.length,
       fromRandomReview: true,
     });
-  }, [completedTopicIds, lessonTopicId, navigation, topicTitle, settings.soundFx]);
+  }, [
+    completedTopicIds,
+    isGuest,
+    lessonTopicId,
+    navigation,
+    topicTitle,
+    settings.soundFx,
+  ]);
 
   return (
     <View

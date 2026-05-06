@@ -53,12 +53,21 @@ function normalize(raw) {
  *
  * `kind` mặc định là "flashcard" để giữ tương thích với code cũ.
  */
-export function TopicProgressProvider({ children }) {
+export function TopicProgressProvider({ children, isGuest = false }) {
   const [progress, setProgress] = useState(emptyState);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
+    if (isGuest) {
+      setProgress(emptyState());
+      setHydrated(true);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setHydrated(false);
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
         if (cancelled) return;
@@ -68,6 +77,8 @@ export function TopicProgressProvider({ children }) {
           } catch {
             // bỏ qua dữ liệu lỗi
           }
+        } else {
+          setProgress(emptyState());
         }
       })
       .finally(() => {
@@ -76,21 +87,26 @@ export function TopicProgressProvider({ children }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isGuest]);
 
-  const persist = useCallback(async (next) => {
-    setProgress(next);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      // ignore — vẫn giữ state trong memory
-    }
-  }, []);
+  const persist = useCallback(
+    async (next) => {
+      setProgress(next);
+      if (isGuest) return;
+      try {
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // ignore — vẫn giữ state trong memory
+      }
+    },
+    [isGuest]
+  );
 
   const getKind = (kind) => (VALID_KINDS.has(kind) ? kind : KIND_FLASHCARD);
 
   const markTopicCompleted = useCallback(
     (topicId, summary, kind = KIND_FLASHCARD) => {
+      if (isGuest) return;
       const k = getKind(kind);
       const key = String(topicId);
       const slice = progress[k] ?? {};
@@ -108,11 +124,12 @@ export function TopicProgressProvider({ children }) {
       };
       persist(next);
     },
-    [progress, persist]
+    [progress, persist, isGuest]
   );
 
   const markTopicsCompleted = useCallback(
     (topicIds, summary, kind = KIND_FLASHCARD) => {
+      if (isGuest) return;
       if (!Array.isArray(topicIds) || topicIds.length === 0) return;
       const k = getKind(kind);
       const now = Date.now();
@@ -128,11 +145,12 @@ export function TopicProgressProvider({ children }) {
       }
       persist({ ...progress, [k]: slice });
     },
-    [progress, persist]
+    [progress, persist, isGuest]
   );
 
   const resetTopic = useCallback(
     (topicId, kind = KIND_FLASHCARD) => {
+      if (isGuest) return;
       const k = getKind(kind);
       const key = String(topicId);
       const slice = progress[k] ?? {};
@@ -141,18 +159,19 @@ export function TopicProgressProvider({ children }) {
       delete nextSlice[key];
       persist({ ...progress, [k]: nextSlice });
     },
-    [progress, persist]
+    [progress, persist, isGuest]
   );
 
   const resetAll = useCallback(
     (kind) => {
+      if (isGuest) return;
       if (kind && VALID_KINDS.has(kind)) {
         persist({ ...progress, [kind]: {} });
       } else {
         persist(emptyState());
       }
     },
-    [progress, persist]
+    [progress, persist, isGuest]
   );
 
   const isCompleted = useCallback(

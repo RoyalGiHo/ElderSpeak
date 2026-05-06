@@ -45,11 +45,16 @@ import Feather from "@expo/vector-icons/Feather";
 
 import { TopicProgressProvider } from "./src/store/TopicProgressContext";
 import { AppSettingsProvider, useAppSettings } from "./src/store/AppSettingsContext";
+import {
+  SessionProvider,
+  useSession,
+  ONBOARDING_DONE_KEY,
+  IS_LOGGED_IN_KEY,
+  IS_GUEST_KEY,
+} from "./src/store/SessionContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const ONBOARDING_DONE_KEY = "onboarding_done";
-const IS_LOGGED_IN_KEY = "is_logged_in";
 const LAST_TAB_KEY = "last_main_tab";
 
 function MainTabs() {
@@ -164,40 +169,8 @@ function MainTabs() {
   );
 }
 
-function AppNavigator() {
-  const { isReady, settings } = useAppSettings();
-  const [fontsLoaded] = useFonts({
-    Audiowide_400Regular,
-    ...Ionicons.font,
-    ...Feather.font,
-  });
-  const [isBootstrapping, setIsBootstrapping] = useState(true);
-  const [initialRouteName, setInitialRouteName] = useState("Onboarding");
-
-  useEffect(() => {
-    const loadInitialRoute = async () => {
-      try {
-        const onboardingDone = await AsyncStorage.getItem(ONBOARDING_DONE_KEY);
-        const isLoggedIn = await AsyncStorage.getItem(IS_LOGGED_IN_KEY);
-        if (isLoggedIn === "true") {
-          setInitialRouteName("MainTabs");
-        } else if (onboardingDone === "true") {
-          setInitialRouteName("LetLogIn");
-        } else {
-          setInitialRouteName("Onboarding");
-        }
-      } catch (error) {
-        setInitialRouteName("Onboarding");
-      } finally {
-        setIsBootstrapping(false);
-      }
-    };
-    loadInitialRoute();
-  }, []);
-
-  if (!fontsLoaded || isBootstrapping || !isReady) {
-    return null;
-  }
+function AppNavigator({ initialRouteName }) {
+  const { settings } = useAppSettings();
 
   const navTheme = settings.darkMode
     ? {
@@ -227,7 +200,7 @@ function AppNavigator() {
     <NavigationContainer theme={navTheme}>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName={initialRouteName}
+        initialRouteName={initialRouteName ?? "Onboarding"}
       >
         {/* Onboarding */}
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
@@ -264,13 +237,65 @@ function AppNavigator() {
   );
 }
 
+function AppWithSession() {
+  const { isReady } = useAppSettings();
+  const { isGuest, refreshFromStorage } = useSession();
+  const [fontsLoaded] = useFonts({
+    Audiowide_400Regular,
+    ...Ionicons.font,
+    ...Feather.font,
+  });
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
+  const [initialRouteName, setInitialRouteName] = useState("Onboarding");
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadInitialRoute = async () => {
+      try {
+        await refreshFromStorage();
+        const onboardingDone = await AsyncStorage.getItem(ONBOARDING_DONE_KEY);
+        const loggedIn = await AsyncStorage.getItem(IS_LOGGED_IN_KEY);
+        const guest = await AsyncStorage.getItem(IS_GUEST_KEY);
+        if (cancelled) return;
+        const isLogged = loggedIn === "true";
+        const guestMode = !isLogged && guest === "true";
+        if (isLogged || guestMode) {
+          setInitialRouteName("MainTabs");
+        } else if (onboardingDone === "true") {
+          setInitialRouteName("LetLogIn");
+        } else {
+          setInitialRouteName("Onboarding");
+        }
+      } catch {
+        if (!cancelled) setInitialRouteName("Onboarding");
+      } finally {
+        if (!cancelled) setIsBootstrapping(false);
+      }
+    };
+    loadInitialRoute();
+    return () => {
+      cancelled = true;
+    };
+  }, [refreshFromStorage]);
+
+  if (!fontsLoaded || isBootstrapping || !isReady) {
+    return null;
+  }
+
+  return (
+    <TopicProgressProvider isGuest={isGuest}>
+      <AppNavigator initialRouteName={initialRouteName} />
+    </TopicProgressProvider>
+  );
+}
+
 export default function App() {
   return (
     <SafeAreaProvider>
       <AppSettingsProvider>
-        <TopicProgressProvider>
-          <AppNavigator />
-        </TopicProgressProvider>
+        <SessionProvider>
+          <AppWithSession />
+        </SessionProvider>
       </AppSettingsProvider>
     </SafeAreaProvider>
   );

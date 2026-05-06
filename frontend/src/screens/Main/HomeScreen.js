@@ -20,6 +20,7 @@ import {
   TOPIC_KIND,
 } from "../../store/TopicProgressContext";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { useSession, GUEST_DISPLAY_NAME } from "../../store/SessionContext";
 import { THEME } from "../../data/themePalette";
 import { playSfx } from "../../utils/soundEffects";
 
@@ -329,10 +330,12 @@ function buildHomeFooter(item, done) {
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { isGuest } = useSession();
   const { isCompleted } = useTopicProgress();
   const { settings } = useAppSettings();
   const isDark = settings.darkMode;
   const palette = isDark ? THEME.dark : THEME.light;
+  const displayName = isGuest ? GUEST_DISPLAY_NAME : USER.name;
   const progress = useMemo(() => {
     const { current, total } = HOME_CURRENT_LESSON;
     return Math.min(1, current / total);
@@ -360,7 +363,7 @@ export default function HomeScreen() {
               {greetingLine()}
               {",\n"}
               <Text style={[styles.greetingName, { color: isDark ? palette.text : C.navy }]}>
-                {USER.name}
+                {displayName}
               </Text>
             </Text>
             <TouchableOpacity
@@ -380,7 +383,7 @@ export default function HomeScreen() {
               accessibilityLabel="Hồ sơ"
             >
               <Text style={styles.avatarLetter}>
-                {USER.name.replace(/\s/g, "").slice(-1)}
+                {displayName.replace(/\s/g, "").slice(-1)}
               </Text>
             </TouchableOpacity>
           </View>
@@ -401,12 +404,16 @@ export default function HomeScreen() {
             const { lessonTopicId, title, current, total, subtitle } =
               HOME_CURRENT_LESSON;
             const line = lessonTopicSummaryLine(lessonTopicId);
+            const lessonMeta = isGuest
+              ? line === "Sắp có dữ liệu"
+                ? subtitle
+                : `${line} · Học thử (không lưu tiến độ)`
+              : line === "Sắp có dữ liệu"
+                ? subtitle
+                : `${line} · Câu ${current}/${total}`;
             navigation.navigate("ChooseMode", {
               topicTitle: title,
-              lessonMeta:
-                line === "Sắp có dữ liệu"
-                  ? subtitle
-                  : `${line} · Câu ${current}/${total}`,
+              lessonMeta,
               lessonTopicId,
             });
           }}
@@ -419,57 +426,63 @@ export default function HomeScreen() {
               {HOME_CURRENT_LESSON.title}
             </Text>
             <Text style={[styles.lessonSubtitle, { color: isDark ? palette.accentText : C.subtitleBlue }]}>
-              {HOME_CURRENT_LESSON.subtitle}
+              {isGuest
+                ? "Gợi ý bài đầu tiên · Chạm để chọn nghe, đọc hoặc viết"
+                : HOME_CURRENT_LESSON.subtitle}
             </Text>
-            <View style={[styles.progressTrack, isDark && { backgroundColor: palette.border }]}>
-              <View
-                style={[styles.progressFill, { width: `${progress * 100}%` }]}
-              />
-            </View>
+            {!isGuest ? (
+              <View style={[styles.progressTrack, isDark && { backgroundColor: palette.border }]}>
+                <View
+                  style={[styles.progressFill, { width: `${progress * 100}%` }]}
+                />
+              </View>
+            ) : null}
           </View>
         </TouchableOpacity>
 
-        <View style={styles.statsRow}>
-          <View
-            style={[
-              styles.statCard,
-              {
-                backgroundColor: isDark ? "#1E293B" : C.statCard,
-                borderWidth: 1.5,
-                borderColor: isDark ? "#475569" : "#AEC8F6",
-              },
-            ]}
-          >
-            <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.streak}</Text>
-            <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Ngày liên tiếp</Text>
+        {!isGuest ? (
+          <View style={styles.statsRow}>
+            <View
+              style={[
+                styles.statCard,
+                {
+                  backgroundColor: isDark ? "#1E293B" : C.statCard,
+                  borderWidth: 1.5,
+                  borderColor: isDark ? "#475569" : "#AEC8F6",
+                },
+              ]}
+            >
+              <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.streak}</Text>
+              <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Ngày liên tiếp</Text>
+            </View>
+            <View
+              style={[
+                styles.statCard,
+                {
+                  backgroundColor: isDark ? "#1E293B" : C.statCard,
+                  borderWidth: 1.5,
+                  borderColor: isDark ? "#475569" : "#AEC8F6",
+                },
+              ]}
+            >
+              <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.totalWords}</Text>
+              <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Từ đã học</Text>
+            </View>
+            <View
+              style={[
+                styles.statCard,
+                {
+                  backgroundColor: isDark ? "#1E293B" : C.statCard,
+                  borderWidth: 1.5,
+                  borderColor: isDark ? "#475569" : "#AEC8F6",
+                },
+              ]}
+            >
+              <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.medals}</Text>
+              <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Huy chương</Text>
+            </View>
           </View>
-          <View
-            style={[
-              styles.statCard,
-              {
-                backgroundColor: isDark ? "#1E293B" : C.statCard,
-                borderWidth: 1.5,
-                borderColor: isDark ? "#475569" : "#AEC8F6",
-              },
-            ]}
-          >
-            <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.totalWords}</Text>
-            <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Từ đã học</Text>
-          </View>
-          <View
-            style={[
-              styles.statCard,
-              {
-                backgroundColor: isDark ? "#1E293B" : C.statCard,
-                borderWidth: 1.5,
-                borderColor: isDark ? "#475569" : "#AEC8F6",
-              },
-            ]}
-          >
-            <Text style={[styles.statNum, isDark && { color: "#BFDBFE" }]}>{USER.medals}</Text>
-            <Text style={[styles.statLabel, isDark && { color: "#CBD5E1" }]}>Huy chương</Text>
-          </View>
-        </View>
+        ) : null}
 
         <View style={styles.sectionHead}>
           <Text style={[styles.sectionTitle, { color: isDark ? palette.text : C.navy }]}>Chủ đề bài học</Text>

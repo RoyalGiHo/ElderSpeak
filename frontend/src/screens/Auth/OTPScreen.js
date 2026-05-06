@@ -6,16 +6,16 @@ import {
   StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useAppSettings } from "../../store/AppSettingsContext";
+import { useSession } from "../../store/SessionContext";
 import { THEME } from "../../data/themePalette";
 import { playSfx } from "../../utils/soundEffects";
 const MOCK_OTP = "1234";
-const IS_LOGGED_IN_KEY = "is_logged_in";
 
 export default function OTPScreen({ navigation, route }) {
+  const { enterAccountSession } = useSession();
   const { mode, phone } = route.params || {};
   const [otp, setOtp] = useState(["", "", "", ""]);
   const inputs = useRef([]);
@@ -44,7 +44,7 @@ export default function OTPScreen({ navigation, route }) {
   const handleConfirm = async () => {
     const entered = otp.join("");
     if (entered === MOCK_OTP) {
-      await AsyncStorage.setItem(IS_LOGGED_IN_KEY, "true");
+      await enterAccountSession();
       if (mode === "register") {
         navigation.replace("MainTabs");
       } else {

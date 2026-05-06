@@ -13,13 +13,18 @@ import Text from "../../components/AppText";
 import { useAppSettings } from "../../store/AppSettingsContext";
 import { THEME } from "../../data/themePalette";
 import { USER } from "../../data/mockData";
+import {
+  useSession,
+  GUEST_DISPLAY_NAME,
+  GUEST_PROFILE_DETAIL,
+} from "../../store/SessionContext";
 import { playSfx } from "../../utils/soundEffects";
 
-const IS_LOGGED_IN_KEY = "is_logged_in";
 const LAST_TAB_KEY = "last_main_tab";
 const USER_PROFILE_KEY = "user_profile";
 
 export default function ProfileScreen({ navigation }) {
+  const { isGuest, clearSession } = useSession();
   const { settings } = useAppSettings();
   const isDark = settings.darkMode;
   const palette = isDark ? THEME.dark : THEME.light;
@@ -40,7 +45,7 @@ export default function ProfileScreen({ navigation }) {
 
   const handleLogout = async () => {
     playSfx("tap", settings.soundFx);
-    await AsyncStorage.removeItem(IS_LOGGED_IN_KEY);
+    await clearSession();
     await AsyncStorage.removeItem(LAST_TAB_KEY);
     navigation.reset({
       index: 0,
@@ -51,6 +56,13 @@ export default function ProfileScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       const loadProfile = async () => {
+        if (isGuest) {
+          setProfile({
+            name: GUEST_DISPLAY_NAME,
+            memberSince: GUEST_PROFILE_DETAIL,
+          });
+          return;
+        }
         try {
           const raw = await AsyncStorage.getItem(USER_PROFILE_KEY);
           if (!raw) {
@@ -67,7 +79,7 @@ export default function ProfileScreen({ navigation }) {
         }
       };
       loadProfile();
-    }, [])
+    }, [isGuest])
   );
 
   return (
@@ -79,7 +91,7 @@ export default function ProfileScreen({ navigation }) {
             {profile.name}
           </Text>
           <Text style={[styles.memberText, { color: isDark ? palette.textMuted : "#6E7284" }]}>
-            Thành viên từ {profile.memberSince}
+            {isGuest ? profile.memberSince : `Thành viên từ ${profile.memberSince}`}
           </Text>
           <TouchableOpacity
             style={[styles.editButton, isDark && { borderColor: palette.accentText }]}
@@ -93,23 +105,27 @@ export default function ProfileScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <Text style={[styles.sectionTitle, isDark && { color: palette.textMuted }]}>THÀNH TÍCH</Text>
-        <View style={[styles.sectionList, isDark && { borderColor: "#1E293B" }]}>
-          {achievementRows.map((row) => (
-            <TouchableOpacity
-              key={row.label}
-              style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
-              onPress={() => {
-                playSfx("tap", settings.soundFx);
-                navigation.navigate(row.screen);
-              }}
-              activeOpacity={0.78}
-            >
-              <Feather name={row.icon} size={28} color={isDark ? "#CBD5E1" : "#17192B"} />
-              <Text style={[styles.rowLabel, isDark && { color: "#E2E8F0" }]}>{row.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        {!isGuest ? (
+          <>
+            <Text style={[styles.sectionTitle, isDark && { color: palette.textMuted }]}>THÀNH TÍCH</Text>
+            <View style={[styles.sectionList, isDark && { borderColor: "#1E293B" }]}>
+              {achievementRows.map((row) => (
+                <TouchableOpacity
+                  key={row.label}
+                  style={[styles.row, isDark && { borderBottomColor: "#1E293B" }]}
+                  onPress={() => {
+                    playSfx("tap", settings.soundFx);
+                    navigation.navigate(row.screen);
+                  }}
+                  activeOpacity={0.78}
+                >
+                  <Feather name={row.icon} size={28} color={isDark ? "#CBD5E1" : "#17192B"} />
+                  <Text style={[styles.rowLabel, isDark && { color: "#E2E8F0" }]}>{row.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
+        ) : null}
 
         <Text style={[styles.sectionTitle, isDark && { color: palette.textMuted }]}>TÀI KHOẢN</Text>
         <View style={[styles.sectionList, isDark && { borderColor: "#1E293B" }]}>
@@ -133,7 +149,9 @@ export default function ProfileScreen({ navigation }) {
             activeOpacity={0.78}
           >
             <Feather name="log-out" size={28} color={isDark ? "#FCA5A5" : "#17192B"} />
-            <Text style={[styles.rowLabel, isDark && { color: "#FCA5A5" }]}>Đăng xuất</Text>
+            <Text style={[styles.rowLabel, isDark && { color: "#FCA5A5" }]}>
+              {isGuest ? "Thoát chế độ khách" : "Đăng xuất"}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
