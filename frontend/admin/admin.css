@@ -384,3 +384,178 @@ main {
 .hidden {
   display: none !important;
 }
+
+.mock-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.mock-card-head h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+}
+
+.helper-text {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+  line-height: 1.45;
+}
+
+.advanced-block {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.advanced-block summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.flash-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .flash-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flash-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.flash-topic-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.flash-topic-btn:hover {
+  border-color: #93c5fd;
+}
+
+.flash-topic-btn.active {
+  border-color: var(--primary);
+  background: #eff6ff;
+}
+
+.flash-topic-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.flash-topic-meta {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.flash-main {
+  min-width: 0;
+}
+
+.flash-main-head {
+  margin-bottom: 0.75rem;
+}
+
+.flash-heading {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.flash-count {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.flash-toolbar {
+  margin-bottom: 0.75rem;
+}
+
+.flash-hint {
+  margin-bottom: 1rem;
+}
+
+.flash-card-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.65rem;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.flash-card-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.flash-card-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.flash-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.65rem;
+}
+
+.flash-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.flash-fields input,
+.flash-fields textarea {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+}
+
+.flash-fields textarea {
+  min-height: 52px;
+  resize: vertical;
+}
+
+.flash-fields-wide {
+  grid-column: 1 / -1;
+}
