@@ -103,17 +103,6 @@ export default function LetLogInScreen({ navigation }) {
           <Text style={styles.registerText}>Chưa có tài khoản? </Text>
           <Text style={styles.registerLink}>Đăng kí</Text>
         </TouchableOpacity>
-
-        {/* Debug: xem lại Onboarding */}
-        <TouchableOpacity
-          style={styles.debugButton}
-          onPress={() => {
-            playSfx("tap", settings.soundFx);
-            navigation.navigate("Onboarding");
-          }}
-        >
-          <Text style={styles.debugButtonText}>Xem lại Onboarding</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -247,20 +236,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#64748B",
     textAlign: "center",
-  },
-  debugButton: {
-    marginTop: 16,
-    alignSelf: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#D0D0D0",
-    borderStyle: "dashed",
-  },
-  debugButtonText: {
-    color: "#888",
-    fontSize: 13,
-    fontWeight: "500",
   },
 });

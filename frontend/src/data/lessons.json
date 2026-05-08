@@ -1,0 +1,2668 @@
+{
+  "1": [
+    {
+      "id": "t1-u1",
+      "title": "Phần 1 · Khai báo triệu chứng",
+      "sentences": [
+        {
+          "id": "1-1",
+          "sentence": "I have a stomachache.",
+          "sentenceVi": "Tôi bị đau bụng.",
+          "phonetic": "ay · hæv · ə · ˈstʌm.ək.eɪk",
+          "listenOptions": [
+            "Tôi bị đau đầu.",
+            "Tôi bị đau bụng.",
+            "Tôi bị sốt.",
+            "Tôi bị ho."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "have",
+            "a",
+            "stomachache",
+            "headache",
+            "fever",
+            "sick",
+            "cold"
+          ],
+          "writeAnswer": [
+            "I",
+            "have",
+            "a",
+            "stomachache"
+          ]
+        },
+        {
+          "id": "1-2",
+          "sentence": "I need to see a doctor.",
+          "sentenceVi": "Tôi cần gặp bác sĩ.",
+          "phonetic": "ay · niːd · tuː · siː · ə · ˈdɒk.tər",
+          "listenOptions": [
+            "Tôi cần mua thuốc.",
+            "Tôi cần gặp bác sĩ.",
+            "Tôi cần nghỉ ngơi.",
+            "Tôi cần đi bệnh viện."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "need",
+            "to",
+            "see",
+            "a",
+            "doctor",
+            "nurse",
+            "phone",
+            "rest",
+            "medicine"
+          ],
+          "writeAnswer": [
+            "I",
+            "need",
+            "to",
+            "see",
+            "a",
+            "doctor"
+          ]
+        },
+        {
+          "id": "1-3",
+          "sentence": "I have a fever.",
+          "sentenceVi": "Tôi bị sốt.",
+          "phonetic": "ay · hæv · ə · ˈfiː.vər",
+          "listenOptions": [
+            "Tôi bị ho.",
+            "Tôi bị sốt.",
+            "Tôi bị cảm lạnh.",
+            "Tôi bị đau họng."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "have",
+            "a",
+            "fever",
+            "cold",
+            "cough",
+            "headache"
+          ],
+          "writeAnswer": [
+            "I",
+            "have",
+            "a",
+            "fever"
+          ]
+        },
+        {
+          "id": "1-4",
+          "sentence": "Where is the pharmacy?",
+          "sentenceVi": "Hiệu thuốc ở đâu?",
+          "phonetic": "wer · ɪz · ðə · ˈfɑːr.mə.si",
+          "listenOptions": [
+            "Bệnh viện ở đâu?",
+            "Hiệu thuốc ở đâu?",
+            "Bác sĩ ở đâu?",
+            "Phòng khám ở đâu?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Where",
+            "is",
+            "the",
+            "pharmacy",
+            "hospital",
+            "doctor",
+            "gate",
+            "nurse"
+          ],
+          "writeAnswer": [
+            "Where",
+            "is",
+            "the",
+            "pharmacy"
+          ]
+        },
+        {
+          "id": "1-5",
+          "sentence": "Please take this medicine.",
+          "sentenceVi": "Vui lòng uống thuốc này.",
+          "phonetic": "pliːz · teɪk · ðɪs · ˈmed.ɪ.sɪn",
+          "listenOptions": [
+            "Vui lòng nghỉ ngơi.",
+            "Vui lòng uống nước.",
+            "Vui lòng uống thuốc này.",
+            "Vui lòng đi khám."
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "Please",
+            "take",
+            "this",
+            "medicine",
+            "drink",
+            "water",
+            "rest",
+            "eat"
+          ],
+          "writeAnswer": [
+            "Please",
+            "take",
+            "this",
+            "medicine"
+          ]
+        },
+        {
+          "id": "1-6",
+          "sentence": "Call an ambulance, please.",
+          "sentenceVi": "Vui lòng gọi xe cứu thương.",
+          "phonetic": "kɔːl · ən · ˈæm.bjə.ləns · pliːz",
+          "listenOptions": [
+            "Vui lòng gọi taxi.",
+            "Vui lòng gọi y tá.",
+            "Vui lòng gọi bác sĩ.",
+            "Vui lòng gọi xe cứu thương."
+          ],
+          "listenAnswer": 3,
+          "writeWords": [
+            "Call",
+            "an",
+            "ambulance",
+            "please",
+            "doctor",
+            "taxi",
+            "help",
+            "nurse"
+          ],
+          "writeAnswer": [
+            "Call",
+            "an",
+            "ambulance",
+            "please"
+          ]
+        },
+        {
+          "id": "1-7",
+          "sentence": "How long have you felt this pain?",
+          "sentenceVi": "Anh/Chị đau như vậy bao lâu rồi?",
+          "phonetic": "how · long · have · you · felt · this · pain",
+          "listenOptions": [
+            "Đau ở đâu?",
+            "Anh/Chị đau như vậy bao lâu rồi?",
+            "Đã uống thuốc chưa?",
+            "Có bị khó thở không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "How",
+            "long",
+            "have",
+            "you",
+            "felt",
+            "this",
+            "pain",
+            "many",
+            "days",
+            "I",
+            "headache"
+          ],
+          "writeAnswer": [
+            "How",
+            "long",
+            "have",
+            "you",
+            "felt",
+            "this",
+            "pain"
+          ]
+        },
+        {
+          "id": "1-8",
+          "sentence": "I feel dizzy.",
+          "sentenceVi": "Tôi chóng mặt.",
+          "phonetic": "i · feel · dizzy",
+          "listenOptions": [
+            "Tôi táo bón.",
+            "Tôi chóng mặt.",
+            "Tôi không ngủ được.",
+            "Tôi không muốn ăn."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "feel",
+            "dizzy",
+            "sick",
+            "tired",
+            "cold",
+            "hot"
+          ],
+          "writeAnswer": [
+            "I",
+            "feel",
+            "dizzy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1-u2",
+      "title": "Phần 2 · Thuốc, bảo hiểm và chỉ dẫn",
+      "sentences": [
+        {
+          "id": "2-1",
+          "sentence": "Could you repeat that slowly?",
+          "sentenceVi": "Bạn có thể nhắc lại chậm hơn được không?",
+          "phonetic": "could · you · repeat · that · slowly",
+          "listenOptions": [
+            "Bạn nói quá nhỏ.",
+            "Bạn có thể nhắc lại chậm hơn được không?",
+            "Hôm nay đóng cửa à?",
+            "Tôi không hiểu."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Could",
+            "you",
+            "repeat",
+            "that",
+            "slowly",
+            "say",
+            "again",
+            "fast",
+            "loud"
+          ],
+          "writeAnswer": [
+            "Could",
+            "you",
+            "repeat",
+            "that",
+            "slowly"
+          ]
+        },
+        {
+          "id": "2-2",
+          "sentence": "Take one pill before meals.",
+          "sentenceVi": "Uống một viên trước bữa ăn.",
+          "phonetic": "take · one · pill · before · meals",
+          "listenOptions": [
+            "Uống sau bữa ăn.",
+            "Uống một viên trước bữa ăn.",
+            "Uống lúc nửa đêm.",
+            "Uống với đường."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Take",
+            "one",
+            "pill",
+            "before",
+            "meals",
+            "after",
+            "water",
+            "twice",
+            "day"
+          ],
+          "writeAnswer": [
+            "Take",
+            "one",
+            "pill",
+            "before",
+            "meals"
+          ]
+        },
+        {
+          "id": "2-3",
+          "sentence": "I am allergic to penicillin.",
+          "sentenceVi": "Tôi bị dị ứng penicillin.",
+          "phonetic": "i · am · allergic · to · penicillin",
+          "listenOptions": [
+            "Tôi dị ứng sữa.",
+            "Tôi bị dị ứng penicillin.",
+            "Tôi không dị ứng gì.",
+            "Tôi dị ứng hạt điều."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "am",
+            "allergic",
+            "to",
+            "penicillin",
+            "fish",
+            "milk",
+            "nuts",
+            "sugar"
+          ],
+          "writeAnswer": [
+            "I",
+            "am",
+            "allergic",
+            "to",
+            "penicillin"
+          ]
+        },
+        {
+          "id": "2-4",
+          "sentence": "When is my next appointment?",
+          "sentenceVi": "Cuộc hẹn tiếp theo của tôi là khi nào?",
+          "phonetic": "when · is · my · next · appointment",
+          "listenOptions": [
+            "Tôi cần trả tiền khi nào?",
+            "Cuộc hẹn tiếp theo của tôi là khi nào?",
+            "Tôi ở lại đây bao lâu?",
+            "Làm sao để về nhà?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "When",
+            "is",
+            "my",
+            "next",
+            "appointment",
+            "today",
+            "doctor",
+            "pharmacy",
+            "home"
+          ],
+          "writeAnswer": [
+            "When",
+            "is",
+            "my",
+            "next",
+            "appointment"
+          ]
+        },
+        {
+          "id": "2-5",
+          "sentence": "The nurse will measure your blood pressure.",
+          "sentenceVi": "Y tá sẽ đo huyết áp cho ông.",
+          "phonetic": "the · nurse · will · measure · your · blood · pressure",
+          "listenOptions": [
+            "Bác sĩ sẽ xét nghiệm máu.",
+            "Y tá sẽ đo huyết áp cho ông.",
+            "Bạn cần nằm lại một giờ.",
+            "Chúng ta sẽ phẫu thuật."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "The",
+            "nurse",
+            "will",
+            "measure",
+            "your",
+            "blood",
+            "pressure",
+            "doctor",
+            "take",
+            "pill",
+            "fever"
+          ],
+          "writeAnswer": [
+            "The",
+            "nurse",
+            "will",
+            "measure",
+            "your",
+            "blood",
+            "pressure"
+          ]
+        },
+        {
+          "id": "2-6",
+          "sentence": "Do I need surgery?",
+          "sentenceVi": "Tôi có cần mổ không?",
+          "phonetic": "do · i · need · surgery",
+          "listenOptions": [
+            "Tôi có cần nhập viện không?",
+            "Tôi có cần mổ không?",
+            "Thuốc này bao lâu mới có tác dụng?",
+            "Có được về không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Do",
+            "I",
+            "need",
+            "surgery",
+            "medicine",
+            "rest",
+            "hospital",
+            "help"
+          ],
+          "writeAnswer": [
+            "Do",
+            "I",
+            "need",
+            "surgery"
+          ]
+        },
+        {
+          "id": "2-7",
+          "sentence": "Do you have insurance?",
+          "sentenceVi": "Bạn có bảo hiểm không?",
+          "phonetic": "do · you · have · insurance",
+          "listenOptions": [
+            "Bạn có tiền mặt không?",
+            "Bạn có bảo hiểm không?",
+            "Tôi cần hộ chiếu.",
+            "Bạn có vé không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Do",
+            "you",
+            "have",
+            "insurance",
+            "cash",
+            "card",
+            "ticket",
+            "phone"
+          ],
+          "writeAnswer": [
+            "Do",
+            "you",
+            "have",
+            "insurance"
+          ]
+        }
+      ]
+    }
+  ],
+  "2": [
+    {
+      "id": "t2-u1",
+      "title": "Phần 1 · Người thân trong nhà",
+      "sentences": [
+        {
+          "id": "1-1",
+          "sentence": "This is my family.",
+          "sentenceVi": "Đây là gia đình tôi.",
+          "phonetic": "ðɪs · ɪz · maɪ · ˈfæm.ɪ.li",
+          "listenOptions": [
+            "Đây là nhà tôi.",
+            "Đây là gia đình tôi.",
+            "Đây là bạn tôi.",
+            "Đây là họ hàng tôi."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "This",
+            "is",
+            "my",
+            "family",
+            "house",
+            "your",
+            "friend",
+            "man"
+          ],
+          "writeAnswer": [
+            "This",
+            "is",
+            "my",
+            "family"
+          ]
+        },
+        {
+          "id": "1-2",
+          "sentence": "My father is a teacher.",
+          "sentenceVi": "Bố tôi là giáo viên.",
+          "phonetic": "maɪ · ˈfɑː.ðər · ɪz · ə · ˈtiː.tʃər",
+          "listenOptions": [
+            "Bố tôi là bác sĩ.",
+            "Mẹ tôi là giáo viên.",
+            "Bố tôi là giáo viên.",
+            "Anh tôi là giáo viên."
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "My",
+            "father",
+            "is",
+            "a",
+            "teacher",
+            "mother",
+            "doctor",
+            "nurse",
+            "farmer"
+          ],
+          "writeAnswer": [
+            "My",
+            "father",
+            "is",
+            "a",
+            "teacher"
+          ]
+        },
+        {
+          "id": "1-3",
+          "sentence": "I love my grandmother.",
+          "sentenceVi": "Tôi yêu bà của tôi.",
+          "phonetic": "aɪ · lʌv · maɪ · ˈɡrænd.mʌð.ər",
+          "listenOptions": [
+            "Tôi yêu mẹ của tôi.",
+            "Tôi yêu bà của tôi.",
+            "Tôi yêu ông của tôi.",
+            "Tôi yêu chị của tôi."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "love",
+            "my",
+            "grandmother",
+            "grandfather",
+            "mother",
+            "sister",
+            "brother"
+          ],
+          "writeAnswer": [
+            "I",
+            "love",
+            "my",
+            "grandmother"
+          ]
+        },
+        {
+          "id": "1-4",
+          "sentence": "I have two sons.",
+          "sentenceVi": "Tôi có hai đứa con trai.",
+          "phonetic": "aɪ · hæv · tuː · sʌnz",
+          "listenOptions": [
+            "Tôi có hai con gái.",
+            "Tôi có một con trai.",
+            "Tôi có hai đứa con trai.",
+            "Tôi có hai cháu trai."
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "I",
+            "have",
+            "two",
+            "sons",
+            "one",
+            "daughters",
+            "daughter",
+            "child"
+          ],
+          "writeAnswer": [
+            "I",
+            "have",
+            "two",
+            "sons"
+          ]
+        },
+        {
+          "id": "1-5",
+          "sentence": "We live together.",
+          "sentenceVi": "Chúng tôi sống cùng nhau.",
+          "phonetic": "wiː · lɪv · təˈɡeð.ər",
+          "listenOptions": [
+            "Chúng tôi đi cùng nhau.",
+            "Chúng tôi ăn cùng nhau.",
+            "Chúng tôi sống cùng nhau.",
+            "Chúng tôi học cùng nhau."
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "We",
+            "live",
+            "together",
+            "eat",
+            "study",
+            "work",
+            "travel"
+          ],
+          "writeAnswer": [
+            "We",
+            "live",
+            "together"
+          ]
+        },
+        {
+          "id": "1-6",
+          "sentence": "Happy birthday to you.",
+          "sentenceVi": "Chúc mừng sinh nhật bạn.",
+          "phonetic": "ˈhæp.i · ˈbɜːrθ.deɪ · tə · juː",
+          "listenOptions": [
+            "Chúc mừng sinh nhật bạn.",
+            "Chúc bạn một ngày tốt lành.",
+            "Chúc mừng năm mới.",
+            "Chúc bạn vui vẻ."
+          ],
+          "listenAnswer": 0,
+          "writeWords": [
+            "Happy",
+            "birthday",
+            "to",
+            "you",
+            "new",
+            "year",
+            "day",
+            "home"
+          ],
+          "writeAnswer": [
+            "Happy",
+            "birthday",
+            "to",
+            "you"
+          ]
+        },
+        {
+          "id": "1-7",
+          "sentence": "My daughter is getting married next month.",
+          "sentenceVi": "Con gái tôi sẽ cưới vào tháng tới.",
+          "phonetic": "my · daughter · is · getting · married · next · month",
+          "listenOptions": [
+            "Con trai tôi đi du học.",
+            "Con gái tôi sẽ cưới vào tháng tới.",
+            "Con tôi vừa sinh cháu.",
+            "Cháu tôi đi học."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "My",
+            "daughter",
+            "is",
+            "getting",
+            "married",
+            "next",
+            "month",
+            "year",
+            "son",
+            "wife",
+            "home"
+          ],
+          "writeAnswer": [
+            "My",
+            "daughter",
+            "is",
+            "getting",
+            "married",
+            "next",
+            "month"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t2-u2",
+      "title": "Phần 2 · Gia đình quây quần",
+      "sentences": [
+        {
+          "id": "2-1",
+          "sentence": "Come over for dinner on Sunday.",
+          "sentenceVi": "Chủ nhật qua nhà chúng tôi ăn cơm nhé.",
+          "phonetic": "come · over · for · dinner · on · sunday",
+          "listenOptions": [
+            "Chủ nhật họp mặt ở công ty.",
+            "Chủ nhật qua nhà chúng tôi ăn cơm nhé.",
+            "Thứ bảy đi du lịch.",
+            "Đừng lên xe."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Come",
+            "over",
+            "for",
+            "dinner",
+            "on",
+            "Sunday",
+            "Monday",
+            "lunch",
+            "home",
+            "late"
+          ],
+          "writeAnswer": [
+            "Come",
+            "over",
+            "for",
+            "dinner",
+            "on",
+            "Sunday"
+          ]
+        },
+        {
+          "id": "2-2",
+          "sentence": "I miss them very much.",
+          "sentenceVi": "Tôi nhớ họ rất nhiều.",
+          "phonetic": "i · miss · them · very · much",
+          "listenOptions": [
+            "Tôi ghét họ.",
+            "Tôi nhớ họ rất nhiều.",
+            "Tôi chưa gặp xe buýt.",
+            "Họ không nói chuyện."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "miss",
+            "them",
+            "very",
+            "much",
+            "love",
+            "hate",
+            "see",
+            "call"
+          ],
+          "writeAnswer": [
+            "I",
+            "miss",
+            "them",
+            "very",
+            "much"
+          ]
+        },
+        {
+          "id": "2-3",
+          "sentence": "My granddaughter just started school.",
+          "sentenceVi": "Cháu gái tôi vừa vào học.",
+          "phonetic": "my · granddaughter · just · started · school",
+          "listenOptions": [
+            "Cháu trai làm xe ôm.",
+            "Cháu gái tôi vừa vào học.",
+            "Chúng ta chơi cờ.",
+            "Nhớ đem ô."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "My",
+            "granddaughter",
+            "just",
+            "started",
+            "school",
+            "work",
+            "tired",
+            "home",
+            "old"
+          ],
+          "writeAnswer": [
+            "My",
+            "granddaughter",
+            "just",
+            "started",
+            "school"
+          ]
+        },
+        {
+          "id": "2-4",
+          "sentence": "Please call when you arrive.",
+          "sentenceVi": "Đến nơi thì nhớ gọi cho ông nhé.",
+          "phonetic": "please · call · when · you · arrive",
+          "listenOptions": [
+            "Đến nhà báo ông chủ.",
+            "Đến nơi thì nhớ gọi cho ông nhé.",
+            "Đừng mang theo ô.",
+            "Hãy chờ xe."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Please",
+            "call",
+            "when",
+            "you",
+            "arrive",
+            "wait",
+            "text",
+            "email",
+            "leave"
+          ],
+          "writeAnswer": [
+            "Please",
+            "call",
+            "when",
+            "you",
+            "arrive"
+          ]
+        },
+        {
+          "id": "2-5",
+          "sentence": "Our family gathers every Lunar New Year.",
+          "sentenceVi": "Nhà tôi tụ họp vào Tết âm.",
+          "phonetic": "our · family · gathers · every · lunar · new · year",
+          "listenOptions": [
+            "Tết ta đi chợ một mình.",
+            "Nhà tôi tụ họp vào Tết âm.",
+            "Chúng ta không họp nhau.",
+            "Tết chỉ có pháo."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Our",
+            "family",
+            "gathers",
+            "every",
+            "Lunar",
+            "New",
+            "Year",
+            "summer",
+            "alone",
+            "work",
+            "shop"
+          ],
+          "writeAnswer": [
+            "Our",
+            "family",
+            "gathers",
+            "every",
+            "Lunar",
+            "New",
+            "Year"
+          ]
+        },
+        {
+          "id": "2-6",
+          "sentence": "She takes care of the kids.",
+          "sentenceVi": "Cô ấy lo cho các cháu nhỏ.",
+          "phonetic": "she · takes · care · of · the · kids",
+          "listenOptions": [
+            "Anh ta đi chợ một mình.",
+            "Cô ấy lo cho các cháu nhỏ.",
+            "Ông nội không ăn được.",
+            "Bà buổi tối mới đến."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "She",
+            "takes",
+            "care",
+            "of",
+            "the",
+            "kids",
+            "mother",
+            "father",
+            "pets",
+            "house"
+          ],
+          "writeAnswer": [
+            "She",
+            "takes",
+            "care",
+            "of",
+            "the",
+            "kids"
+          ]
+        },
+        {
+          "id": "2-7",
+          "sentence": "We are proud of you.",
+          "sentenceVi": "Chúng tôi tự hào về bạn.",
+          "phonetic": "we · are · proud · of · you",
+          "listenOptions": [
+            "Chúng tôi buồn vì bạn.",
+            "Chúng tôi tự hào về bạn.",
+            "Chúng tôi không nghe rõ.",
+            "Chúng tôi lo lắng quá."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "We",
+            "are",
+            "proud",
+            "of",
+            "you",
+            "angry",
+            "sad",
+            "tired",
+            "late"
+          ],
+          "writeAnswer": [
+            "We",
+            "are",
+            "proud",
+            "of",
+            "you"
+          ]
+        }
+      ]
+    }
+  ],
+  "3": [
+    {
+      "id": "t3-u1",
+      "title": "Phần 1 · Hỏi giá và thanh toán",
+      "sentences": [
+        {
+          "id": "1-1",
+          "sentence": "How much is this?",
+          "sentenceVi": "Cái này bao nhiêu tiền?",
+          "phonetic": "haʊ · mʌtʃ · ɪz · ðɪs",
+          "listenOptions": [
+            "Cái này là gì?",
+            "Cái này bao nhiêu tiền?",
+            "Cái này ở đâu?",
+            "Cái này của ai?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "How",
+            "much",
+            "is",
+            "this",
+            "many",
+            "where",
+            "that",
+            "cheap"
+          ],
+          "writeAnswer": [
+            "How",
+            "much",
+            "is",
+            "this"
+          ]
+        },
+        {
+          "id": "1-2",
+          "sentence": "I want to buy this.",
+          "sentenceVi": "Tôi muốn mua cái này.",
+          "phonetic": "aɪ · wɒnt · tə · baɪ · ðɪs",
+          "listenOptions": [
+            "Tôi muốn xem cái này.",
+            "Tôi muốn mua cái này.",
+            "Tôi muốn trả lại.",
+            "Tôi muốn mua cái kia."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "want",
+            "to",
+            "buy",
+            "this",
+            "see",
+            "sell",
+            "that",
+            "cheap"
+          ],
+          "writeAnswer": [
+            "I",
+            "want",
+            "to",
+            "buy",
+            "this"
+          ]
+        },
+        {
+          "id": "1-3",
+          "sentence": "It is too expensive.",
+          "sentenceVi": "Cái đó quá đắt.",
+          "phonetic": "ɪt · ɪz · tuː · ɪkˈspen.sɪv",
+          "listenOptions": [
+            "Cái đó quá rẻ.",
+            "Cái đó quá đắt.",
+            "Cái đó quá to.",
+            "Cái đó quá nhỏ."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "It",
+            "is",
+            "too",
+            "expensive",
+            "cheap",
+            "big",
+            "small",
+            "free"
+          ],
+          "writeAnswer": [
+            "It",
+            "is",
+            "too",
+            "expensive"
+          ]
+        },
+        {
+          "id": "1-4",
+          "sentence": "Can I pay by card?",
+          "sentenceVi": "Tôi có thể trả bằng thẻ không?",
+          "phonetic": "kæn · aɪ · peɪ · baɪ · kɑːrd",
+          "listenOptions": [
+            "Tôi có thể trả bằng tiền mặt không?",
+            "Tôi có thể trả bằng thẻ không?",
+            "Tôi có thể trả sau không?",
+            "Tôi có thể đổi tiền không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Can",
+            "I",
+            "pay",
+            "by",
+            "card",
+            "cash",
+            "later",
+            "phone",
+            "free"
+          ],
+          "writeAnswer": [
+            "Can",
+            "I",
+            "pay",
+            "by",
+            "card"
+          ]
+        },
+        {
+          "id": "1-5",
+          "sentence": "Please give me a receipt.",
+          "sentenceVi": "Vui lòng đưa tôi hoá đơn.",
+          "phonetic": "pliːz · ɡɪv · miː · ə · rɪˈsiːt",
+          "listenOptions": [
+            "Vui lòng đưa tôi cái túi.",
+            "Vui lòng đưa tôi tiền thừa.",
+            "Vui lòng đưa tôi hoá đơn.",
+            "Vui lòng đưa tôi hộ chiếu."
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "Please",
+            "give",
+            "me",
+            "a",
+            "receipt",
+            "bag",
+            "change",
+            "menu",
+            "help"
+          ],
+          "writeAnswer": [
+            "Please",
+            "give",
+            "me",
+            "a",
+            "receipt"
+          ]
+        },
+        {
+          "id": "1-6",
+          "sentence": "Do you have a discount?",
+          "sentenceVi": "Bạn có giảm giá không?",
+          "phonetic": "də · juː · hæv · ə · ˈdɪs.kaʊnt",
+          "listenOptions": [
+            "Bạn có size khác không?",
+            "Bạn có màu khác không?",
+            "Bạn có giảm giá không?",
+            "Bạn có bán hết chưa?"
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "Do",
+            "you",
+            "have",
+            "a",
+            "discount",
+            "sale",
+            "size",
+            "color",
+            "gift"
+          ],
+          "writeAnswer": [
+            "Do",
+            "you",
+            "have",
+            "a",
+            "discount"
+          ]
+        },
+        {
+          "id": "1-7",
+          "sentence": "Is there anything cheaper?",
+          "sentenceVi": "Có loại nào rẻ hơn không?",
+          "phonetic": "is · there · anything · cheaper",
+          "listenOptions": [
+            "Còn sai số không?",
+            "Có loại nào rẻ hơn không?",
+            "Cửa đó có chìa không?",
+            "Cần chờ thêm phải không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Is",
+            "there",
+            "anything",
+            "cheaper",
+            "free",
+            "big",
+            "new",
+            "old"
+          ],
+          "writeAnswer": [
+            "Is",
+            "there",
+            "anything",
+            "cheaper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t3-u2",
+      "title": "Phần 2 · Đổi trả và siêu thị",
+      "sentences": [
+        {
+          "id": "2-1",
+          "sentence": "I am just looking, thank you.",
+          "sentenceVi": "Tôi chỉ xem thôi, cảm ơn.",
+          "phonetic": "i · am · just · looking · thank · you",
+          "listenOptions": [
+            "Tôi đổi ý rồi.",
+            "Tôi chỉ xem thôi, cảm ơn.",
+            "Tôi không biết giá.",
+            "Tôi trả mặc cả."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "am",
+            "just",
+            "looking",
+            "thank",
+            "you",
+            "buying",
+            "selling",
+            "late",
+            "hungry"
+          ],
+          "writeAnswer": [
+            "I",
+            "am",
+            "just",
+            "looking",
+            "thank",
+            "you"
+          ]
+        },
+        {
+          "id": "2-2",
+          "sentence": "Could you wrap it as a gift?",
+          "sentenceVi": "Cho tôi gói quà được không?",
+          "phonetic": "could · you · wrap · it · as · a · gift",
+          "listenOptions": [
+            "Cho khuyến mãi chứ?",
+            "Cho tôi gói quà được không?",
+            "Đổi một cái mới chứ?",
+            "Có chỗ ngồi không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Could",
+            "you",
+            "wrap",
+            "it",
+            "as",
+            "a",
+            "gift",
+            "bag",
+            "box",
+            "card",
+            "home"
+          ],
+          "writeAnswer": [
+            "Could",
+            "you",
+            "wrap",
+            "it",
+            "as",
+            "a",
+            "gift"
+          ]
+        },
+        {
+          "id": "2-3",
+          "sentence": "This one does not fit.",
+          "sentenceVi": "Cái này không vừa.",
+          "phonetic": "this · one · does · not · fit",
+          "listenOptions": [
+            "Cái này hết nhãn.",
+            "Cái này không vừa.",
+            "Không được chụp hình.",
+            "Không được trả tiền."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "This",
+            "one",
+            "does",
+            "not",
+            "fit",
+            "size",
+            "cheap",
+            "old",
+            "new"
+          ],
+          "writeAnswer": [
+            "This",
+            "one",
+            "does",
+            "not",
+            "fit"
+          ]
+        },
+        {
+          "id": "2-4",
+          "sentence": "Where can I find the milk?",
+          "sentenceVi": "Sữa tươi ở kệ nào?",
+          "phonetic": "where · can · i · find · the · milk",
+          "listenOptions": [
+            "Nhà vệ sinh ở đâu?",
+            "Sữa tươi ở kệ nào?",
+            "Thẻ tín dụng ở đâu?",
+            "Xe bus ở đâu?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Where",
+            "can",
+            "I",
+            "find",
+            "the",
+            "milk",
+            "bread",
+            "rice",
+            "water",
+            "meat"
+          ],
+          "writeAnswer": [
+            "Where",
+            "can",
+            "I",
+            "find",
+            "the",
+            "milk"
+          ]
+        },
+        {
+          "id": "2-5",
+          "sentence": "The line is very long today.",
+          "sentenceVi": "Hôm nay xếp hàng rất dài.",
+          "phonetic": "the · line · is · very · long · today",
+          "listenOptions": [
+            "Hôm nay đóng cửa.",
+            "Hôm nay xếp hàng rất dài.",
+            "Hôm nay không bán.",
+            "Hôm nay giảm nửa giá."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "The",
+            "line",
+            "is",
+            "very",
+            "long",
+            "today",
+            "short",
+            "quiet",
+            "late",
+            "open"
+          ],
+          "writeAnswer": [
+            "The",
+            "line",
+            "is",
+            "very",
+            "long",
+            "today"
+          ]
+        },
+        {
+          "id": "2-6",
+          "sentence": "Can I try it on?",
+          "sentenceVi": "Tôi thử được không?",
+          "phonetic": "can · i · try · it · on",
+          "listenOptions": [
+            "Tôi trả góp được không?",
+            "Tôi thử được không?",
+            "Tôi lấy chưa ngon.",
+            "Tôi buồn quá."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Can",
+            "I",
+            "try",
+            "it",
+            "on",
+            "see",
+            "buy",
+            "pay",
+            "eat"
+          ],
+          "writeAnswer": [
+            "Can",
+            "I",
+            "try",
+            "it",
+            "on"
+          ]
+        },
+        {
+          "id": "2-7",
+          "sentence": "Keep the change.",
+          "sentenceVi": "Tiền thừa không cần trả lại.",
+          "phonetic": "keep · the · change",
+          "listenOptions": [
+            "Cho tôi thêm túi.",
+            "Tiền thừa không cần trả lại.",
+            "Tôi không mang tiền.",
+            "Tôi quên thẻ."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Keep",
+            "the",
+            "change",
+            "bill",
+            "card",
+            "bag",
+            "free"
+          ],
+          "writeAnswer": [
+            "Keep",
+            "the",
+            "change"
+          ]
+        }
+      ]
+    }
+  ],
+  "4": [
+    {
+      "id": "t4-u1",
+      "title": "Phần 1 · Sân bay cơ bản",
+      "sentences": [
+        {
+          "id": "1-1",
+          "sentence": "Here is my passport.",
+          "sentenceVi": "Đây là hộ chiếu của tôi.",
+          "phonetic": "hɪr · ɪz · maɪ · ˈpæs.pɔːrt",
+          "listenOptions": [
+            "Đây là vé của tôi.",
+            "Đây là hộ chiếu của tôi.",
+            "Đây là va li của tôi.",
+            "Đây là thị thực của tôi."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Here",
+            "is",
+            "my",
+            "passport",
+            "ticket",
+            "visa",
+            "bag",
+            "phone"
+          ],
+          "writeAnswer": [
+            "Here",
+            "is",
+            "my",
+            "passport"
+          ]
+        },
+        {
+          "id": "1-2",
+          "sentence": "I am a tourist.",
+          "sentenceVi": "Tôi là khách du lịch.",
+          "phonetic": "aɪ · æm · ə · ˈtʊr.ɪst",
+          "listenOptions": [
+            "Tôi là sinh viên.",
+            "Tôi là khách du lịch.",
+            "Tôi là người Việt Nam.",
+            "Tôi là khách của khách sạn."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "am",
+            "a",
+            "tourist",
+            "student",
+            "worker",
+            "pilot",
+            "guide"
+          ],
+          "writeAnswer": [
+            "I",
+            "am",
+            "a",
+            "tourist"
+          ]
+        },
+        {
+          "id": "1-3",
+          "sentence": "Where is the gate?",
+          "sentenceVi": "Cổng ra máy bay ở đâu?",
+          "phonetic": "wer · ɪz · ðə · ɡeɪt",
+          "listenOptions": [
+            "Sân bay ở đâu?",
+            "Cổng ra máy bay ở đâu?",
+            "Khách sạn ở đâu?",
+            "Hành lý ở đâu?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Where",
+            "is",
+            "the",
+            "gate",
+            "airport",
+            "hotel",
+            "map",
+            "taxi"
+          ],
+          "writeAnswer": [
+            "Where",
+            "is",
+            "the",
+            "gate"
+          ]
+        },
+        {
+          "id": "1-4",
+          "sentence": "My flight is delayed.",
+          "sentenceVi": "Chuyến bay của tôi bị hoãn.",
+          "phonetic": "maɪ · flaɪt · ɪz · dɪˈleɪd",
+          "listenOptions": [
+            "Chuyến bay của tôi đã đến.",
+            "Chuyến bay của tôi bị huỷ.",
+            "Chuyến bay của tôi bị hoãn.",
+            "Chuyến bay của tôi đúng giờ."
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "My",
+            "flight",
+            "is",
+            "delayed",
+            "early",
+            "late",
+            "gate",
+            "full"
+          ],
+          "writeAnswer": [
+            "My",
+            "flight",
+            "is",
+            "delayed"
+          ]
+        },
+        {
+          "id": "1-5",
+          "sentence": "I want a window seat.",
+          "sentenceVi": "Tôi muốn một ghế cạnh cửa sổ.",
+          "phonetic": "aɪ · wɒnt · ə · ˈwɪn.doʊ · siːt",
+          "listenOptions": [
+            "Tôi muốn ghế lối đi.",
+            "Tôi muốn một ghế cạnh cửa sổ.",
+            "Tôi muốn đổi ghế.",
+            "Tôi muốn ghế trống."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "want",
+            "a",
+            "window",
+            "seat",
+            "aisle",
+            "door",
+            "map",
+            "food"
+          ],
+          "writeAnswer": [
+            "I",
+            "want",
+            "a",
+            "window",
+            "seat"
+          ]
+        },
+        {
+          "id": "1-6",
+          "sentence": "Welcome to Vietnam.",
+          "sentenceVi": "Chào mừng đến Việt Nam.",
+          "phonetic": "ˈwel.kəm · tə · ˌvjetˈnɑːm",
+          "listenOptions": [
+            "Tạm biệt Việt Nam.",
+            "Chào mừng đến Việt Nam.",
+            "Cảm ơn bạn đến Việt Nam.",
+            "Hẹn gặp lại Việt Nam."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Welcome",
+            "to",
+            "Vietnam",
+            "Japan",
+            "from",
+            "see",
+            "home"
+          ],
+          "writeAnswer": [
+            "Welcome",
+            "to",
+            "Vietnam"
+          ]
+        },
+        {
+          "id": "1-7",
+          "sentence": "How long will I stay?",
+          "sentenceVi": "Tôi sẽ ở đây bao lâu?",
+          "phonetic": "how · long · will · i · stay",
+          "listenOptions": [
+            "Tôi có bị nhốt không?",
+            "Tôi sẽ ở đây bao lâu?",
+            "Tôi phải tháo máy chứ?",
+            "Tôi mất ô kìa."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "How",
+            "long",
+            "will",
+            "I",
+            "stay",
+            "wait",
+            "see",
+            "fly",
+            "eat"
+          ],
+          "writeAnswer": [
+            "How",
+            "long",
+            "will",
+            "I",
+            "stay"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t4-u2",
+      "title": "Phần 2 · Hải quan và xe",
+      "sentences": [
+        {
+          "id": "2-1",
+          "sentence": "I have nothing to declare.",
+          "sentenceVi": "Tôi không có gì để khai báo.",
+          "phonetic": "i · have · nothing · to · declare",
+          "listenOptions": [
+            "Tôi không mang hành lý.",
+            "Tôi không có gì để khai báo.",
+            "Tôi mang thịt vào cửa.",
+            "Tôi chỉ có nhẫn cưới."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "have",
+            "nothing",
+            "to",
+            "declare",
+            "food",
+            "money",
+            "see",
+            "open"
+          ],
+          "writeAnswer": [
+            "I",
+            "have",
+            "nothing",
+            "to",
+            "declare"
+          ]
+        },
+        {
+          "id": "2-2",
+          "sentence": "Is this the right baggage claim?",
+          "sentenceVi": "Đây có phải băng chuyền nhận hành lý không?",
+          "phonetic": "is · this · the · right · baggage · claim",
+          "listenOptions": [
+            "Đây có phải nhà wc không?",
+            "Đây có phải băng chuyền nhận hành lý không?",
+            "Xe bus ở đây không?",
+            "Tôi bị nhầm chỗ chứ?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Is",
+            "this",
+            "the",
+            "right",
+            "baggage",
+            "claim",
+            "gate",
+            "map",
+            "taxi",
+            "food"
+          ],
+          "writeAnswer": [
+            "Is",
+            "this",
+            "the",
+            "right",
+            "baggage",
+            "claim"
+          ]
+        },
+        {
+          "id": "2-3",
+          "sentence": "Where is customs?",
+          "sentenceVi": "Hải quan ở đâu?",
+          "phonetic": "where · is · customs",
+          "listenOptions": [
+            "Xe đón ở đâu?",
+            "Hải quan ở đâu?",
+            "Đổi tiền ở xa không?",
+            "Có chỗ uống cà phê chứ?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Where",
+            "is",
+            "customs",
+            "gate",
+            "hotel",
+            "taxi",
+            "map"
+          ],
+          "writeAnswer": [
+            "Where",
+            "is",
+            "customs"
+          ]
+        },
+        {
+          "id": "2-4",
+          "sentence": "My luggage is heavy.",
+          "sentenceVi": "Hành lý của tôi nặng.",
+          "phonetic": "my · luggage · is · heavy",
+          "listenOptions": [
+            "Hộ chiếu mới hết.",
+            "Hành lý của tôi nặng.",
+            "Xe bus kẹt đường.",
+            "Điều chỉnh thời gian chứ."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "My",
+            "luggage",
+            "is",
+            "heavy",
+            "light",
+            "small",
+            "cheap",
+            "new"
+          ],
+          "writeAnswer": [
+            "My",
+            "luggage",
+            "is",
+            "heavy"
+          ]
+        },
+        {
+          "id": "2-5",
+          "sentence": "Could you speak more slowly?",
+          "sentenceVi": "Bạn nói chậm hơn được không?",
+          "phonetic": "could · you · speak · more · slowly",
+          "listenOptions": [
+            "Bạn nói to hơn được không?",
+            "Bạn nói chậm hơn được không?",
+            "Bạn biết tiếng Pháp không?",
+            "Bạn đói chưa?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Could",
+            "you",
+            "speak",
+            "more",
+            "slowly",
+            "loudly",
+            "fast",
+            "English",
+            "help"
+          ],
+          "writeAnswer": [
+            "Could",
+            "you",
+            "speak",
+            "more",
+            "slowly"
+          ]
+        },
+        {
+          "id": "2-6",
+          "sentence": "I need a taxi to the hotel.",
+          "sentenceVi": "Tôi cần taxi đến khách sạn.",
+          "phonetic": "i · need · a · taxi · to · the · hotel",
+          "listenOptions": [
+            "Tôi cần giường nằm.",
+            "Tôi cần taxi đến khách sạn.",
+            "Tôi cần đổi vé.",
+            "Tôi cần mua sim."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "need",
+            "a",
+            "taxi",
+            "to",
+            "the",
+            "hotel",
+            "bus",
+            "map",
+            "gate",
+            "food"
+          ],
+          "writeAnswer": [
+            "I",
+            "need",
+            "a",
+            "taxi",
+            "to",
+            "the",
+            "hotel"
+          ]
+        },
+        {
+          "id": "2-7",
+          "sentence": "Thank you for your help.",
+          "sentenceVi": "Cảm ơn bạn đã giúp đỡ.",
+          "phonetic": "thank · you · for · your · help",
+          "listenOptions": [
+            "Tôi không nghe rõ.",
+            "Cảm ơn bạn đã giúp đỡ.",
+            "Tôi bị lạc.",
+            "Tôi quên hộ chiếu."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Thank",
+            "you",
+            "for",
+            "your",
+            "help",
+            "please",
+            "sorry",
+            "water",
+            "late"
+          ],
+          "writeAnswer": [
+            "Thank",
+            "you",
+            "for",
+            "your",
+            "help"
+          ]
+        }
+      ]
+    }
+  ],
+  "5": [
+    {
+      "id": "t5-u1",
+      "title": "Phần 1 · Chào hỏi hằng ngày",
+      "sentences": [
+        {
+          "id": "1-1",
+          "sentence": "Hello, how are you?",
+          "sentenceVi": "Xin chào, bạn khoẻ không?",
+          "phonetic": "heˈloʊ · haʊ · ɑːr · juː",
+          "listenOptions": [
+            "Tạm biệt, bạn khoẻ không?",
+            "Xin chào, bạn khoẻ không?",
+            "Cảm ơn bạn rất nhiều.",
+            "Xin chào, tên bạn là gì?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Hello",
+            "how",
+            "are",
+            "you",
+            "name",
+            "what",
+            "where",
+            "fine"
+          ],
+          "writeAnswer": [
+            "Hello",
+            "how",
+            "are",
+            "you"
+          ]
+        },
+        {
+          "id": "1-2",
+          "sentence": "I am fine, thank you.",
+          "sentenceVi": "Tôi khoẻ, cảm ơn bạn.",
+          "phonetic": "aɪ · æm · faɪn · θæŋk · juː",
+          "listenOptions": [
+            "Tôi mệt, cảm ơn bạn.",
+            "Tôi khoẻ, cảm ơn bạn.",
+            "Tôi bận, cảm ơn bạn.",
+            "Tôi không khoẻ."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "am",
+            "fine",
+            "thank",
+            "you",
+            "tired",
+            "busy",
+            "sick",
+            "late"
+          ],
+          "writeAnswer": [
+            "I",
+            "am",
+            "fine",
+            "thank",
+            "you"
+          ]
+        },
+        {
+          "id": "1-3",
+          "sentence": "Nice to meet you.",
+          "sentenceVi": "Rất vui được gặp bạn.",
+          "phonetic": "naɪs · tə · miːt · juː",
+          "listenOptions": [
+            "Rất vui được gặp bạn.",
+            "Hẹn gặp lại bạn sau.",
+            "Cảm ơn bạn rất nhiều.",
+            "Tạm biệt bạn."
+          ],
+          "listenAnswer": 0,
+          "writeWords": [
+            "Nice",
+            "to",
+            "meet",
+            "you",
+            "later",
+            "see",
+            "sorry",
+            "home"
+          ],
+          "writeAnswer": [
+            "Nice",
+            "to",
+            "meet",
+            "you"
+          ]
+        },
+        {
+          "id": "1-4",
+          "sentence": "What is your name?",
+          "sentenceVi": "Tên bạn là gì?",
+          "phonetic": "wɒt · ɪz · jɔːr · neɪm",
+          "listenOptions": [
+            "Bạn bao nhiêu tuổi?",
+            "Tên bạn là gì?",
+            "Bạn từ đâu đến?",
+            "Bạn làm nghề gì?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "What",
+            "is",
+            "your",
+            "name",
+            "age",
+            "from",
+            "time",
+            "phone"
+          ],
+          "writeAnswer": [
+            "What",
+            "is",
+            "your",
+            "name"
+          ]
+        },
+        {
+          "id": "1-5",
+          "sentence": "Thank you very much.",
+          "sentenceVi": "Cảm ơn bạn rất nhiều.",
+          "phonetic": "θæŋk · juː · ˈver.i · mʌtʃ",
+          "listenOptions": [
+            "Xin lỗi rất nhiều.",
+            "Cảm ơn bạn rất nhiều.",
+            "Vui lòng giúp tôi.",
+            "Cảm ơn bạn một chút."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Thank",
+            "you",
+            "very",
+            "much",
+            "sorry",
+            "please",
+            "fine",
+            "late"
+          ],
+          "writeAnswer": [
+            "Thank",
+            "you",
+            "very",
+            "much"
+          ]
+        },
+        {
+          "id": "1-6",
+          "sentence": "See you tomorrow.",
+          "sentenceVi": "Hẹn gặp ngày mai.",
+          "phonetic": "siː · juː · təˈmɒr.oʊ",
+          "listenOptions": [
+            "Hẹn gặp tuần sau.",
+            "Hẹn gặp ngày mai.",
+            "Tạm biệt mọi người.",
+            "Chào buổi sáng."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "See",
+            "you",
+            "tomorrow",
+            "later",
+            "today",
+            "home",
+            "night"
+          ],
+          "writeAnswer": [
+            "See",
+            "you",
+            "tomorrow"
+          ]
+        },
+        {
+          "id": "1-7",
+          "sentence": "Have a nice day!",
+          "sentenceVi": "Chúc bạn một ngày tốt lành!",
+          "phonetic": "have · a · nice · day",
+          "listenOptions": [
+            "Chúc bạn sớm khoẻ.",
+            "Chúc bạn một ngày tốt lành!",
+            "Chúng ta đừng về sớm.",
+            "Tôi rất thích màn hình này."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Have",
+            "a",
+            "nice",
+            "day",
+            "night",
+            "week",
+            "see",
+            "home"
+          ],
+          "writeAnswer": [
+            "Have",
+            "a",
+            "nice",
+            "day"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t5-u2",
+      "title": "Phần 2 · Giao tiếp lịch sự",
+      "sentences": [
+        {
+          "id": "2-1",
+          "sentence": "Excuse me, where is the restroom?",
+          "sentenceVi": "Xin lỗi, nhà vệ sinh ở đâu?",
+          "phonetic": "excuse · me · where · is · the · restroom",
+          "listenOptions": [
+            "Xin lỗi, giờ mấy rồi?",
+            "Xin lỗi, nhà vệ sinh ở đâu?",
+            "Tôi cần bánh mì chứ không phải cà phê.",
+            "Bạn thích nghe nhạc không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Excuse",
+            "me",
+            "where",
+            "is",
+            "the",
+            "restroom",
+            "hello",
+            "map",
+            "help",
+            "phone"
+          ],
+          "writeAnswer": [
+            "Excuse",
+            "me",
+            "where",
+            "is",
+            "the",
+            "restroom"
+          ]
+        },
+        {
+          "id": "2-2",
+          "sentence": "I do not speak English very well.",
+          "sentenceVi": "Tôi nói tiếng Anh chưa tốt lắm.",
+          "phonetic": "i · do · not · speak · english · very · well",
+          "listenOptions": [
+            "Tôi không biết lái xe.",
+            "Tôi nói tiếng Anh chưa tốt lắm.",
+            "Tôi chưa ăn cơm.",
+            "Tôi thích xem tin tức."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "do",
+            "not",
+            "speak",
+            "English",
+            "very",
+            "well",
+            "read",
+            "write",
+            "sing",
+            "dance"
+          ],
+          "writeAnswer": [
+            "I",
+            "do",
+            "not",
+            "speak",
+            "English",
+            "very",
+            "well"
+          ]
+        },
+        {
+          "id": "2-3",
+          "sentence": "Could you repeat that?",
+          "sentenceVi": "Bạn nói lại được không?",
+          "phonetic": "could · you · repeat · that",
+          "listenOptions": [
+            "Chúng ta đọc lại chứ?",
+            "Bạn nói lại được không?",
+            "Bạn không nghe chứ?",
+            "Tôi sẽ chờ chứ?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Could",
+            "you",
+            "repeat",
+            "that",
+            "say",
+            "write",
+            "read",
+            "see"
+          ],
+          "writeAnswer": [
+            "Could",
+            "you",
+            "repeat",
+            "that"
+          ]
+        },
+        {
+          "id": "2-4",
+          "sentence": "I am pleased to meet you.",
+          "sentenceVi": "Rất vui được làm quen với ông.",
+          "phonetic": "i · am · pleased · to · meet · you",
+          "listenOptions": [
+            "Tôi ghét chỗ này.",
+            "Rất vui được làm quen với ông.",
+            "Tôi chưa sẵn sàng đi chợ.",
+            "Chắc là trời sẽ mưa."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "am",
+            "pleased",
+            "to",
+            "meet",
+            "you",
+            "fine",
+            "sad",
+            "late",
+            "tired"
+          ],
+          "writeAnswer": [
+            "I",
+            "am",
+            "pleased",
+            "to",
+            "meet",
+            "you"
+          ]
+        },
+        {
+          "id": "2-5",
+          "sentence": "Good morning, sir.",
+          "sentenceVi": "Chào buổi sáng, thưa ông.",
+          "phonetic": "good · morning · sir",
+          "listenOptions": [
+            "Chào buổi tối, thưa cô.",
+            "Chào buổi sáng, thưa ông.",
+            "Đồ uống ở quầy này.",
+            "Tối không ngủ được."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Good",
+            "morning",
+            "sir",
+            "evening",
+            "night",
+            "maam",
+            "help"
+          ],
+          "writeAnswer": [
+            "Good",
+            "morning",
+            "sir"
+          ]
+        },
+        {
+          "id": "2-6",
+          "sentence": "Take care!",
+          "sentenceVi": "Bảo trọng nhé!",
+          "phonetic": "take · care",
+          "listenOptions": [
+            "Chúng ta kết thúc buổi học chứ?",
+            "Bảo trọng nhé!",
+            "Hãy chờ chỗ xe.",
+            "Đồ uống còn nóng quá."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Take",
+            "care",
+            "see",
+            "hello",
+            "please",
+            "sorry"
+          ],
+          "writeAnswer": [
+            "Take",
+            "care"
+          ]
+        },
+        {
+          "id": "2-7",
+          "sentence": "See you later.",
+          "sentenceVi": "Hẹn gặp lại sau.",
+          "phonetic": "see · you · later",
+          "listenOptions": [
+            "Mai bạn rảnh không?",
+            "Hẹn gặp lại sau.",
+            "Tôi quên chìa khoá.",
+            "Chúng ta chưa trả tiền."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "See",
+            "you",
+            "later",
+            "tomorrow",
+            "today",
+            "night",
+            "home"
+          ],
+          "writeAnswer": [
+            "See",
+            "you",
+            "later"
+          ]
+        }
+      ]
+    }
+  ],
+  "6": [
+    {
+      "id": "t6-u1",
+      "title": "Phần 1 · Số và thanh toán",
+      "sentences": [
+        {
+          "id": "1-1",
+          "sentence": "I have one apple.",
+          "sentenceVi": "Tôi có một quả táo.",
+          "phonetic": "aɪ · hæv · wʌn · ˈæp.əl",
+          "listenOptions": [
+            "Tôi có hai quả táo.",
+            "Tôi có một quả cam.",
+            "Tôi có một quả táo.",
+            "Tôi có một cuốn sách."
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "I",
+            "have",
+            "one",
+            "apple",
+            "two",
+            "orange",
+            "book",
+            "pen"
+          ],
+          "writeAnswer": [
+            "I",
+            "have",
+            "one",
+            "apple"
+          ]
+        },
+        {
+          "id": "1-2",
+          "sentence": "It costs ten dollars.",
+          "sentenceVi": "Cái đó giá mười đô la.",
+          "phonetic": "ɪt · kɒsts · ten · ˈdɒl.ərz",
+          "listenOptions": [
+            "Cái đó giá hai đô la.",
+            "Cái đó giá mười đô la.",
+            "Cái đó giá một trăm đồng.",
+            "Cái đó giá một đô la."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "It",
+            "costs",
+            "ten",
+            "dollars",
+            "two",
+            "five",
+            "dong",
+            "free"
+          ],
+          "writeAnswer": [
+            "It",
+            "costs",
+            "ten",
+            "dollars"
+          ]
+        },
+        {
+          "id": "1-3",
+          "sentence": "I have fifty thousand dong.",
+          "sentenceVi": "Tôi có năm mươi nghìn đồng.",
+          "phonetic": "aɪ · hæv · ˈfɪf.ti · ˈθaʊ.zənd · dɒŋ",
+          "listenOptions": [
+            "Tôi có năm mươi nghìn đồng.",
+            "Tôi có năm trăm nghìn đồng.",
+            "Tôi có năm mươi đô la.",
+            "Tôi có một triệu đồng."
+          ],
+          "listenAnswer": 0,
+          "writeWords": [
+            "I",
+            "have",
+            "fifty",
+            "thousand",
+            "dong",
+            "hundred",
+            "million",
+            "ten",
+            "one"
+          ],
+          "writeAnswer": [
+            "I",
+            "have",
+            "fifty",
+            "thousand",
+            "dong"
+          ]
+        },
+        {
+          "id": "1-4",
+          "sentence": "What is your phone number?",
+          "sentenceVi": "Số điện thoại của bạn là gì?",
+          "phonetic": "wɒt · ɪz · jɔːr · foʊn · ˈnʌm.bər",
+          "listenOptions": [
+            "Tên của bạn là gì?",
+            "Địa chỉ của bạn là gì?",
+            "Số điện thoại của bạn là gì?",
+            "Tuổi của bạn là gì?"
+          ],
+          "listenAnswer": 2,
+          "writeWords": [
+            "What",
+            "is",
+            "your",
+            "phone",
+            "number",
+            "name",
+            "address",
+            "age",
+            "time"
+          ],
+          "writeAnswer": [
+            "What",
+            "is",
+            "your",
+            "phone",
+            "number"
+          ]
+        },
+        {
+          "id": "1-5",
+          "sentence": "Can I have the bill?",
+          "sentenceVi": "Cho tôi xin hoá đơn được không?",
+          "phonetic": "kæn · aɪ · hæv · ðə · bɪl",
+          "listenOptions": [
+            "Cho tôi xin nước được không?",
+            "Cho tôi xin hoá đơn được không?",
+            "Cho tôi xin thực đơn được không?",
+            "Cho tôi xin một cái túi được không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Can",
+            "I",
+            "have",
+            "the",
+            "bill",
+            "menu",
+            "water",
+            "bag",
+            "see"
+          ],
+          "writeAnswer": [
+            "Can",
+            "I",
+            "have",
+            "the",
+            "bill"
+          ]
+        },
+        {
+          "id": "1-6",
+          "sentence": "Five minutes, please.",
+          "sentenceVi": "Vui lòng năm phút.",
+          "phonetic": "faɪv · ˈmɪn.ɪts · pliːz",
+          "listenOptions": [
+            "Vui lòng mười phút.",
+            "Vui lòng năm phút.",
+            "Vui lòng năm giây.",
+            "Vui lòng một giờ."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Five",
+            "minutes",
+            "please",
+            "ten",
+            "hour",
+            "one",
+            "six"
+          ],
+          "writeAnswer": [
+            "Five",
+            "minutes",
+            "please"
+          ]
+        },
+        {
+          "id": "1-7",
+          "sentence": "Is this item on sale?",
+          "sentenceVi": "Mặt hàng này có giảm giá không?",
+          "phonetic": "is · this · item · on · sale",
+          "listenOptions": [
+            "Đã bán hết chưa?",
+            "Mặt hàng này có giảm giá không?",
+            "Có nhận thẻ không?",
+            "Có giao tận nhà không?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Is",
+            "this",
+            "item",
+            "on",
+            "sale",
+            "price",
+            "free",
+            "card",
+            "food"
+          ],
+          "writeAnswer": [
+            "Is",
+            "this",
+            "item",
+            "on",
+            "sale"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t6-u2",
+      "title": "Phần 2 · Giá và tổng tiền",
+      "sentences": [
+        {
+          "id": "2-1",
+          "sentence": "I need three tickets.",
+          "sentenceVi": "Tôi cần ba vé.",
+          "phonetic": "i · need · three · tickets",
+          "listenOptions": [
+            "Tôi cần hai vé.",
+            "Tôi cần ba vé.",
+            "Tôi cần mười vé nhưng không có tiền.",
+            "Tôi trả vé rồi."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "need",
+            "three",
+            "tickets",
+            "two",
+            "five",
+            "one",
+            "ten"
+          ],
+          "writeAnswer": [
+            "I",
+            "need",
+            "three",
+            "tickets"
+          ]
+        },
+        {
+          "id": "2-2",
+          "sentence": "The total is eighty thousand dong.",
+          "sentenceVi": "Tổng cộng tám mươi nghìn đồng.",
+          "phonetic": "the · total · is · eighty · thousand · dong",
+          "listenOptions": [
+            "Đã được giảm nửa chứ?",
+            "Tổng cộng tám mươi nghìn đồng.",
+            "Tụi nhỏ chưa ăn cơm.",
+            "Thời tiết không đẹp."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "The",
+            "total",
+            "is",
+            "eighty",
+            "thousand",
+            "dong",
+            "fifty",
+            "hundred",
+            "dollar",
+            "free"
+          ],
+          "writeAnswer": [
+            "The",
+            "total",
+            "is",
+            "eighty",
+            "thousand",
+            "dong"
+          ]
+        },
+        {
+          "id": "2-3",
+          "sentence": "Can I pay in cash?",
+          "sentenceVi": "Tôi trả tiền mặt được không?",
+          "phonetic": "can · i · pay · in · cash",
+          "listenOptions": [
+            "Tôi trả vé online được không?",
+            "Tôi trả tiền mặt được không?",
+            "Tôi hết tiền rồi.",
+            "Xe bus đã đến chưa?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Can",
+            "I",
+            "pay",
+            "in",
+            "cash",
+            "card",
+            "later",
+            "free",
+            "see"
+          ],
+          "writeAnswer": [
+            "Can",
+            "I",
+            "pay",
+            "in",
+            "cash"
+          ]
+        },
+        {
+          "id": "2-4",
+          "sentence": "What time does the store open?",
+          "sentenceVi": "Cửa hàng mở cửa lúc mấy giờ?",
+          "phonetic": "what · time · does · the · store · open",
+          "listenOptions": [
+            "Nhà hàng đóng cửa chưa?",
+            "Cửa hàng mở cửa lúc mấy giờ?",
+            "Giá xăng tăng chưa?",
+            "Máy rút tiền ở đâu?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "What",
+            "time",
+            "does",
+            "the",
+            "store",
+            "open",
+            "close",
+            "run",
+            "see",
+            "home"
+          ],
+          "writeAnswer": [
+            "What",
+            "time",
+            "does",
+            "the",
+            "store",
+            "open"
+          ]
+        },
+        {
+          "id": "2-5",
+          "sentence": "This is thirty percent off.",
+          "sentenceVi": "Đang giảm ba mươi phần trăm.",
+          "phonetic": "this · is · thirty · percent · off",
+          "listenOptions": [
+            "Không được chụp hình chứ?",
+            "Đang giảm ba mươi phần trăm.",
+            "Chỉ có bốn chỗ đứng thôi.",
+            "Hôm nay có hội chợ chứ."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "This",
+            "is",
+            "thirty",
+            "percent",
+            "off",
+            "fifty",
+            "free",
+            "card",
+            "see"
+          ],
+          "writeAnswer": [
+            "This",
+            "is",
+            "thirty",
+            "percent",
+            "off"
+          ]
+        },
+        {
+          "id": "2-6",
+          "sentence": "I would like smaller change.",
+          "sentenceVi": "Tôi muốn xin nhỏ lại tiền lẻ.",
+          "phonetic": "i · would · like · smaller · change",
+          "listenOptions": [
+            "Tôi muốn mua chứng khoán.",
+            "Tôi muốn xin nhỏ lại tiền lẻ.",
+            "Tôi chưa mở được điện thoại.",
+            "Tôi cần sạc máy chứ không phải cá."
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "I",
+            "would",
+            "like",
+            "smaller",
+            "change",
+            "bigger",
+            "bill",
+            "card",
+            "cash"
+          ],
+          "writeAnswer": [
+            "I",
+            "would",
+            "like",
+            "smaller",
+            "change"
+          ]
+        },
+        {
+          "id": "2-7",
+          "sentence": "Please count again.",
+          "sentenceVi": "Vui lòng đếm lại một lần nữa.",
+          "phonetic": "please · count · again",
+          "listenOptions": [
+            "Đổi chỗ ngồi được không?",
+            "Vui lòng đếm lại một lần nữa.",
+            "Tài xế chờ chứ?",
+            "Xe bus đã khởi hành chưa?"
+          ],
+          "listenAnswer": 1,
+          "writeWords": [
+            "Please",
+            "count",
+            "again",
+            "write",
+            "read",
+            "see",
+            "help"
+          ],
+          "writeAnswer": [
+            "Please",
+            "count",
+            "again"
+          ]
+        }
+      ]
+    }
+  ]
+}

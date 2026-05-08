@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ElderSpeak · Admin</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1>ElderSpeak Admin</h1>
+        <p class="sub">Chỉnh dữ liệu mock, bài học và flashcard. Chạy <code style="color:#cbd5e1">npm run admin</code> trong thư mục frontend.</p>
+        <button type="button" class="nav-btn active" data-panel="mock">Nội dung mock</button>
+        <button type="button" class="nav-btn" data-panel="lessons">Bài học (lessons.json)</button>
+        <button type="button" class="nav-btn" data-panel="flash">Flashcard</button>
+      </aside>
+      <main>
+        <p id="status-global" class="status ok hidden"></p>
+        <button type="button" class="btn btn-secondary" id="btn-reload" style="margin-bottom: 1rem">
+          ↻ Tải lại từ đĩa
+        </button>
+
+        <section id="panel-mock" class="panel active">
+          <h2 class="page-title">Nội dung mock</h2>
+          <p class="page-desc">
+            USER, trang chủ, chủ đề, thẻ home, huy chương, lịch sử — lưu vào
+            <code>src/data/mockContent.json</code>.
+          </p>
+          <div class="toolbar">
+            <button type="button" class="btn btn-primary" id="btn-save-mock">Lưu ra đĩa</button>
+            <button type="button" class="btn btn-secondary" id="btn-download-mock">Tải xuống JSON</button>
+            <button type="button" class="btn btn-danger" id="btn-clear-history">Xoá hết HISTORY</button>
+            <span id="status-mock" class="status ok hidden"></span>
+          </div>
+          <div id="mock-forms"></div>
+          <h3 class="page-title" style="font-size: 1rem; margin-top: 1.5rem">JSON đầy đủ</h3>
+          <div class="toolbar">
+            <button type="button" class="btn btn-secondary" id="btn-apply-raw-mock">Áp dụng từ ô dưới</button>
+          </div>
+          <textarea id="raw-mock" class="json-editor" spellcheck="false"></textarea>
+        </section>
+
+        <section id="panel-lessons" class="panel">
+          <h2 class="page-title">Bài học</h2>
+          <p class="page-desc">
+            Cấu trúc giống <code>lessonsRegistry</code> trước đây: mỗi chủ đề có các phần (unit), mỗi phần có mảng
+            <code>sentences</code>. Lưu vào <code>src/data/lessons.json</code>.
+          </p>
+          <div class="toolbar">
+            <button type="button" class="btn btn-primary" id="btn-save-lessons">Lưu ra đĩa</button>
+            <button type="button" class="btn btn-secondary" id="btn-download-lessons">Tải xuống JSON</button>
+            <button type="button" class="btn btn-secondary" id="btn-add-lesson-topic">+ Chủ đề mới</button>
+            <span id="status-lessons" class="status ok hidden"></span>
+          </div>
+          <div class="lesson-topic-bar" id="lesson-topic-chips"></div>
+          <div id="lesson-detail"></div>
+          <h3 class="page-title" style="font-size: 1rem; margin-top: 1.5rem">JSON đầy đủ</h3>
+          <div class="toolbar">
+            <button type="button" class="btn btn-secondary" id="btn-apply-raw-lessons">Áp dụng từ ô dưới</button>
+          </div>
+          <textarea id="raw-lessons" class="json-editor" spellcheck="false" style="min-height: 320px"></textarea>
+        </section>
+
+        <section id="panel-flash" class="panel">
+          <h2 class="page-title">Flashcard</h2>
+          <p class="page-desc">
+            Trường <code>image</code> là <strong>tên file</strong> trong <code>src/flashcardPics/</code> (vd.
+            <code>doctor.jpg</code>) hoặc <code>null</code>. Ảnh mới cần thêm dòng
+            <code>require</code> trong <code>flashcardAssets.js</code>.
+          </p>
+          <div class="toolbar">
+            <button type="button" class="btn btn-primary" id="btn-save-flash">Lưu ra đĩa</button>
+            <button type="button" class="btn btn-secondary" id="btn-download-flash">Tải xuống JSON</button>
+            <span id="status-flash" class="status ok hidden"></span>
+          </div>
+          <textarea id="raw-flash" class="json-editor" spellcheck="false"></textarea>
+          <div class="toolbar" style="margin-top: 0.5rem">
+            <button type="button" class="btn btn-secondary" id="btn-apply-raw-flash">Áp dụng chỉnh sửa JSON</button>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="admin.js"></script>
+  </body>
+</html>

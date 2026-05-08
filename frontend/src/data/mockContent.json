@@ -1,0 +1,146 @@
+{
+  "MOCK_USERS": [{ "phone": "0123456789", "password": "1234" }],
+  "USER": {
+    "name": "Bác A",
+    "phone": "0123456789",
+    "memberSince": "tháng 1 / 2025",
+    "streak": 7,
+    "totalWords": 42,
+    "medals": 3
+  },
+  "HOME_CURRENT_LESSON": {
+    "lessonTopicId": "5",
+    "title": "Chào hỏi cơ bản",
+    "subtitle": "Trò chuyện thường ngày · Câu 3/14",
+    "current": 3,
+    "total": 14
+  },
+  "HOME_TOPIC_CARDS": [
+    {
+      "id": "home-family",
+      "lessonTopicId": "2",
+      "label": "GIA ĐÌNH",
+      "footer": "6 bài · Hoàn thành ✓",
+      "badge": "Đã xong",
+      "theme": "purple"
+    },
+    {
+      "id": "home-medical",
+      "lessonTopicId": "1",
+      "label": "KHÁM BỆNH",
+      "chooseModeTopicTitle": "Đi khám bệnh",
+      "footer": "6 bài · Chưa bắt đầu",
+      "badge": null,
+      "theme": "blue"
+    },
+    {
+      "id": "home-entry",
+      "lessonTopicId": "4",
+      "label": "NHẬP CẢNH",
+      "footer": "6 bài · Chưa bắt đầu",
+      "badge": "Mới",
+      "theme": "green"
+    },
+    {
+      "id": "home-shopping",
+      "lessonTopicId": "3",
+      "label": "MUA SẮM",
+      "footer": "6 bài · Đang học",
+      "badge": null,
+      "theme": "amber"
+    },
+    {
+      "id": "home-greeting",
+      "lessonTopicId": "5",
+      "label": "CHÀO HỎI",
+      "footer": "6 bài · Chưa bắt đầu",
+      "badge": "Phổ biến",
+      "theme": "rose"
+    }
+  ],
+  "TOPICS": [
+    { "id": "1", "name": "Khám bệnh", "icon": "🏥", "totalWords": 32, "done": true },
+    { "id": "2", "name": "Gia đình", "icon": "👨‍👩‍👧", "totalWords": 24, "done": true },
+    { "id": "3", "name": "Mua sắm", "icon": "🛒", "totalWords": 18, "done": false },
+    {
+      "id": "4",
+      "name": "Nhập cảnh / sân bay",
+      "icon": "✈️",
+      "totalWords": 28,
+      "done": false
+    },
+    { "id": "5", "name": "Chào hỏi cơ bản", "icon": "👋", "totalWords": 15, "done": false },
+    {
+      "id": "6",
+      "name": "Số đếm và tiền tệ",
+      "icon": "💰",
+      "totalWords": 20,
+      "done": false
+    }
+  ],
+  "MEDALS": [
+    {
+      "id": "1",
+      "name": "Gia đình",
+      "desc": "Hoàn thành chủ đề Gia đình",
+      "earned": true,
+      "icon": "🥇"
+    },
+    {
+      "id": "2",
+      "name": "Chào hỏi",
+      "desc": "Hoàn thành chủ đề Chào hỏi",
+      "earned": true,
+      "icon": "🥈"
+    },
+    {
+      "id": "3",
+      "name": "Kiên trì 7 ngày",
+      "desc": "Học 7 ngày liên tiếp",
+      "earned": true,
+      "icon": "🌟"
+    },
+    {
+      "id": "4",
+      "name": "Bác sĩ tí hon",
+      "desc": "Hoàn thành chủ đề Khám bệnh",
+      "earned": false,
+      "icon": "🥉"
+    },
+    {
+      "id": "5",
+      "name": "Nhà du lịch",
+      "desc": "Hoàn thành chủ đề Nhập cảnh",
+      "earned": false,
+      "icon": "✈️"
+    },
+    {
+      "id": "6",
+      "name": "Học viên xuất sắc",
+      "desc": "Học 30 ngày liên tiếp",
+      "earned": false,
+      "icon": "🔥"
+    },
+    {
+      "id": "7",
+      "name": "Phát âm chuẩn",
+      "desc": "Hoàn thành 10 bài luyện nói",
+      "earned": false,
+      "icon": "🎤"
+    },
+    {
+      "id": "8",
+      "name": "Mua sắm thông thái",
+      "desc": "Hoàn thành chủ đề Mua sắm",
+      "earned": false,
+      "icon": "🛒"
+    }
+  ],
+  "HISTORY": [
+    { "date": "Hôm nay — 31/03", "items": ["Trò chuyện thường ngày"] },
+    { "date": "Hôm qua — 30/03", "items": ["Từ vựng — Gia đình", "Luyện phát âm"] },
+    { "date": "29/03/2026", "items": ["Trò chuyện — Khám bệnh"] },
+    { "date": "28/03/2026", "items": ["Flashcard — Khám bệnh"] },
+    { "date": "27/03/2026", "items": ["Trò chuyện — Gia đình"] }
+  ]
+}

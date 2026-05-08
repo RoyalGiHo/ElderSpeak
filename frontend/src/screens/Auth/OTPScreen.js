@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   View,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Text from "../../components/AppText";
 import PrimaryButton from "../../components/PrimaryButton";
@@ -13,15 +14,48 @@ import { useSession } from "../../store/SessionContext";
 import { THEME } from "../../data/themePalette";
 import { playSfx } from "../../utils/soundEffects";
 const MOCK_OTP = "1234";
+/** Chỉ hiện hướng dẫn SMS + luồng điền OTP ngẫu nhiên một lần (đã xem gợi ý). */
+const OTP_SMS_HINT_SEEN_KEY = "otp_sms_hint_seen";
+
+function randomOtpDigits() {
+  return Array.from({ length: 4 }, () =>
+    String(Math.floor(Math.random() * 10)),
+  );
+}
 
 export default function OTPScreen({ navigation, route }) {
   const { enterAccountSession } = useSession();
-  const { mode, phone } = route.params || {};
+  const { phone } = route.params || {};
   const [otp, setOtp] = useState(["", "", "", ""]);
+  /** false đến khi đọc AsyncStorage xong — tránh bấm Tiếp tục nhầm luồng. */
+  const [otpHintReady, setOtpHintReady] = useState(false);
+  const [smsHintSeen, setSmsHintSeen] = useState(false);
   const inputs = useRef([]);
   const { settings } = useAppSettings();
   const isDark = settings.darkMode;
   const palette = isDark ? THEME.dark : THEME.light;
+
+  useEffect(() => {
+    let cancelled = false;
+    AsyncStorage.getItem(OTP_SMS_HINT_SEEN_KEY)
+      .then((v) => {
+        if (!cancelled) {
+          setSmsHintSeen(v === "true");
+          setOtpHintReady(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setOtpHintReady(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const completeOtpSuccess = useCallback(async () => {
+    await enterAccountSession();
+    navigation.replace("MainTabs");
+  }, [enterAccountSession, navigation]);
 
   const handlePress = (digit) => {
     const idx = otp.findIndex((d) => d === "");
@@ -43,14 +77,36 @@ export default function OTPScreen({ navigation, route }) {
 
   const handleConfirm = async () => {
     const entered = otp.join("");
+    if (entered.length < 4) return;
+
+    if (!smsHintSeen) {
+      Alert.alert(
+        "Mã OTP",
+        "Đọc tin nhắn SMS để lấy mã OTP.",
+        [
+          {
+            text: "OK",
+            onPress: async () => {
+              try {
+                await AsyncStorage.setItem(OTP_SMS_HINT_SEEN_KEY, "true");
+                setSmsHintSeen(true);
+                const digits = randomOtpDigits();
+                setOtp(digits);
+                playSfx("tap", settings.soundFx);
+                await completeOtpSuccess();
+              } catch (e) {
+                console.warn("OTP demo flow failed:", e);
+              }
+            },
+          },
+        ],
+        { cancelable: true },
+      );
+      return;
+    }
+
     if (entered === MOCK_OTP) {
-      await enterAccountSession();
-      if (mode === "register") {
-        navigation.replace("MainTabs");
-      } else {
-        // forgotPassword — TODO: navigate sang CreateNewPassword
-        navigation.replace("MainTabs");
-      }
+      await completeOtpSuccess();
     }
   };
 
@@ -99,7 +155,7 @@ export default function OTPScreen({ navigation, route }) {
         <PrimaryButton
           label="Tiếp tục"
           onPress={handleConfirm}
-          disabled={otp.join("").length < 4}
+          disabled={!otpHintReady || otp.join("").length < 4}
           style={{ width: "100%" }}
         />
 

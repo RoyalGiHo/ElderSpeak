@@ -48,7 +48,6 @@ import { AppSettingsProvider, useAppSettings } from "./src/store/AppSettingsCont
 import {
   SessionProvider,
   useSession,
-  ONBOARDING_DONE_KEY,
   IS_LOGGED_IN_KEY,
   IS_GUEST_KEY,
 } from "./src/store/SessionContext";
@@ -253,7 +252,6 @@ function AppWithSession() {
     const loadInitialRoute = async () => {
       try {
         await refreshFromStorage();
-        const onboardingDone = await AsyncStorage.getItem(ONBOARDING_DONE_KEY);
         const loggedIn = await AsyncStorage.getItem(IS_LOGGED_IN_KEY);
         const guest = await AsyncStorage.getItem(IS_GUEST_KEY);
         if (cancelled) return;
@@ -261,8 +259,6 @@ function AppWithSession() {
         const guestMode = !isLogged && guest === "true";
         if (isLogged || guestMode) {
           setInitialRouteName("MainTabs");
-        } else if (onboardingDone === "true") {
-          setInitialRouteName("LetLogIn");
         } else {
           setInitialRouteName("Onboarding");
         }

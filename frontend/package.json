@@ -6,7 +6,9 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "admin": "node scripts/admin-server.mjs",
+    "extract-flashcards": "node scripts/extract-flashcards.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/audiowide": "^0.4.1",
